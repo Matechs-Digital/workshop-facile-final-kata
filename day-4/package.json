@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node -r ts-node/register src/index.ts",
     "test": "jest",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "ci": "yarn type-check && yarn test --ci"
   },
   "dependencies": {
     "@effect-ts/core": "^0.7.25",
