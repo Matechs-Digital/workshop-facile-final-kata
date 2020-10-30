@@ -1,4 +1,5 @@
 import * as I from "./common/Int"
+import { foldLeft } from "./utils/array"
 import * as E from "./utils/either"
 import { pipe } from "./utils/pipe"
 
@@ -316,4 +317,12 @@ export function move(command: Command) {
 
 export function nextMove(command: Command) {
   return <E>(e: E.Either<E, ProgramState>) => pipe(e, E.map(move(command)))
+}
+
+export function nextBatch(...commands: readonly [Command, ...Command[]]) {
+  return <E>(e: E.Either<E, ProgramState>): E.Either<E, ProgramState> =>
+    pipe(
+      e,
+      E.map((s) => foldLeft(commands, s, (c, x) => move(c)(x)))
+    )
 }

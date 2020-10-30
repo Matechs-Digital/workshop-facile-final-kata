@@ -693,4 +693,55 @@ describe("Rover", () => {
       })
     )
   })
+
+  it("run batches of commands", () => {
+    const state = MR.initialState({
+      planet: {
+        width: I.wrapIso(5),
+        height: I.wrapIso(4)
+      },
+      rover: {
+        position: {
+          x: I.wrapIso(0),
+          y: I.wrapIso(0)
+        },
+        orientation: "E"
+      }
+    })
+
+    const program = pipe(state, MR.nextBatch("f", "r", "f"))
+
+    expect(program).toEqual(
+      E.right({
+        rover: {
+          position: { x: 1, y: 2, _tag: "Position" },
+          orientation: "S",
+          _tag: "Rover"
+        },
+        planet: { width: 5, height: 4, _tag: "Planet" },
+        history: [
+          {
+            position: { x: 0, y: 0, _tag: "Position" },
+            orientation: "E",
+            _tag: "Point"
+          },
+          {
+            position: { x: 1, y: 0, _tag: "Position" },
+            orientation: "E",
+            _tag: "Point"
+          },
+          {
+            position: { x: 1, y: 3, _tag: "Position" },
+            orientation: "S",
+            _tag: "Point"
+          },
+          {
+            position: { x: 1, y: 2, _tag: "Position" },
+            orientation: "S",
+            _tag: "Point"
+          }
+        ]
+      })
+    )
+  })
 })
