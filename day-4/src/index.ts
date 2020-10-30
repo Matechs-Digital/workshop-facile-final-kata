@@ -41,18 +41,21 @@ export const makePosition = (planet: Planet) => (
       : E.left(new InvalidHeight())
     : E.left(new InvalidWidth())
 
-export const OrientationValues = ["N", "S", "E", "W"] as const
+export const OrientationValues = {
+  N: true,
+  S: true,
+  E: true,
+  W: true
+}
 
-export type Orientation = typeof OrientationValues[number]
+export type Orientation = keyof typeof OrientationValues
 
 export class InvalidOrientation {
   readonly _tag = "InvalidOrientation"
 }
 
 export const makeOrientation = (o: string): E.Either<InvalidOrientation, Orientation> =>
-  OrientationValues.includes(o as any)
-    ? E.right(<Orientation>o)
-    : E.left(new InvalidOrientation())
+  o in OrientationValues ? E.right(<Orientation>o) : E.left(new InvalidOrientation())
 
 export class Rover {
   readonly _tag = "Rover"
