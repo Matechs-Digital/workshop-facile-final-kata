@@ -17,6 +17,7 @@ jobs:
       - name: npm install, build, and test
         run: |
           npm install -g yarn
+          cd day-4
           yarn
           yarn run ci
         env:
