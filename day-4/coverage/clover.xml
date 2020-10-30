@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1604096543191" clover="3.2.0">
+  <project timestamp="1604096543191" name="All files">
+    <metrics statements="64" coveredstatements="60" conditionals="30" coveredconditionals="24" methods="23" coveredmethods="22" elements="117" coveredelements="106" complexity="0" loc="64" ncloc="64" packages="1" files="1" classes="1"/>
+    <file name="index.ts" path="/home/ma/facile/day-4/src/index.ts">
+      <metrics statements="64" coveredstatements="60" conditionals="30" coveredconditionals="24" methods="23" coveredmethods="22"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="2" count="1" type="stmt"/>
+      <line num="3" count="1" type="stmt"/>
+      <line num="5" count="1" type="stmt"/>
+      <line num="6" count="17" type="stmt"/>
+      <line num="7" count="17" type="stmt"/>
+      <line num="8" count="1" type="stmt"/>
+      <line num="10" count="1" type="stmt"/>
+      <line num="14" count="17" type="stmt"/>
+      <line num="21" count="1" type="stmt"/>
+      <line num="22" count="33" type="stmt"/>
+      <line num="23" count="33" type="stmt"/>
+      <line num="24" count="1" type="stmt"/>
+      <line num="26" count="1" type="stmt"/>
+      <line num="27" count="0" type="stmt"/>
+      <line num="28" count="1" type="stmt"/>
+      <line num="30" count="1" type="stmt"/>
+      <line num="31" count="0" type="stmt"/>
+      <line num="32" count="1" type="stmt"/>
+      <line num="34" count="17" type="stmt"/>
+      <line num="38" count="17" type="stmt"/>
+      <line num="44" count="1" type="stmt"/>
+      <line num="48" count="1" type="stmt"/>
+      <line num="49" count="0" type="stmt"/>
+      <line num="50" count="1" type="stmt"/>
+      <line num="52" count="1" type="stmt"/>
+      <line num="53" count="0" type="stmt"/>
+      <line num="57" count="1" type="stmt"/>
+      <line num="58" count="33" type="stmt"/>
+      <line num="59" count="33" type="stmt"/>
+      <line num="60" count="1" type="stmt"/>
+      <line num="62" count="1" type="stmt"/>
+      <line num="63" count="17" type="stmt"/>
+      <line num="64" count="17" type="stmt"/>
+      <line num="66" count="17" type="stmt"/>
+      <line num="91" count="1" type="stmt"/>
+      <line num="92" count="17" type="stmt"/>
+      <line num="95" count="17" type="stmt"/>
+      <line num="97" count="17" type="stmt"/>
+      <line num="103" count="1" type="stmt"/>
+      <line num="104" count="16" type="stmt"/>
+      <line num="105" count="16" type="stmt"/>
+      <line num="107" count="4" type="stmt"/>
+      <line num="109" count="1" type="stmt"/>
+      <line num="121" count="1" type="stmt"/>
+      <line num="133" count="1" type="stmt"/>
+      <line num="145" count="1" type="stmt"/>
+      <line num="159" count="4" type="stmt"/>
+      <line num="161" count="1" type="stmt"/>
+      <line num="173" count="1" type="stmt"/>
+      <line num="185" count="1" type="stmt"/>
+      <line num="197" count="1" type="stmt"/>
+      <line num="211" count="4" type="stmt"/>
+      <line num="213" count="1" type="stmt"/>
+      <line num="225" count="1" type="stmt"/>
+      <line num="237" count="1" type="stmt"/>
+      <line num="249" count="1" type="stmt"/>
+      <line num="263" count="4" type="stmt"/>
+      <line num="265" count="1" type="stmt"/>
+      <line num="277" count="1" type="stmt"/>
+      <line num="289" count="1" type="stmt"/>
+      <line num="301" count="1" type="stmt"/>
+      <line num="318" count="1" type="stmt"/>
+      <line num="319" count="16" type="stmt"/>
+    </file>
+  </project>
+</coverage>

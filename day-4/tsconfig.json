@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "downlevelIteration": true,
+    "lib": ["ES2019"],
+    "target": "ES5",
+    "strict": true,
+    "outDir": "lib",
+    "noErrorTruncation": true,
+    "noEmit": false,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "rootDir": ".",
+    "declaration": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts",
+    "scripts/**/*.ts",
+    "migrations/**/*.ts",
+    "articles/**/*.ts"
+  ]
+}
