@@ -26,7 +26,14 @@ describe("Rover", () => {
           _tag: "Rover",
           position: { _tag: "Position", x: 0, y: 0 },
           orientation: "N"
-        }
+        },
+        history: [
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 0 },
+            orientation: "N"
+          }
+        ]
       })
     )
   })
@@ -55,7 +62,19 @@ describe("Rover", () => {
           _tag: "Rover",
           position: { _tag: "Position", x: 0, y: 0 },
           orientation: "N"
-        }
+        },
+        history: [
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 3 },
+            orientation: "N"
+          },
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 0 },
+            orientation: "N"
+          }
+        ]
       })
     )
   })
@@ -84,7 +103,19 @@ describe("Rover", () => {
           _tag: "Rover",
           position: { _tag: "Position", x: 0, y: 3 },
           orientation: "S"
-        }
+        },
+        history: [
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 0 },
+            orientation: "S"
+          },
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 3 },
+            orientation: "S"
+          }
+        ]
       })
     )
   })
@@ -113,7 +144,19 @@ describe("Rover", () => {
           _tag: "Rover",
           position: { _tag: "Position", x: 0, y: 0 },
           orientation: "E"
-        }
+        },
+        history: [
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 4, y: 0 },
+            orientation: "E"
+          },
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 0 },
+            orientation: "E"
+          }
+        ]
       })
     )
   })
@@ -142,7 +185,19 @@ describe("Rover", () => {
           _tag: "Rover",
           position: { _tag: "Position", x: 4, y: 0 },
           orientation: "W"
-        }
+        },
+        history: [
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 0 },
+            orientation: "W"
+          },
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 4, y: 0 },
+            orientation: "W"
+          }
+        ]
       })
     )
   })
@@ -171,7 +226,19 @@ describe("Rover", () => {
           _tag: "Rover",
           position: { _tag: "Position", x: 0, y: 3 },
           orientation: "S"
-        }
+        },
+        history: [
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 0 },
+            orientation: "N"
+          },
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 3 },
+            orientation: "S"
+          }
+        ]
       })
     )
   })
@@ -200,7 +267,19 @@ describe("Rover", () => {
           _tag: "Rover",
           position: { _tag: "Position", x: 0, y: 0 },
           orientation: "N"
-        }
+        },
+        history: [
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 3 },
+            orientation: "S"
+          },
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 0 },
+            orientation: "N"
+          }
+        ]
       })
     )
   })
@@ -229,7 +308,19 @@ describe("Rover", () => {
           _tag: "Rover",
           position: { _tag: "Position", x: 4, y: 0 },
           orientation: "W"
-        }
+        },
+        history: [
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 0 },
+            orientation: "E"
+          },
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 4, y: 0 },
+            orientation: "W"
+          }
+        ]
       })
     )
   })
@@ -258,7 +349,19 @@ describe("Rover", () => {
           _tag: "Rover",
           position: { _tag: "Position", x: 0, y: 0 },
           orientation: "E"
-        }
+        },
+        history: [
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 4, y: 0 },
+            orientation: "W"
+          },
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 0 },
+            orientation: "E"
+          }
+        ]
       })
     )
   })
@@ -287,7 +390,19 @@ describe("Rover", () => {
           _tag: "Rover",
           position: { _tag: "Position", x: 4, y: 0 },
           orientation: "W"
-        }
+        },
+        history: [
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 0 },
+            orientation: "N"
+          },
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 4, y: 0 },
+            orientation: "W"
+          }
+        ]
       })
     )
   })
@@ -316,7 +431,19 @@ describe("Rover", () => {
           _tag: "Rover",
           position: { _tag: "Position", x: 0, y: 0 },
           orientation: "E"
-        }
+        },
+        history: [
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 4, y: 0 },
+            orientation: "S"
+          },
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 0 },
+            orientation: "E"
+          }
+        ]
       })
     )
   })
@@ -345,7 +472,19 @@ describe("Rover", () => {
           _tag: "Rover",
           position: { _tag: "Position", x: 0, y: 0 },
           orientation: "N"
-        }
+        },
+        history: [
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 3 },
+            orientation: "E"
+          },
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 0 },
+            orientation: "N"
+          }
+        ]
       })
     )
   })
@@ -374,7 +513,19 @@ describe("Rover", () => {
           _tag: "Rover",
           position: { _tag: "Position", x: 0, y: 3 },
           orientation: "S"
-        }
+        },
+        history: [
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 0 },
+            orientation: "W"
+          },
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 3 },
+            orientation: "S"
+          }
+        ]
       })
     )
   })
@@ -403,7 +554,19 @@ describe("Rover", () => {
           _tag: "Rover",
           position: { _tag: "Position", x: 0, y: 0 },
           orientation: "E"
-        }
+        },
+        history: [
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 4, y: 0 },
+            orientation: "N"
+          },
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 0 },
+            orientation: "E"
+          }
+        ]
       })
     )
   })
@@ -432,7 +595,19 @@ describe("Rover", () => {
           _tag: "Rover",
           position: { _tag: "Position", x: 4, y: 0 },
           orientation: "W"
-        }
+        },
+        history: [
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 0 },
+            orientation: "S"
+          },
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 4, y: 0 },
+            orientation: "W"
+          }
+        ]
       })
     )
   })
@@ -461,7 +636,19 @@ describe("Rover", () => {
           _tag: "Rover",
           position: { _tag: "Position", x: 0, y: 3 },
           orientation: "S"
-        }
+        },
+        history: [
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 0 },
+            orientation: "E"
+          },
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 3 },
+            orientation: "S"
+          }
+        ]
       })
     )
   })
@@ -490,7 +677,19 @@ describe("Rover", () => {
           _tag: "Rover",
           position: { _tag: "Position", x: 0, y: 0 },
           orientation: "N"
-        }
+        },
+        history: [
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 3 },
+            orientation: "W"
+          },
+          {
+            _tag: "Point",
+            position: { _tag: "Position", x: 0, y: 0 },
+            orientation: "N"
+          }
+        ]
       })
     )
   })

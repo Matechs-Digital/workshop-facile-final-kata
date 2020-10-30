@@ -83,9 +83,15 @@ export interface Configuration {
   }
 }
 
+export class Point {
+  readonly _tag = "Point"
+  constructor(readonly position: Position, readonly orientation: Orientation) {}
+}
+
 export interface ProgramState {
   planet: Planet
   rover: Rover
+  history: readonly Point[]
 }
 
 export function initialState(config: Configuration) {
@@ -94,10 +100,32 @@ export function initialState(config: Configuration) {
     E.chain((planet) =>
       pipe(
         makeRover(planet)(config.rover),
-        E.map((rover): ProgramState => ({ rover, planet }))
+        E.map(
+          (rover): ProgramState => ({
+            rover,
+            planet,
+            history: [new Point(rover.position, rover.orientation)]
+          })
+        )
       )
     )
   )
+}
+
+export function nextPosition(
+  state: ProgramState,
+  position: Position,
+  orientation: Orientation
+): ProgramState {
+  return {
+    ...state,
+    rover: {
+      ...state.rover,
+      position,
+      orientation
+    },
+    history: [...state.history, new Point(position, orientation)]
+  }
 }
 
 export function move(command: Command) {
@@ -106,208 +134,176 @@ export function move(command: Command) {
       case "f": {
         switch (state.rover.orientation) {
           case "N": {
-            return {
-              planet: state.planet,
-              rover: new Rover(
-                new Position(
-                  state.rover.position.x,
-                  I.mod(state.planet.height)(I.add(I.One)(state.rover.position.y))
-                ),
-                "N"
-              )
-            }
+            return nextPosition(
+              state,
+              new Position(
+                state.rover.position.x,
+                I.mod(state.planet.height)(I.add(I.One)(state.rover.position.y))
+              ),
+              "N"
+            )
           }
           case "S": {
-            return {
-              planet: state.planet,
-              rover: new Rover(
-                new Position(
-                  state.rover.position.x,
-                  I.mod(state.planet.height)(I.sub(I.One)(state.rover.position.y))
-                ),
-                "S"
-              )
-            }
+            return nextPosition(
+              state,
+              new Position(
+                state.rover.position.x,
+                I.mod(state.planet.height)(I.sub(I.One)(state.rover.position.y))
+              ),
+              "S"
+            )
           }
           case "E": {
-            return {
-              planet: state.planet,
-              rover: new Rover(
-                new Position(
-                  I.mod(state.planet.width)(I.add(I.One)(state.rover.position.x)),
-                  state.rover.position.y
-                ),
-                "E"
-              )
-            }
+            return nextPosition(
+              state,
+              new Position(
+                I.mod(state.planet.width)(I.add(I.One)(state.rover.position.x)),
+                state.rover.position.y
+              ),
+              "E"
+            )
           }
           case "W": {
-            return {
-              planet: state.planet,
-              rover: new Rover(
-                new Position(
-                  I.mod(state.planet.width)(I.sub(I.One)(state.rover.position.x)),
-                  state.rover.position.y
-                ),
-                "W"
-              )
-            }
+            return nextPosition(
+              state,
+              new Position(
+                I.mod(state.planet.width)(I.sub(I.One)(state.rover.position.x)),
+                state.rover.position.y
+              ),
+              "W"
+            )
           }
         }
       }
       case "b": {
         switch (state.rover.orientation) {
           case "N": {
-            return {
-              planet: state.planet,
-              rover: new Rover(
-                new Position(
-                  state.rover.position.x,
-                  I.mod(state.planet.height)(I.sub(I.One)(state.rover.position.y))
-                ),
-                "S"
-              )
-            }
+            return nextPosition(
+              state,
+              new Position(
+                state.rover.position.x,
+                I.mod(state.planet.height)(I.sub(I.One)(state.rover.position.y))
+              ),
+              "S"
+            )
           }
           case "S": {
-            return {
-              planet: state.planet,
-              rover: new Rover(
-                new Position(
-                  state.rover.position.x,
-                  I.mod(state.planet.height)(I.add(I.One)(state.rover.position.y))
-                ),
-                "N"
-              )
-            }
+            return nextPosition(
+              state,
+              new Position(
+                state.rover.position.x,
+                I.mod(state.planet.height)(I.add(I.One)(state.rover.position.y))
+              ),
+              "N"
+            )
           }
           case "E": {
-            return {
-              planet: state.planet,
-              rover: new Rover(
-                new Position(
-                  I.mod(state.planet.width)(I.sub(I.One)(state.rover.position.x)),
-                  state.rover.position.y
-                ),
-                "W"
-              )
-            }
+            return nextPosition(
+              state,
+              new Position(
+                I.mod(state.planet.width)(I.sub(I.One)(state.rover.position.x)),
+                state.rover.position.y
+              ),
+              "W"
+            )
           }
           case "W": {
-            return {
-              planet: state.planet,
-              rover: new Rover(
-                new Position(
-                  I.mod(state.planet.width)(I.add(I.One)(state.rover.position.x)),
-                  state.rover.position.y
-                ),
-                "E"
-              )
-            }
+            return nextPosition(
+              state,
+              new Position(
+                I.mod(state.planet.width)(I.add(I.One)(state.rover.position.x)),
+                state.rover.position.y
+              ),
+              "E"
+            )
           }
         }
       }
       case "l": {
         switch (state.rover.orientation) {
           case "N": {
-            return {
-              planet: state.planet,
-              rover: new Rover(
-                new Position(
-                  I.mod(state.planet.width)(I.sub(I.One)(state.rover.position.x)),
-                  state.rover.position.y
-                ),
-                "W"
-              )
-            }
+            return nextPosition(
+              state,
+              new Position(
+                I.mod(state.planet.width)(I.sub(I.One)(state.rover.position.x)),
+                state.rover.position.y
+              ),
+              "W"
+            )
           }
           case "S": {
-            return {
-              planet: state.planet,
-              rover: new Rover(
-                new Position(
-                  I.mod(state.planet.width)(I.add(I.One)(state.rover.position.x)),
-                  state.rover.position.y
-                ),
-                "E"
-              )
-            }
+            return nextPosition(
+              state,
+              new Position(
+                I.mod(state.planet.width)(I.add(I.One)(state.rover.position.x)),
+                state.rover.position.y
+              ),
+              "E"
+            )
           }
           case "E": {
-            return {
-              planet: state.planet,
-              rover: new Rover(
-                new Position(
-                  state.rover.position.x,
-                  I.mod(state.planet.height)(I.add(I.One)(state.rover.position.y))
-                ),
-                "N"
-              )
-            }
+            return nextPosition(
+              state,
+              new Position(
+                state.rover.position.x,
+                I.mod(state.planet.height)(I.add(I.One)(state.rover.position.y))
+              ),
+              "N"
+            )
           }
           case "W": {
-            return {
-              planet: state.planet,
-              rover: new Rover(
-                new Position(
-                  state.rover.position.x,
-                  I.mod(state.planet.height)(I.sub(I.One)(state.rover.position.y))
-                ),
-                "S"
-              )
-            }
+            return nextPosition(
+              state,
+              new Position(
+                state.rover.position.x,
+                I.mod(state.planet.height)(I.sub(I.One)(state.rover.position.y))
+              ),
+              "S"
+            )
           }
         }
       }
       case "r": {
         switch (state.rover.orientation) {
           case "N": {
-            return {
-              planet: state.planet,
-              rover: new Rover(
-                new Position(
-                  I.mod(state.planet.width)(I.add(I.One)(state.rover.position.x)),
-                  state.rover.position.y
-                ),
-                "E"
-              )
-            }
+            return nextPosition(
+              state,
+              new Position(
+                I.mod(state.planet.width)(I.add(I.One)(state.rover.position.x)),
+                state.rover.position.y
+              ),
+              "E"
+            )
           }
           case "S": {
-            return {
-              planet: state.planet,
-              rover: new Rover(
-                new Position(
-                  I.mod(state.planet.width)(I.sub(I.One)(state.rover.position.x)),
-                  state.rover.position.y
-                ),
-                "W"
-              )
-            }
+            return nextPosition(
+              state,
+              new Position(
+                I.mod(state.planet.width)(I.sub(I.One)(state.rover.position.x)),
+                state.rover.position.y
+              ),
+              "W"
+            )
           }
           case "E": {
-            return {
-              planet: state.planet,
-              rover: new Rover(
-                new Position(
-                  state.rover.position.x,
-                  I.mod(state.planet.height)(I.sub(I.One)(state.rover.position.y))
-                ),
-                "S"
-              )
-            }
+            return nextPosition(
+              state,
+              new Position(
+                state.rover.position.x,
+                I.mod(state.planet.height)(I.sub(I.One)(state.rover.position.y))
+              ),
+              "S"
+            )
           }
           case "W": {
-            return {
-              planet: state.planet,
-              rover: new Rover(
-                new Position(
-                  state.rover.position.x,
-                  I.mod(state.planet.height)(I.add(I.One)(state.rover.position.y))
-                ),
-                "N"
-              )
-            }
+            return nextPosition(
+              state,
+              new Position(
+                state.rover.position.x,
+                I.mod(state.planet.height)(I.add(I.One)(state.rover.position.y))
+              ),
+              "N"
+            )
           }
         }
       }
