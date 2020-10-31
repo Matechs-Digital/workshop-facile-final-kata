@@ -18,8 +18,11 @@ export const Int = newtypePrism<Int>()((n) =>
 export const IntIso = newtypeIso<Int>()
 
 export const Zero = newtypeIso<Int>().wrap(0)
-
 export const One = newtypeIso<Int>().wrap(1)
+export const Two = newtypeIso<Int>().wrap(2)
+export const Three = newtypeIso<Int>().wrap(3)
+export const Four = newtypeIso<Int>().wrap(4)
+export const Five = newtypeIso<Int>().wrap(5)
 
 export function between(min: Int, max: Int) {
   return flow(Int.unwrap, (n) => n >= Int.unwrap(min) && n <= Int.unwrap(max))
