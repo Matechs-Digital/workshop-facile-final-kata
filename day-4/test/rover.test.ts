@@ -3,6 +3,8 @@ import * as I from "../src/common/Int"
 import * as E from "../src/utils/either"
 import { pipe } from "../src/utils/pipe"
 
+const planet = new MR.Planet(I.wrapIso(5), I.wrapIso(4))
+
 describe("Rover", () => {
   it("init", () => {
     const state = MR.initialState({
@@ -21,19 +23,9 @@ describe("Rover", () => {
 
     expect(state).toEqual(
       E.right({
-        planet: { _tag: "Planet", width: 5, height: 4 },
-        rover: {
-          _tag: "Rover",
-          position: { _tag: "Position", x: 0, y: 0 },
-          orientation: "N"
-        },
-        history: [
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 0 },
-            orientation: "N"
-          }
-        ]
+        planet,
+        rover: new MR.Rover(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "N"),
+        history: [new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "N")]
       })
     )
   })
@@ -57,23 +49,11 @@ describe("Rover", () => {
 
     expect(program).toEqual(
       E.right({
-        planet: { _tag: "Planet", width: 5, height: 4 },
-        rover: {
-          _tag: "Rover",
-          position: { _tag: "Position", x: 0, y: 0 },
-          orientation: "N"
-        },
+        planet,
+        rover: new MR.Rover(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "N"),
         history: [
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 3 },
-            orientation: "N"
-          },
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 0 },
-            orientation: "N"
-          }
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(3)), "N"),
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "N")
         ]
       })
     )
@@ -98,23 +78,11 @@ describe("Rover", () => {
 
     expect(program).toEqual(
       E.right({
-        planet: { _tag: "Planet", width: 5, height: 4 },
-        rover: {
-          _tag: "Rover",
-          position: { _tag: "Position", x: 0, y: 3 },
-          orientation: "S"
-        },
+        planet,
+        rover: new MR.Rover(new MR.Position(I.wrapIso(0), I.wrapIso(3)), "S"),
         history: [
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 0 },
-            orientation: "S"
-          },
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 3 },
-            orientation: "S"
-          }
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "S"),
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(3)), "S")
         ]
       })
     )
@@ -139,23 +107,11 @@ describe("Rover", () => {
 
     expect(program).toEqual(
       E.right({
-        planet: { _tag: "Planet", width: 5, height: 4 },
-        rover: {
-          _tag: "Rover",
-          position: { _tag: "Position", x: 0, y: 0 },
-          orientation: "E"
-        },
+        planet,
+        rover: new MR.Rover(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "E"),
         history: [
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 4, y: 0 },
-            orientation: "E"
-          },
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 0 },
-            orientation: "E"
-          }
+          new MR.Point(new MR.Position(I.wrapIso(4), I.wrapIso(0)), "E"),
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "E")
         ]
       })
     )
@@ -180,23 +136,11 @@ describe("Rover", () => {
 
     expect(program).toEqual(
       E.right({
-        planet: { _tag: "Planet", width: 5, height: 4 },
-        rover: {
-          _tag: "Rover",
-          position: { _tag: "Position", x: 4, y: 0 },
-          orientation: "W"
-        },
+        planet,
+        rover: new MR.Rover(new MR.Position(I.wrapIso(4), I.wrapIso(0)), "W"),
         history: [
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 0 },
-            orientation: "W"
-          },
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 4, y: 0 },
-            orientation: "W"
-          }
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "W"),
+          new MR.Point(new MR.Position(I.wrapIso(4), I.wrapIso(0)), "W")
         ]
       })
     )
@@ -221,23 +165,11 @@ describe("Rover", () => {
 
     expect(program).toEqual(
       E.right({
-        planet: { _tag: "Planet", width: 5, height: 4 },
-        rover: {
-          _tag: "Rover",
-          position: { _tag: "Position", x: 0, y: 3 },
-          orientation: "S"
-        },
+        planet,
+        rover: new MR.Rover(new MR.Position(I.wrapIso(0), I.wrapIso(3)), "S"),
         history: [
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 0 },
-            orientation: "N"
-          },
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 3 },
-            orientation: "S"
-          }
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "N"),
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(3)), "S")
         ]
       })
     )
@@ -262,23 +194,11 @@ describe("Rover", () => {
 
     expect(program).toEqual(
       E.right({
-        planet: { _tag: "Planet", width: 5, height: 4 },
-        rover: {
-          _tag: "Rover",
-          position: { _tag: "Position", x: 0, y: 0 },
-          orientation: "N"
-        },
+        planet,
+        rover: new MR.Rover(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "N"),
         history: [
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 3 },
-            orientation: "S"
-          },
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 0 },
-            orientation: "N"
-          }
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(3)), "S"),
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "N")
         ]
       })
     )
@@ -303,23 +223,11 @@ describe("Rover", () => {
 
     expect(program).toEqual(
       E.right({
-        planet: { _tag: "Planet", width: 5, height: 4 },
-        rover: {
-          _tag: "Rover",
-          position: { _tag: "Position", x: 4, y: 0 },
-          orientation: "W"
-        },
+        planet,
+        rover: new MR.Rover(new MR.Position(I.wrapIso(4), I.wrapIso(0)), "W"),
         history: [
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 0 },
-            orientation: "E"
-          },
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 4, y: 0 },
-            orientation: "W"
-          }
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "E"),
+          new MR.Point(new MR.Position(I.wrapIso(4), I.wrapIso(0)), "W")
         ]
       })
     )
@@ -344,23 +252,11 @@ describe("Rover", () => {
 
     expect(program).toEqual(
       E.right({
-        planet: { _tag: "Planet", width: 5, height: 4 },
-        rover: {
-          _tag: "Rover",
-          position: { _tag: "Position", x: 0, y: 0 },
-          orientation: "E"
-        },
+        planet,
+        rover: new MR.Rover(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "E"),
         history: [
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 4, y: 0 },
-            orientation: "W"
-          },
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 0 },
-            orientation: "E"
-          }
+          new MR.Point(new MR.Position(I.wrapIso(4), I.wrapIso(0)), "W"),
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "E")
         ]
       })
     )
@@ -385,23 +281,11 @@ describe("Rover", () => {
 
     expect(program).toEqual(
       E.right({
-        planet: { _tag: "Planet", width: 5, height: 4 },
-        rover: {
-          _tag: "Rover",
-          position: { _tag: "Position", x: 4, y: 0 },
-          orientation: "W"
-        },
+        planet,
+        rover: new MR.Rover(new MR.Position(I.wrapIso(4), I.wrapIso(0)), "W"),
         history: [
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 0 },
-            orientation: "N"
-          },
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 4, y: 0 },
-            orientation: "W"
-          }
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "N"),
+          new MR.Point(new MR.Position(I.wrapIso(4), I.wrapIso(0)), "W")
         ]
       })
     )
@@ -426,23 +310,11 @@ describe("Rover", () => {
 
     expect(program).toEqual(
       E.right({
-        planet: { _tag: "Planet", width: 5, height: 4 },
-        rover: {
-          _tag: "Rover",
-          position: { _tag: "Position", x: 0, y: 0 },
-          orientation: "E"
-        },
+        planet,
+        rover: new MR.Rover(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "E"),
         history: [
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 4, y: 0 },
-            orientation: "S"
-          },
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 0 },
-            orientation: "E"
-          }
+          new MR.Point(new MR.Position(I.wrapIso(4), I.wrapIso(0)), "S"),
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "E")
         ]
       })
     )
@@ -467,23 +339,11 @@ describe("Rover", () => {
 
     expect(program).toEqual(
       E.right({
-        planet: { _tag: "Planet", width: 5, height: 4 },
-        rover: {
-          _tag: "Rover",
-          position: { _tag: "Position", x: 0, y: 0 },
-          orientation: "N"
-        },
+        planet,
+        rover: new MR.Rover(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "N"),
         history: [
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 3 },
-            orientation: "E"
-          },
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 0 },
-            orientation: "N"
-          }
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(3)), "E"),
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "N")
         ]
       })
     )
@@ -508,23 +368,11 @@ describe("Rover", () => {
 
     expect(program).toEqual(
       E.right({
-        planet: { _tag: "Planet", width: 5, height: 4 },
-        rover: {
-          _tag: "Rover",
-          position: { _tag: "Position", x: 0, y: 3 },
-          orientation: "S"
-        },
+        planet,
+        rover: new MR.Rover(new MR.Position(I.wrapIso(0), I.wrapIso(3)), "S"),
         history: [
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 0 },
-            orientation: "W"
-          },
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 3 },
-            orientation: "S"
-          }
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "W"),
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(3)), "S")
         ]
       })
     )
@@ -549,23 +397,11 @@ describe("Rover", () => {
 
     expect(program).toEqual(
       E.right({
-        planet: { _tag: "Planet", width: 5, height: 4 },
-        rover: {
-          _tag: "Rover",
-          position: { _tag: "Position", x: 0, y: 0 },
-          orientation: "E"
-        },
+        planet,
+        rover: new MR.Rover(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "E"),
         history: [
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 4, y: 0 },
-            orientation: "N"
-          },
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 0 },
-            orientation: "E"
-          }
+          new MR.Point(new MR.Position(I.wrapIso(4), I.wrapIso(0)), "N"),
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "E")
         ]
       })
     )
@@ -590,23 +426,11 @@ describe("Rover", () => {
 
     expect(program).toEqual(
       E.right({
-        planet: { _tag: "Planet", width: 5, height: 4 },
-        rover: {
-          _tag: "Rover",
-          position: { _tag: "Position", x: 4, y: 0 },
-          orientation: "W"
-        },
+        planet,
+        rover: new MR.Rover(new MR.Position(I.wrapIso(4), I.wrapIso(0)), "W"),
         history: [
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 0 },
-            orientation: "S"
-          },
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 4, y: 0 },
-            orientation: "W"
-          }
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "S"),
+          new MR.Point(new MR.Position(I.wrapIso(4), I.wrapIso(0)), "W")
         ]
       })
     )
@@ -631,23 +455,11 @@ describe("Rover", () => {
 
     expect(program).toEqual(
       E.right({
-        planet: { _tag: "Planet", width: 5, height: 4 },
-        rover: {
-          _tag: "Rover",
-          position: { _tag: "Position", x: 0, y: 3 },
-          orientation: "S"
-        },
+        planet,
+        rover: new MR.Rover(new MR.Position(I.wrapIso(0), I.wrapIso(3)), "S"),
         history: [
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 0 },
-            orientation: "E"
-          },
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 3 },
-            orientation: "S"
-          }
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "E"),
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(3)), "S")
         ]
       })
     )
@@ -672,23 +484,11 @@ describe("Rover", () => {
 
     expect(program).toEqual(
       E.right({
-        planet: { _tag: "Planet", width: 5, height: 4 },
-        rover: {
-          _tag: "Rover",
-          position: { _tag: "Position", x: 0, y: 0 },
-          orientation: "N"
-        },
+        planet,
+        rover: new MR.Rover(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "N"),
         history: [
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 3 },
-            orientation: "W"
-          },
-          {
-            _tag: "Point",
-            position: { _tag: "Position", x: 0, y: 0 },
-            orientation: "N"
-          }
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(3)), "W"),
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "N")
         ]
       })
     )
@@ -713,33 +513,13 @@ describe("Rover", () => {
 
     expect(program).toEqual(
       E.right({
-        rover: {
-          position: { x: 1, y: 2, _tag: "Position" },
-          orientation: "S",
-          _tag: "Rover"
-        },
-        planet: { width: 5, height: 4, _tag: "Planet" },
+        planet,
+        rover: new MR.Rover(new MR.Position(I.wrapIso(1), I.wrapIso(2)), "S"),
         history: [
-          {
-            position: { x: 0, y: 0, _tag: "Position" },
-            orientation: "E",
-            _tag: "Point"
-          },
-          {
-            position: { x: 1, y: 0, _tag: "Position" },
-            orientation: "E",
-            _tag: "Point"
-          },
-          {
-            position: { x: 1, y: 3, _tag: "Position" },
-            orientation: "S",
-            _tag: "Point"
-          },
-          {
-            position: { x: 1, y: 2, _tag: "Position" },
-            orientation: "S",
-            _tag: "Point"
-          }
+          new MR.Point(new MR.Position(I.wrapIso(0), I.wrapIso(0)), "E"),
+          new MR.Point(new MR.Position(I.wrapIso(1), I.wrapIso(0)), "E"),
+          new MR.Point(new MR.Position(I.wrapIso(1), I.wrapIso(3)), "S"),
+          new MR.Point(new MR.Position(I.wrapIso(1), I.wrapIso(2)), "S")
         ]
       })
     )
