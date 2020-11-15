@@ -10,28 +10,38 @@ import { none, some } from "./common/Option"
 import * as RTE from "./common/ReaderTaskEither"
 import * as TE from "./common/TaskEither"
 
-function runLoop<R, E>(e: RTE.ReaderTaskEither<R, E, ProgramState>) {
-  return pipe(
-    e,
-    RTE.chain((initial) =>
-      RTE.repeatUntilSome(
-        pipe(
-          getStrLn,
-          RTE.chain((s) => {
-            if (s.length === 0) {
-              return RTE.right(some(undefined))
-            }
+export class AtomicRef<A> {
+  private ref: A
+  constructor(initial: A) {
+    this.ref = initial
+  }
+  readonly get = () => this.ref
+  readonly set = (a: A) => {
+    this.ref = a
+  }
+}
 
-            return RTE.sync(() => {
-              console.log(s)
-              return none
-            })
+export const runMainLoop = pipe(
+  begin,
+  RTE.chain(
+    RTE.repeatWithState((state) =>
+      pipe(
+        getStrLn,
+        RTE.chain((s) => {
+          if (s.length === 0) {
+            return RTE.right(none)
+          }
+
+          return RTE.sync(() => {
+            console.log(s)
+            return some(state)
           })
-        )
+        })
       )
     )
-  )
-}
+  ),
+  providePlanet
+)
 
 pipe(
   RTE.tuple(
@@ -40,12 +50,7 @@ pipe(
     readFile(P.join(__dirname, "../config/obstacles.txt"))
   ),
   RTE.chain(([planet, initial, obstacles]) =>
-    pipe(
-      begin,
-      runLoop,
-      providePlanet,
-      provideAppConfig({ initial, obstacles, planet })
-    )
+    pipe(runMainLoop, provideAppConfig({ initial, obstacles, planet }))
   ),
   RTE.provide(LiveReadFile),
   RTE.provide(LiveReadline),
@@ -53,9 +58,10 @@ pipe(
   TE.fold(
     (e) => async () => {
       console.error(JSON.stringify(e, null, 2))
+      process.exit(1)
     },
-    (s) => async () => {
-      console.log(JSON.stringify(s, null, 2))
+    () => async () => {
+      process.exit(0)
     }
   )
 )()

@@ -204,20 +204,23 @@ export function foreach<R, A, E, B>(f: (a: A) => ReaderTaskEither<R, E, B>) {
     )
 }
 
-export function repeatUntilSome<R, E, A>(
-  self: ReaderTaskEither<R, E, Option<A>>
-): ReaderTaskEither<R, E, A> {
-  return (r) => async () => {
+export function repeatWithState<S, R, E>(
+  self: (s: S) => ReaderTaskEither<R, E, Option<S>>
+): (s: S) => ReaderTaskEither<R, E, void> {
+  return (s) => (r) => async () => {
+    let current = s
     // eslint-disable-next-line no-constant-condition
     while (true) {
-      const result = await self(r)()
+      const result = await self(current)(r)()
 
       if (result._tag === "Left") {
         return result
       }
 
-      if (result.right._tag === "Some") {
-        return E.right(result.right.value)
+      if (result.right._tag === "None") {
+        return E.right(undefined)
+      } else {
+        current = result.right.value
       }
     }
   }
