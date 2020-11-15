@@ -162,7 +162,7 @@ export function foreach<A, E, B>(f: (a: A) => TaskEither<E, B>) {
 
 export function repeatUntilSome<E, A>(
   self: TaskEither<E, Option<A>>
-): TaskEither<E, void> {
+): TaskEither<E, A> {
   return async () => {
     // eslint-disable-next-line no-constant-condition
     while (true) {
@@ -172,8 +172,8 @@ export function repeatUntilSome<E, A>(
         return result
       }
 
-      if (result.right._tag === "None") {
-        return E.right(undefined)
+      if (result.right._tag === "Some") {
+        return E.right(result.right.value)
       }
     }
   }
