@@ -63,7 +63,12 @@ export function nextBatch(...commands: readonly [Command, ...Command[]]) {
   return <E>(e: E.Either<E, ProgramState>): E.Either<E, ProgramState> =>
     pipe(
       e,
-      E.map((s) => reduce(commands, s, (c, x) => move(c)(x)))
+      E.map((s) =>
+        pipe(
+          commands,
+          reduce(s, (c, x) => move(c)(x))
+        )
+      )
     )
 }
 

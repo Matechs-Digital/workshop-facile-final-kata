@@ -9,14 +9,15 @@ import { Planet } from "../src/domain/Planet"
 import { PlanetPosition } from "../src/domain/PlanetPosition"
 import { Rover } from "../src/domain/Rover"
 
-const planet = new Planet(I.Five, I.Four)
+const planet = new Planet(I.Five, I.Four, new Set())
 
 describe("Rover", () => {
   it("init", () => {
     const state = MR.begin({
       planet: {
         width: I.Five,
-        height: I.Four
+        height: I.Four,
+        obstacles: []
       },
       rover: {
         position: {
@@ -27,7 +28,7 @@ describe("Rover", () => {
       }
     })
 
-    expect(state).toEqual(
+    expect(state).toMatchObject(
       E.right({
         rover: new Rover(planet, new PlanetPosition(I.Zero, I.Zero), Orientation.North),
         history: [
@@ -44,7 +45,8 @@ describe("Rover", () => {
     const state = MR.begin({
       planet: {
         width: I.Five,
-        height: I.Four
+        height: I.Four,
+        obstacles: []
       },
       rover: {
         position: {
@@ -57,7 +59,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Forward))
 
-    expect(program).toEqual(
+    expect(program).toMatchObject(
       E.right({
         rover: new Rover(planet, new PlanetPosition(I.Zero, I.Zero), Orientation.North),
         history: [
@@ -78,7 +80,8 @@ describe("Rover", () => {
     const state = MR.begin({
       planet: {
         width: I.Five,
-        height: I.Four
+        height: I.Four,
+        obstacles: []
       },
       rover: {
         position: {
@@ -91,7 +94,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Forward))
 
-    expect(program).toEqual(
+    expect(program).toMatchObject(
       E.right({
         rover: new Rover(
           planet,
@@ -116,7 +119,8 @@ describe("Rover", () => {
     const state = MR.begin({
       planet: {
         width: I.Five,
-        height: I.Four
+        height: I.Four,
+        obstacles: []
       },
       rover: {
         position: {
@@ -129,7 +133,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Forward))
 
-    expect(program).toEqual(
+    expect(program).toMatchObject(
       E.right({
         rover: new Rover(planet, new PlanetPosition(I.Zero, I.Zero), Orientation.East),
         history: [
@@ -150,7 +154,8 @@ describe("Rover", () => {
     const state = MR.begin({
       planet: {
         width: I.Five,
-        height: I.Four
+        height: I.Four,
+        obstacles: []
       },
       rover: {
         position: {
@@ -163,7 +168,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Forward))
 
-    expect(program).toEqual(
+    expect(program).toMatchObject(
       E.right({
         rover: new Rover(planet, new PlanetPosition(I.Four, I.Zero), Orientation.West),
         history: [
@@ -184,7 +189,8 @@ describe("Rover", () => {
     const state = MR.begin({
       planet: {
         width: I.Five,
-        height: I.Four
+        height: I.Four,
+        obstacles: []
       },
       rover: {
         position: {
@@ -197,7 +203,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Backward))
 
-    expect(program).toEqual(
+    expect(program).toMatchObject(
       E.right({
         rover: new Rover(
           planet,
@@ -222,7 +228,8 @@ describe("Rover", () => {
     const state = MR.begin({
       planet: {
         width: I.Five,
-        height: I.Four
+        height: I.Four,
+        obstacles: []
       },
       rover: {
         position: {
@@ -235,7 +242,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Backward))
 
-    expect(program).toEqual(
+    expect(program).toMatchObject(
       E.right({
         rover: new Rover(planet, new PlanetPosition(I.Zero, I.Zero), Orientation.North),
         history: [
@@ -256,7 +263,8 @@ describe("Rover", () => {
     const state = MR.begin({
       planet: {
         width: I.Five,
-        height: I.Four
+        height: I.Four,
+        obstacles: []
       },
       rover: {
         position: {
@@ -269,7 +277,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Backward))
 
-    expect(program).toEqual(
+    expect(program).toMatchObject(
       E.right({
         rover: new Rover(planet, new PlanetPosition(I.Four, I.Zero), Orientation.West),
         history: [
@@ -290,7 +298,8 @@ describe("Rover", () => {
     const state = MR.begin({
       planet: {
         width: I.Five,
-        height: I.Four
+        height: I.Four,
+        obstacles: []
       },
       rover: {
         position: {
@@ -303,7 +312,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Backward))
 
-    expect(program).toEqual(
+    expect(program).toMatchObject(
       E.right({
         rover: new Rover(planet, new PlanetPosition(I.Zero, I.Zero), Orientation.East),
         history: [
@@ -324,7 +333,8 @@ describe("Rover", () => {
     const state = MR.begin({
       planet: {
         width: I.Five,
-        height: I.Four
+        height: I.Four,
+        obstacles: []
       },
       rover: {
         position: {
@@ -337,7 +347,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Left))
 
-    expect(program).toEqual(
+    expect(program).toMatchObject(
       E.right({
         rover: new Rover(planet, new PlanetPosition(I.Four, I.Zero), Orientation.West),
         history: [
@@ -358,7 +368,8 @@ describe("Rover", () => {
     const state = MR.begin({
       planet: {
         width: I.Five,
-        height: I.Four
+        height: I.Four,
+        obstacles: []
       },
       rover: {
         position: {
@@ -371,7 +382,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Left))
 
-    expect(program).toEqual(
+    expect(program).toMatchObject(
       E.right({
         rover: new Rover(planet, new PlanetPosition(I.Zero, I.Zero), Orientation.East),
         history: [
@@ -392,7 +403,8 @@ describe("Rover", () => {
     const state = MR.begin({
       planet: {
         width: I.Five,
-        height: I.Four
+        height: I.Four,
+        obstacles: []
       },
       rover: {
         position: {
@@ -405,7 +417,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Left))
 
-    expect(program).toEqual(
+    expect(program).toMatchObject(
       E.right({
         rover: new Rover(planet, new PlanetPosition(I.Zero, I.Zero), Orientation.North),
         history: [
@@ -426,7 +438,8 @@ describe("Rover", () => {
     const state = MR.begin({
       planet: {
         width: I.Five,
-        height: I.Four
+        height: I.Four,
+        obstacles: []
       },
       rover: {
         position: {
@@ -439,7 +452,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Left))
 
-    expect(program).toEqual(
+    expect(program).toMatchObject(
       E.right({
         rover: new Rover(
           planet,
@@ -464,7 +477,8 @@ describe("Rover", () => {
     const state = MR.begin({
       planet: {
         width: I.Five,
-        height: I.Four
+        height: I.Four,
+        obstacles: []
       },
       rover: {
         position: {
@@ -477,7 +491,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Right))
 
-    expect(program).toEqual(
+    expect(program).toMatchObject(
       E.right({
         rover: new Rover(planet, new PlanetPosition(I.Zero, I.Zero), Orientation.East),
         history: [
@@ -498,7 +512,8 @@ describe("Rover", () => {
     const state = MR.begin({
       planet: {
         width: I.Five,
-        height: I.Four
+        height: I.Four,
+        obstacles: []
       },
       rover: {
         position: {
@@ -511,7 +526,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Right))
 
-    expect(program).toEqual(
+    expect(program).toMatchObject(
       E.right({
         rover: new Rover(planet, new PlanetPosition(I.Four, I.Zero), Orientation.West),
         history: [
@@ -532,7 +547,8 @@ describe("Rover", () => {
     const state = MR.begin({
       planet: {
         width: I.Five,
-        height: I.Four
+        height: I.Four,
+        obstacles: []
       },
       rover: {
         position: {
@@ -545,7 +561,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Right))
 
-    expect(program).toEqual(
+    expect(program).toMatchObject(
       E.right({
         rover: new Rover(
           planet,
@@ -570,7 +586,8 @@ describe("Rover", () => {
     const state = MR.begin({
       planet: {
         width: I.Five,
-        height: I.Four
+        height: I.Four,
+        obstacles: []
       },
       rover: {
         position: {
@@ -583,7 +600,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Right))
 
-    expect(program).toEqual(
+    expect(program).toMatchObject(
       E.right({
         rover: new Rover(planet, new PlanetPosition(I.Zero, I.Zero), Orientation.North),
         history: [
@@ -604,7 +621,8 @@ describe("Rover", () => {
     const state = MR.begin({
       planet: {
         width: I.Five,
-        height: I.Four
+        height: I.Four,
+        obstacles: []
       },
       rover: {
         position: {
@@ -624,7 +642,7 @@ describe("Rover", () => {
       )
     )
 
-    expect(program).toEqual(
+    expect(program).toMatchObject(
       E.right({
         rover: new Rover(planet, new PlanetPosition(I.One, I.Two), Orientation.South),
         history: [

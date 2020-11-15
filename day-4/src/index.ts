@@ -9,7 +9,8 @@ import { Orientation } from "./domain/Orientation"
 const config: MR.ProgramConfiguration = {
   planet: {
     width: I.Five,
-    height: I.Four
+    height: I.Four,
+    obstacles: []
   },
   rover: {
     position: {
