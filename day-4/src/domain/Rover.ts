@@ -1,15 +1,16 @@
+import type { AppConfig } from "../app/AppConfig"
+import { pipe } from "../common/Function"
 import type * as I from "../common/Int"
+import * as RE from "../common/ReaderEither"
+import { parseInitialPosition } from "../serde/ParseInitialPosition"
 import type { Orientation } from "./Orientation"
-import type { Planet } from "./Planet"
-import { PlanetPosition } from "./PlanetPosition"
+import type { PlanetContext } from "./Planet"
+import type { Position } from "./Position"
+import { scale } from "./Position"
 
 export class Rover {
   readonly _tag = "Rover"
-  constructor(
-    readonly planet: Planet,
-    readonly position: PlanetPosition,
-    readonly orientation: Orientation
-  ) {}
+  constructor(readonly position: Position, readonly orientation: Orientation) {}
 }
 
 export interface RoverConfiguration {
@@ -31,11 +32,13 @@ export function roverConfiguration(
   }
 }
 
-export function makeRover(rover: RoverConfiguration) {
-  return (planet: Planet) =>
-    new Rover(
-      planet,
-      new PlanetPosition(planet, rover.position.x, rover.position.y),
-      rover.orientation
+export const makeRover = RE.accessM(
+  ({ config, planetContext }: AppConfig & PlanetContext) =>
+    pipe(
+      RE.fromEither(parseInitialPosition(config.initial)),
+      RE.map(
+        ({ orientation, position }) =>
+          new Rover(scale(planetContext.planet)(position), orientation)
+      )
     )
-}
+)

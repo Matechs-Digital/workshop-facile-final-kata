@@ -1,9 +1,15 @@
-import * as MR from "./app/Program"
+import type { AppConfig } from "./app/AppConfig"
+import { provideAppConfig } from "./app/AppConfig"
+import type { NextPositionObstacle } from "./app/Program"
+import { begin, moveForward, moveLeft, providePlanet, runEither } from "./app/Program"
 import type { ProgramState } from "./app/ProgramState"
 import * as E from "./common/Either"
 import { pipe } from "./common/Function"
+import * as RE from "./common/ReaderEither"
+import type { PlanetContext } from "./domain/Planet"
+import type { ParseError } from "./serde/ParseError"
 
-const onError = (e: MR.ConfigError | MR.NextPositionObstacle): void => {
+const onError = (e: ParseError | NextPositionObstacle): void => {
   console.error(JSON.stringify(e, null, 2))
 
   process.exit(1)
@@ -14,15 +20,14 @@ const onSuccess = (a: ProgramState): void => {
   process.exit(0)
 }
 
-const runMain = E.fold(onError, onSuccess)
-
 pipe(
-  MR.begin({
+  begin,
+  moveForward,
+  moveLeft,
+  runEither({
     planet: "5x4",
     initial: "1,3:N",
     obstacles: "1,2 0,0 3,4"
   }),
-  MR.moveForward,
-  MR.moveLeft,
-  runMain
+  E.fold(onError, onSuccess)
 )

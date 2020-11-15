@@ -1,5 +1,5 @@
 import type { Orientation } from "../domain/Orientation"
-import type { PlanetPosition } from "../domain/PlanetPosition"
+import type { Position } from "../domain/Position"
 import type { Rover } from "../domain/Rover"
 
 export interface ProgramState {
@@ -9,5 +9,5 @@ export interface ProgramState {
 
 export class HistoryEntry {
   readonly _tag = "HistoryEntry"
-  constructor(readonly position: PlanetPosition, readonly orientation: Orientation) {}
+  constructor(readonly position: Position, readonly orientation: Orientation) {}
 }

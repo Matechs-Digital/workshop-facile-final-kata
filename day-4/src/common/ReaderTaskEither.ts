@@ -2,6 +2,7 @@ import { reduce } from "./Array"
 import * as E from "./Either"
 import { pipe } from "./Function"
 import type { Option } from "./Option"
+import type { ReaderEither } from "./ReaderEither"
 import type { Task } from "./Task"
 import * as TE from "./TaskEither"
 
@@ -45,6 +46,12 @@ export function fromEither<E, A>(
   self: E.Either<E, A>
 ): ReaderTaskEither<unknown, E, A> {
   return () => TE.fromEither(self)
+}
+
+export function fromReaderEither<R, E, A>(
+  self: ReaderEither<R, E, A>
+): ReaderTaskEither<R, E, A> {
+  return (r) => TE.fromEither(self(r))
 }
 
 export function map<A, B>(f: (a: A) => B) {
