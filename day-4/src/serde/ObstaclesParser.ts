@@ -1,4 +1,3 @@
-import { reduce } from "../common/Array"
 import * as E from "../common/Either"
 import { pipe } from "../common/Function"
 import * as I from "../common/Int"

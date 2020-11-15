@@ -9,6 +9,7 @@ import { pipe } from "./common/Function"
 import { none, some } from "./common/Option"
 import * as RTE from "./common/ReaderTaskEither"
 import * as TE from "./common/TaskEither"
+import { parseCommands } from "./serde/CommandParser"
 
 export class AtomicRef<A> {
   private ref: A
@@ -33,7 +34,7 @@ export const runMainLoop = pipe(
           }
 
           return RTE.sync(() => {
-            console.log(s)
+            console.log(parseCommands(s))
             return some(state)
           })
         })
