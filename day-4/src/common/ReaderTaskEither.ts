@@ -1,8 +1,7 @@
-import { reduce } from "./Array"
+import * as A from "./Array"
 import * as E from "./Either"
 import { pipe } from "./Function"
 import type { Option } from "./Option"
-import type { ReaderEither } from "./ReaderEither"
 import type { Task } from "./Task"
 import * as TE from "./TaskEither"
 
@@ -54,10 +53,8 @@ export function fromTaskEither<E, A>(
   return () => self
 }
 
-export function fromReaderEither<R, E, A>(
-  self: ReaderEither<R, E, A>
-): ReaderTaskEither<R, E, A> {
-  return (r) => TE.fromEither(self(r))
+export function sync<A>(f: () => A): ReaderTaskEither<unknown, never, A> {
+  return () => () => Promise.resolve(E.right(f()))
 }
 
 export function map<A, B>(f: (a: A) => B) {
@@ -193,7 +190,7 @@ export function foreach<R, A, E, B>(f: (a: A) => ReaderTaskEither<R, E, B>) {
   return (self: ReadonlyArray<A>): ReaderTaskEither<R, E, readonly B[]> =>
     pipe(
       self,
-      reduce(right([]) as ReaderTaskEither<R, E, readonly B[]>, (a, ebs) =>
+      A.reduce(right([]) as ReaderTaskEither<R, E, readonly B[]>, (a, ebs) =>
         pipe(
           ebs,
           chain((bs) =>
@@ -224,4 +221,19 @@ export function repeatUntilSome<R, E, A>(
       }
     }
   }
+}
+
+export function reduce<S>(initial: S) {
+  return <R, E, A>(f: (a: A, s: S) => ReaderTaskEither<R, E, S>) => (
+    as: ReadonlyArray<A>
+  ) =>
+    pipe(
+      as,
+      A.reduce(right(initial) as ReaderTaskEither<R, E, S>, (a, ms) =>
+        pipe(
+          ms,
+          chain((s) => f(a, s))
+        )
+      )
+    )
 }

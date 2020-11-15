@@ -1,5 +1,5 @@
 import type { NextPositionObstacle } from "./app/Program"
-import { begin, moveForward, moveLeft, runEither } from "./app/Program"
+import { begin, moveForward, moveLeft, runTaskEither } from "./app/Program"
 import type { ProgramState } from "./app/ProgramState"
 import * as E from "./common/Either"
 import { pipe } from "./common/Function"
@@ -23,10 +23,9 @@ pipe(
   begin,
   moveForward,
   moveLeft,
-  runEither({
+  runTaskEither({
     planet: "5x4",
     initial: "1,3:N",
     obstacles: "1,2 0,0 3,4"
-  }),
-  E.fold(onError, onSuccess)
-)
+  })
+)().then(E.fold(onError, onSuccess))

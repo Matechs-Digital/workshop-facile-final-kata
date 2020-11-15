@@ -8,15 +8,15 @@ import { Orientation } from "../src/domain/Orientation"
 import { Rover } from "../src/domain/Rover"
 
 describe("Rover", () => {
-  it("init", () => {
-    const state = pipe(
+  it("init", async () => {
+    const state = await pipe(
       MR.begin,
-      MR.runEither({
+      MR.runTaskEither({
         planet: "5x4",
         initial: "0,0:N",
         obstacles: ""
       })
-    )
+    )()
 
     expect(state).toEqual(
       E.right({
@@ -28,16 +28,16 @@ describe("Rover", () => {
     )
   })
 
-  it("move forward looking north (at edge)", () => {
-    const program = pipe(
+  it("move forward looking north (at edge)", async () => {
+    const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Forward),
-      MR.runEither({
+      MR.runTaskEither({
         planet: "5x4",
         initial: "0,3:N",
         obstacles: ""
       })
-    )
+    )()
 
     expect(program).toEqual(
       E.right({
@@ -50,16 +50,16 @@ describe("Rover", () => {
     )
   })
 
-  it("move forward looking south (at the edge)", () => {
-    const program = pipe(
+  it("move forward looking south (at the edge)", async () => {
+    const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Forward),
-      MR.runEither({
+      MR.runTaskEither({
         planet: "5x4",
         initial: "0,0:S",
         obstacles: ""
       })
-    )
+    )()
 
     expect(program).toEqual(
       E.right({
@@ -72,16 +72,16 @@ describe("Rover", () => {
     )
   })
 
-  it("move forward looking east (at the edge)", () => {
-    const program = pipe(
+  it("move forward looking east (at the edge)", async () => {
+    const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Forward),
-      MR.runEither({
+      MR.runTaskEither({
         planet: "5x4",
         initial: "4,0:E",
         obstacles: ""
       })
-    )
+    )()
 
     expect(program).toEqual(
       E.right({
@@ -94,16 +94,16 @@ describe("Rover", () => {
     )
   })
 
-  it("move forward looking west (at the edge)", () => {
-    const program = pipe(
+  it("move forward looking west (at the edge)", async () => {
+    const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Forward),
-      MR.runEither({
+      MR.runTaskEither({
         planet: "5x4",
         initial: "0,0:W",
         obstacles: ""
       })
-    )
+    )()
 
     expect(program).toEqual(
       E.right({
@@ -116,16 +116,16 @@ describe("Rover", () => {
     )
   })
 
-  it("move backward looking north (at the edge)", () => {
-    const program = pipe(
+  it("move backward looking north (at the edge)", async () => {
+    const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Backward),
-      MR.runEither({
+      MR.runTaskEither({
         planet: "5x4",
         initial: "0,0:N",
         obstacles: ""
       })
-    )
+    )()
 
     expect(program).toEqual(
       E.right({
@@ -138,16 +138,16 @@ describe("Rover", () => {
     )
   })
 
-  it("move backward looking south (at the edge)", () => {
-    const program = pipe(
+  it("move backward looking south (at the edge)", async () => {
+    const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Backward),
-      MR.runEither({
+      MR.runTaskEither({
         planet: "5x4",
         initial: "0,3:S",
         obstacles: ""
       })
-    )
+    )()
 
     expect(program).toEqual(
       E.right({
@@ -160,16 +160,16 @@ describe("Rover", () => {
     )
   })
 
-  it("move backward looking east (at the edge)", () => {
-    const program = pipe(
+  it("move backward looking east (at the edge)", async () => {
+    const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Backward),
-      MR.runEither({
+      MR.runTaskEither({
         planet: "5x4",
         initial: "0,0:E",
         obstacles: ""
       })
-    )
+    )()
 
     expect(program).toEqual(
       E.right({
@@ -182,16 +182,16 @@ describe("Rover", () => {
     )
   })
 
-  it("move backward looking west (at the edge)", () => {
-    const program = pipe(
+  it("move backward looking west (at the edge)", async () => {
+    const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Backward),
-      MR.runEither({
+      MR.runTaskEither({
         planet: "5x4",
         initial: "4,0:W",
         obstacles: ""
       })
-    )
+    )()
 
     expect(program).toEqual(
       E.right({
@@ -204,16 +204,16 @@ describe("Rover", () => {
     )
   })
 
-  it("move left looking north (at the edge)", () => {
-    const program = pipe(
+  it("move left looking north (at the edge)", async () => {
+    const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Left),
-      MR.runEither({
+      MR.runTaskEither({
         planet: "5x4",
         initial: "0,0:N",
         obstacles: ""
       })
-    )
+    )()
 
     expect(program).toEqual(
       E.right({
@@ -226,16 +226,16 @@ describe("Rover", () => {
     )
   })
 
-  it("move left looking south (at the edge)", () => {
-    const program = pipe(
+  it("move left looking south (at the edge)", async () => {
+    const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Left),
-      MR.runEither({
+      MR.runTaskEither({
         planet: "5x4",
         initial: "4,0:S",
         obstacles: ""
       })
-    )
+    )()
 
     expect(program).toEqual(
       E.right({
@@ -248,16 +248,16 @@ describe("Rover", () => {
     )
   })
 
-  it("move left looking east (at the edge)", () => {
-    const program = pipe(
+  it("move left looking east (at the edge)", async () => {
+    const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Left),
-      MR.runEither({
+      MR.runTaskEither({
         planet: "5x4",
         initial: "0,3:E",
         obstacles: ""
       })
-    )
+    )()
 
     expect(program).toEqual(
       E.right({
@@ -270,16 +270,16 @@ describe("Rover", () => {
     )
   })
 
-  it("move left looking west (at the edge)", () => {
-    const program = pipe(
+  it("move left looking west (at the edge)", async () => {
+    const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Left),
-      MR.runEither({
+      MR.runTaskEither({
         planet: "5x4",
         initial: "0,0:W",
         obstacles: ""
       })
-    )
+    )()
 
     expect(program).toEqual(
       E.right({
@@ -292,16 +292,16 @@ describe("Rover", () => {
     )
   })
 
-  it("move right looking north (at the edge)", () => {
-    const program = pipe(
+  it("move right looking north (at the edge)", async () => {
+    const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Right),
-      MR.runEither({
+      MR.runTaskEither({
         planet: "5x4",
         initial: "4,0:N",
         obstacles: ""
       })
-    )
+    )()
 
     expect(program).toEqual(
       E.right({
@@ -314,16 +314,16 @@ describe("Rover", () => {
     )
   })
 
-  it("move right looking south (at the edge)", () => {
-    const program = pipe(
+  it("move right looking south (at the edge)", async () => {
+    const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Right),
-      MR.runEither({
+      MR.runTaskEither({
         planet: "5x4",
         initial: "0,0:S",
         obstacles: ""
       })
-    )
+    )()
 
     expect(program).toEqual(
       E.right({
@@ -336,16 +336,16 @@ describe("Rover", () => {
     )
   })
 
-  it("move right looking east (at the edge)", () => {
-    const program = pipe(
+  it("move right looking east (at the edge)", async () => {
+    const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Right),
-      MR.runEither({
+      MR.runTaskEither({
         planet: "5x4",
         initial: "0,0:E",
         obstacles: ""
       })
-    )
+    )()
 
     expect(program).toEqual(
       E.right({
@@ -358,16 +358,16 @@ describe("Rover", () => {
     )
   })
 
-  it("move right looking west (at the edge)", () => {
-    const program = pipe(
+  it("move right looking west (at the edge)", async () => {
+    const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Right),
-      MR.runEither({
+      MR.runTaskEither({
         planet: "5x4",
         initial: "0,3:W",
         obstacles: ""
       })
-    )
+    )()
 
     expect(program).toEqual(
       E.right({
@@ -380,20 +380,20 @@ describe("Rover", () => {
     )
   })
 
-  it("run batches of commands", () => {
-    const program = pipe(
+  it("run batches of commands", async () => {
+    const program = await pipe(
       MR.begin,
       MR.nextBatch(
         Command.Commands.Forward,
         Command.Commands.Right,
         Command.Commands.Forward
       ),
-      MR.runEither({
+      MR.runTaskEither({
         planet: "5x4",
         initial: "0,0:E",
         obstacles: ""
       })
-    )
+    )()
 
     expect(program).toEqual(
       E.right({

@@ -1,10 +1,9 @@
-import { reduce } from "../common/Array"
 import type * as E from "../common/Either"
 import { pipe } from "../common/Function"
 import * as I from "../common/Int"
 import { matchTag } from "../common/Match"
 import * as NA from "../common/NonEmptyArray"
-import * as RE from "../common/ReaderEither"
+import * as RE from "../common/ReaderTaskEither"
 import { Orientation } from "../domain/Orientation"
 import type { PlanetContext } from "../domain/Planet"
 import { addObstacles } from "../domain/Planet"
@@ -22,8 +21,6 @@ import { Commands } from "./Command"
 import type { ProgramState } from "./ProgramState"
 import { HistoryEntry } from "./ProgramState"
 
-export type ConfigError = E.EitherGetE<ReturnType<typeof begin>>
-
 export class NextPositionObstacle {
   readonly _tag = "NextPositionObstacle"
   constructor(
@@ -37,7 +34,7 @@ export function nextPosition(
   x: I.Int,
   y: I.Int,
   orientation: Orientation
-): RE.ReaderEither<PlanetContext, NextPositionObstacle, ProgramState> {
+): RE.ReaderTaskEither<PlanetContext, NextPositionObstacle, ProgramState> {
   return pipe(
     validatePosition({ x, y }),
     RE.map(
@@ -53,7 +50,7 @@ export function nextPosition(
 export const move: (
   c: Command,
   s: ProgramState
-) => RE.ReaderEither<PlanetContext, NextPositionObstacle, ProgramState> = (c, s) =>
+) => RE.ReaderTaskEither<PlanetContext, NextPositionObstacle, ProgramState> = (c, s) =>
   pipe(
     c,
     matchTag({
@@ -65,7 +62,7 @@ export const move: (
   )(s)
 
 export function nextMove(command: Command) {
-  return <R, E>(e: RE.ReaderEither<R, E, ProgramState>) =>
+  return <R, E>(e: RE.ReaderTaskEither<R, E, ProgramState>) =>
     pipe(
       e,
       RE.chain((s) => move(command, s))
@@ -73,7 +70,7 @@ export function nextMove(command: Command) {
 }
 
 export function nextBatch(...commands: readonly [Command, ...Command[]]) {
-  return <R, E>(e: RE.ReaderEither<R, E, ProgramState>) =>
+  return <R, E>(e: RE.ReaderTaskEither<R, E, ProgramState>) =>
     pipe(
       e,
       RE.chain((s) => pipe(commands, RE.reduce(s)(move)))
@@ -83,7 +80,7 @@ export function nextBatch(...commands: readonly [Command, ...Command[]]) {
 export function goForward(_: GoForward) {
   return (
     state: ProgramState
-  ): RE.ReaderEither<PlanetContext, NextPositionObstacle, ProgramState> =>
+  ): RE.ReaderTaskEither<PlanetContext, NextPositionObstacle, ProgramState> =>
     pipe(
       state.rover.orientation,
       matchTag({
@@ -122,7 +119,7 @@ export function goForward(_: GoForward) {
 export function goBackward(_: GoBackward) {
   return (
     state: ProgramState
-  ): RE.ReaderEither<PlanetContext, NextPositionObstacle, ProgramState> =>
+  ): RE.ReaderTaskEither<PlanetContext, NextPositionObstacle, ProgramState> =>
     pipe(
       state.rover.orientation,
       matchTag({
@@ -161,7 +158,7 @@ export function goBackward(_: GoBackward) {
 export function goLeft(_: GoLeft) {
   return (
     state: ProgramState
-  ): RE.ReaderEither<PlanetContext, NextPositionObstacle, ProgramState> =>
+  ): RE.ReaderTaskEither<PlanetContext, NextPositionObstacle, ProgramState> =>
     pipe(
       state.rover.orientation,
       matchTag({
@@ -200,7 +197,7 @@ export function goLeft(_: GoLeft) {
 export function goRight(_: GoRight) {
   return (
     state: ProgramState
-  ): RE.ReaderEither<PlanetContext, NextPositionObstacle, ProgramState> =>
+  ): RE.ReaderTaskEither<PlanetContext, NextPositionObstacle, ProgramState> =>
     pipe(
       state.rover.orientation,
       matchTag({
@@ -244,7 +241,9 @@ export const moveForward = nextMove(Commands.Forward)
 
 export const moveBackward = nextMove(Commands.Backward)
 
-export function providePlanet<R, E, A>(self: RE.ReaderEither<R & PlanetContext, E, A>) {
+export function providePlanet<R, E, A>(
+  self: RE.ReaderTaskEither<R & PlanetContext, E, A>
+) {
   return RE.accessM(({ config }: AppConfig) =>
     pipe(
       RE.do,
@@ -280,8 +279,8 @@ export function actualize(self: ProgramState): ProgramState {
   }
 }
 
-export const runEither = (config: AppConfig["config"]) => (
-  self: RE.ReaderEither<
+export const runTaskEither = (config: AppConfig["config"]) => (
+  self: RE.ReaderTaskEither<
     AppConfig & PlanetContext,
     ParseError | NextPositionObstacle | InvalidInitialPosition,
     ProgramState

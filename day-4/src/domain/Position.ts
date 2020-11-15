@@ -2,7 +2,7 @@ import { pipe } from "../common/Function"
 import * as I from "../common/Int"
 import type { Newtype } from "../common/Newtype"
 import { newtype } from "../common/Newtype"
-import * as RE from "../common/ReaderEither"
+import * as RTE from "../common/ReaderTaskEither"
 import type { PlanetContext } from "./Planet"
 
 export interface Position {
@@ -26,7 +26,7 @@ export function scale(to: { width: I.Int; height: I.Int }) {
 }
 
 export const makPosition = (x: I.Int, y: I.Int) =>
-  RE.access(({ planetContext: { planet } }: PlanetContext) =>
+  RTE.access(({ planetContext: { planet } }: PlanetContext) =>
     pipe(scale(planet)({ x, y }), ({ x, y }): Position => ({ x, y }))
   )
 
@@ -37,13 +37,13 @@ export class ObstacleHit {
 
 export function validatePosition(
   self: Position
-): RE.ReaderEither<PlanetContext, ObstacleHit, Position> {
-  return RE.accessM(({ planetContext: { planet } }: PlanetContext) =>
+): RTE.ReaderTaskEither<PlanetContext, ObstacleHit, Position> {
+  return RTE.accessM(({ planetContext: { planet } }: PlanetContext) =>
     pipe(scale(planet)(self), (p) => {
       if (planet.obstacles.has(hashPosition(p))) {
-        return RE.left(new ObstacleHit(p))
+        return RTE.left(new ObstacleHit(p))
       }
-      return RE.right(p)
+      return RTE.right(p)
     })
   )
 }
