@@ -30,10 +30,14 @@ const onSuccess = (a: ProgramState): void => {
   console.log(JSON.stringify(a, null, 2))
 }
 
-const x = pipe(
-  MR.begin(config),
-  MR.nextMove(Command.Commands.Backward),
-  MR.nextMove(Command.Commands.Forward),
-  MR.nextMove(Command.Commands.Left),
-  E.fold(onError, onSuccess)
+const runMain = E.fold(onError, onSuccess)
+
+pipe(
+  config,
+  MR.begin,
+  MR.moveBackward,
+  MR.moveForward,
+  MR.moveLeft,
+  MR.moveRight,
+  runMain
 )

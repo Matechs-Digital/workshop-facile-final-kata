@@ -11,6 +11,7 @@ import { PlanetPosition, validatePlanetPosition } from "../domain/PlanetPosition
 import type { RoverConfiguration } from "../domain/Rover"
 import { makeRover, Rover } from "../domain/Rover"
 import type { Command, GoBackward, GoForward, GoLeft, GoRight } from "./Command"
+import { Commands } from "./Command"
 import type { ProgramState } from "./ProgramState"
 import { HistoryEntry } from "./ProgramState"
 
@@ -237,3 +238,11 @@ export function goRight(_: GoRight) {
       })
     )
 }
+
+export const moveRight = nextMove(Commands.Right)
+
+export const moveLeft = nextMove(Commands.Left)
+
+export const moveForward = nextMove(Commands.Forward)
+
+export const moveBackward = nextMove(Commands.Backward)
