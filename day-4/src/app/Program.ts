@@ -50,36 +50,32 @@ export function nextPosition(
 }
 
 export const move: (
-  _: Command
-) => (
-  _: ProgramState
-) => RE.ReaderEither<PlanetContext, NextPositionObstacle, ProgramState> = matchTag({
-  GoForward: goForward,
-  GoBackward: goBackward,
-  GoLeft: goLeft,
-  GoRight: goRight
-})
+  c: Command,
+  s: ProgramState
+) => RE.ReaderEither<PlanetContext, NextPositionObstacle, ProgramState> = (c, s) =>
+  pipe(
+    c,
+    matchTag({
+      GoForward: goForward,
+      GoBackward: goBackward,
+      GoLeft: goLeft,
+      GoRight: goRight
+    })
+  )(s)
 
 export function nextMove(command: Command) {
   return <R, E>(e: RE.ReaderEither<R, E, ProgramState>) =>
-    pipe(e, RE.chain(move(command)))
+    pipe(
+      e,
+      RE.chain((s) => move(command, s))
+    )
 }
 
 export function nextBatch(...commands: readonly [Command, ...Command[]]) {
   return <R, E>(e: RE.ReaderEither<R, E, ProgramState>) =>
     pipe(
       e,
-      RE.chain((s) =>
-        pipe(
-          commands,
-          reduce(
-            <RE.ReaderEither<PlanetContext, NextPositionObstacle, ProgramState>>(
-              RE.right(s)
-            ),
-            (c, x) => nextMove(c)(x)
-          )
-        )
-      )
+      RE.chain((s) => pipe(commands, RE.reduce(s)(move)))
     )
 }
 

@@ -1,4 +1,4 @@
-import { reduce } from "./Array"
+import * as A from "./Array"
 import * as E from "./Either"
 import { pipe } from "./Function"
 import type { Option } from "./Option"
@@ -170,7 +170,7 @@ export function foreach<R, A, E, B>(f: (a: A) => ReaderEither<R, E, B>) {
   return (self: ReadonlyArray<A>): ReaderEither<R, E, readonly B[]> =>
     pipe(
       self,
-      reduce(right([]) as ReaderEither<R, E, readonly B[]>, (a, ebs) =>
+      A.reduce(right([]) as ReaderEither<R, E, readonly B[]>, (a, ebs) =>
         pipe(
           ebs,
           chain((bs) =>
@@ -201,4 +201,19 @@ export function repeatUntilSome<R, E, A>(
       }
     }
   }
+}
+
+export function reduce<S>(initial: S) {
+  return <R, E, A>(f: (a: A, s: S) => ReaderEither<R, E, S>) => (
+    as: ReadonlyArray<A>
+  ) =>
+    pipe(
+      as,
+      A.reduce(right(initial) as ReaderEither<R, E, S>, (a, ms) =>
+        pipe(
+          ms,
+          chain((s) => f(a, s))
+        )
+      )
+    )
 }
