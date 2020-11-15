@@ -48,6 +48,12 @@ export function fromEither<E, A>(
   return () => TE.fromEither(self)
 }
 
+export function fromTaskEither<E, A>(
+  self: TE.TaskEither<E, A>
+): ReaderTaskEither<unknown, E, A> {
+  return () => self
+}
+
 export function fromReaderEither<R, E, A>(
   self: ReaderEither<R, E, A>
 ): ReaderTaskEither<R, E, A> {
@@ -92,7 +98,7 @@ export function tuple<Es extends readonly ReaderTaskEither<any, any, any>[]>(
       as.push(x.right)
     }
 
-    return right(as) as any
+    return E.right(as) as any
   }
 }
 

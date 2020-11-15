@@ -1,12 +1,18 @@
-import { getStrLn, LiveReadline } from "./app/Readline"
+import * as P from "path"
+
+import { LiveReadFile, readFile } from "./app/ReadFile"
 import { pipe } from "./common/Function"
-import { provide, run } from "./common/ReaderTaskEither"
+import * as RTE from "./common/ReaderTaskEither"
 import * as TE from "./common/TaskEither"
 
 pipe(
-  getStrLn,
-  provide(LiveReadline),
-  run,
+  RTE.tuple(
+    readFile(P.join(__dirname, "../config/planet.txt")),
+    readFile(P.join(__dirname, "../config/initial.txt")),
+    readFile(P.join(__dirname, "../config/obstacles.txt"))
+  ),
+  RTE.provide(LiveReadFile),
+  RTE.run,
   TE.fold(
     (e) => async () => {
       console.log(JSON.stringify(e, null, 2))
