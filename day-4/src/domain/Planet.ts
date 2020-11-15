@@ -2,7 +2,6 @@ import * as A from "../common/Array"
 import * as E from "../common/Either"
 import { pipe } from "../common/Function"
 import * as I from "../common/Int"
-import { SerializableSet } from "../common/SerializableSet"
 import type { Position, PositionHash } from "./Position"
 import { hashPosition, scale } from "./Position"
 
@@ -11,7 +10,7 @@ export class Planet {
   constructor(
     readonly width: I.Int,
     readonly height: I.Int,
-    readonly obstacles: SerializableSet<PositionHash>
+    readonly obstacles: Set<PositionHash>
   ) {}
 }
 
@@ -38,7 +37,7 @@ export function makePlanet({
             height,
             pipe(
               obstacles,
-              A.reduce(new SerializableSet(), (p, m) =>
+              A.reduce(new Set(), (p, m) =>
                 m.add(hashPosition(scale({ width, height })(p)))
               )
             )
@@ -54,4 +53,16 @@ export class InvalidPlanetWidth {
 
 export class InvalidPlanetHeight {
   readonly _tag = "InvalidPlanetHeight"
+}
+
+export function addObstacles(...obstacles: readonly ObstaclePosition[]) {
+  return (self: Planet) =>
+    new Planet(
+      self.width,
+      self.height,
+      pipe(
+        obstacles,
+        A.reduce(self.obstacles, (p, s) => s.add(hashPosition(scale(self)(p))))
+      )
+    )
 }

@@ -57,3 +57,17 @@ export const { wrap: wrapIso } = IntIso
 export const increment = add(One)
 
 export const decrement = sub(One)
+
+export function parse(s: string) {
+  try {
+    const r = parseInt(s, 10)
+
+    if (Number.isFinite(r)) {
+      return Int.wrap(r)
+    } else {
+      return left(new InvalidInteger())
+    }
+  } catch {
+    return left(new InvalidInteger())
+  }
+}
