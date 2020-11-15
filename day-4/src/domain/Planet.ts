@@ -14,18 +14,18 @@ export interface PlanetConfiguration {
 export function makePlanet({
   height,
   width
-}: PlanetConfiguration): E.Either<InvalidHeight | InvalidWidth, Planet> {
+}: PlanetConfiguration): E.Either<InvalidPlanetHeight | InvalidPlanetWidth, Planet> {
   return I.positive(width)
     ? I.positive(height)
       ? E.right(new Planet(width, height))
-      : E.left(new InvalidHeight())
-    : E.left(new InvalidWidth())
+      : E.left(new InvalidPlanetHeight())
+    : E.left(new InvalidPlanetWidth())
 }
 
-export class InvalidWidth {
-  readonly _tag = "InvalidWidth"
+export class InvalidPlanetWidth {
+  readonly _tag = "InvalidPlanetWidth"
 }
 
-export class InvalidHeight {
-  readonly _tag = "InvalidHeight"
+export class InvalidPlanetHeight {
+  readonly _tag = "InvalidPlanetHeight"
 }

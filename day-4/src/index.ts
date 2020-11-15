@@ -1,11 +1,12 @@
 import * as Command from "./app/Command"
 import * as MR from "./app/Program"
+import type { ProgramState } from "./app/ProgramState"
 import * as E from "./common/Either"
 import { pipe } from "./common/Function"
 import * as I from "./common/Int"
 import { Orientation } from "./domain/Orientation"
 
-const state = MR.begin({
+const config: MR.ProgramConfiguration = {
   planet: {
     width: I.Five,
     height: I.Four
@@ -17,17 +18,19 @@ const state = MR.begin({
     },
     orientation: Orientation.West
   }
-})
+}
+
+const onError = (e: MR.ConfigError): void => {
+  console.error(JSON.stringify(e, null, 2))
+  process.exit(1)
+}
+
+const onSuccess = (a: ProgramState): void => {
+  console.log(JSON.stringify(a, null, 2))
+}
 
 pipe(
-  state,
+  MR.begin(config),
   MR.nextMove(Command.Commands.Backward),
-  E.fold(
-    (e) => {
-      console.error(e)
-    },
-    (a) => {
-      console.log(JSON.stringify(a, null, 2))
-    }
-  )
+  E.fold(onError, onSuccess)
 )

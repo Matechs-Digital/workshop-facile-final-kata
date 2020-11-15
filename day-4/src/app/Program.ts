@@ -36,6 +36,8 @@ export function begin(config: ProgramConfiguration) {
   )
 }
 
+export type ConfigError = E.EitherGetE<ReturnType<typeof begin>>
+
 export function nextPosition(
   state: ProgramState,
   position: Position,

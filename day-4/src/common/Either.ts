@@ -63,3 +63,15 @@ export function fold<E, A, B, C>(onLeft: (e: E) => C, onRight: (a: A) => B) {
   return (self: Either<E, A>) =>
     self._tag === "Left" ? onLeft(self.left) : onRight(self.right)
 }
+
+export type EitherGetE<X extends Either<any, any>> = [X] extends [
+  Either<infer E, infer A>
+]
+  ? E
+  : never
+
+export type EitherGetA<X extends Either<any, any>> = [X] extends [
+  Either<infer E, infer A>
+]
+  ? A
+  : never
