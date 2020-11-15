@@ -11,9 +11,7 @@ export class ParsePlanetError {
 
 export const planetRegex = /^(\d+)x(\d+)$/
 
-export function parsePlanet(
-  planetConfig: string
-): E.Either<ParsePlanetError | InvalidPlanetConfig | I.InvalidInteger, Planet> {
+export function parsePlanet(planetConfig: string): E.Either<ParsePlanetError, Planet> {
   const results = planetRegex.exec(planetConfig)
 
   if (results == null) {
@@ -26,6 +24,7 @@ export function parsePlanet(
 
   return pipe(
     E.tuple(I.parse(results[1]), I.parse(results[2])),
-    E.chain(([width, height]) => makePlanet({ width, height, obstacles: [] }))
+    E.chain(([width, height]) => makePlanet({ width, height, obstacles: [] })),
+    E.catchAll(() => E.left(new ParsePlanetError(planetConfig)))
   )
 }

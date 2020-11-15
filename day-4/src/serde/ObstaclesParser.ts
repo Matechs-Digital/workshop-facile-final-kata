@@ -14,7 +14,7 @@ export const obstacleRegex = /^(\d+),(\d+)$/
 
 export function parseObstacle(
   obstacleConfig: string
-): E.Either<ParseObstaclesError | I.InvalidInteger, ObstaclePosition> {
+): E.Either<ParseObstaclesError, ObstaclePosition> {
   const results = obstacleRegex.exec(obstacleConfig)
 
   if (results == null) {
@@ -27,20 +27,18 @@ export function parseObstacle(
 
   return pipe(
     E.tuple(I.parse(results[1]), I.parse(results[2])),
-    E.map(([x, y]): ObstaclePosition => ({ x, y }))
+    E.map(([x, y]): ObstaclePosition => ({ x, y })),
+    E.catchAll(() => E.left(new ParseObstaclesError(obstacleConfig)))
   )
 }
 
 export function parseObstacles(
   obstaclesConfig: string
-): E.Either<ParseObstaclesError | I.InvalidInteger, readonly ObstaclePosition[]> {
+): E.Either<ParseObstaclesError, readonly ObstaclePosition[]> {
   return pipe(
     obstaclesConfig.split(" "),
     reduce(
-      E.right([]) as E.Either<
-        ParseObstaclesError | I.InvalidInteger,
-        readonly ObstaclePosition[]
-      >,
+      E.right([]) as E.Either<ParseObstaclesError, readonly ObstaclePosition[]>,
       (s, obsOrErr) =>
         pipe(
           obsOrErr,

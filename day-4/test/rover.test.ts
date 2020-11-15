@@ -28,7 +28,7 @@ describe("Rover", () => {
       }
     })
 
-    expect(state).toMatchObject(
+    expect(state).toEqual(
       E.right({
         rover: new Rover(
           planet,
@@ -63,7 +63,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Forward))
 
-    expect(program).toMatchObject(
+    expect(program).toEqual(
       E.right({
         rover: new Rover(
           planet,
@@ -102,7 +102,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Forward))
 
-    expect(program).toMatchObject(
+    expect(program).toEqual(
       E.right({
         rover: new Rover(
           planet,
@@ -141,7 +141,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Forward))
 
-    expect(program).toMatchObject(
+    expect(program).toEqual(
       E.right({
         rover: new Rover(
           planet,
@@ -180,7 +180,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Forward))
 
-    expect(program).toMatchObject(
+    expect(program).toEqual(
       E.right({
         rover: new Rover(
           planet,
@@ -219,7 +219,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Backward))
 
-    expect(program).toMatchObject(
+    expect(program).toEqual(
       E.right({
         rover: new Rover(
           planet,
@@ -258,7 +258,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Backward))
 
-    expect(program).toMatchObject(
+    expect(program).toEqual(
       E.right({
         rover: new Rover(
           planet,
@@ -297,7 +297,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Backward))
 
-    expect(program).toMatchObject(
+    expect(program).toEqual(
       E.right({
         rover: new Rover(
           planet,
@@ -336,7 +336,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Backward))
 
-    expect(program).toMatchObject(
+    expect(program).toEqual(
       E.right({
         rover: new Rover(
           planet,
@@ -375,7 +375,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Left))
 
-    expect(program).toMatchObject(
+    expect(program).toEqual(
       E.right({
         rover: new Rover(
           planet,
@@ -414,7 +414,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Left))
 
-    expect(program).toMatchObject(
+    expect(program).toEqual(
       E.right({
         rover: new Rover(
           planet,
@@ -453,7 +453,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Left))
 
-    expect(program).toMatchObject(
+    expect(program).toEqual(
       E.right({
         rover: new Rover(
           planet,
@@ -492,7 +492,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Left))
 
-    expect(program).toMatchObject(
+    expect(program).toEqual(
       E.right({
         rover: new Rover(
           planet,
@@ -531,7 +531,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Right))
 
-    expect(program).toMatchObject(
+    expect(program).toEqual(
       E.right({
         rover: new Rover(
           planet,
@@ -570,7 +570,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Right))
 
-    expect(program).toMatchObject(
+    expect(program).toEqual(
       E.right({
         rover: new Rover(
           planet,
@@ -609,7 +609,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Right))
 
-    expect(program).toMatchObject(
+    expect(program).toEqual(
       E.right({
         rover: new Rover(
           planet,
@@ -648,7 +648,7 @@ describe("Rover", () => {
 
     const program = pipe(state, MR.nextMove(Command.Commands.Right))
 
-    expect(program).toMatchObject(
+    expect(program).toEqual(
       E.right({
         rover: new Rover(
           planet,
@@ -694,7 +694,7 @@ describe("Rover", () => {
       )
     )
 
-    expect(program).toMatchObject(
+    expect(program).toEqual(
       E.right({
         rover: new Rover(
           planet,

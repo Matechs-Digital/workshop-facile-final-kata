@@ -11,12 +11,12 @@ import { parsePlanet, ParsePlanetError } from "../src/serde/PlanetParser"
 
 describe("Parsers", () => {
   it("parse planet config", () => {
-    expect(parsePlanet("5x4")).toMatchObject(
+    expect(parsePlanet("5x4")).toEqual(
       right(new Planet(IntIso.wrap(5), IntIso.wrap(4), new Set()))
     )
   })
   it("parse planet config - fail", () => {
-    expect(parsePlanet("5x4x")).toMatchObject(left(new ParsePlanetError("5x4x")))
+    expect(parsePlanet("5x4x")).toEqual(left(new ParsePlanetError("5x4x")))
   })
   it("parse obstacles config", () => {
     expect(parseObstacles("1,2 0,0 3,4")).toEqual(

@@ -19,7 +19,7 @@ export class InitialPosition {
 
 export function parseInitialPosition(
   initialPositionConfig: string
-): E.Either<ParseInitialPositionError | I.InvalidInteger, InitialPosition> {
+): E.Either<ParseInitialPositionError, InitialPosition> {
   const results = initialPositionRegex.exec(initialPositionConfig)
 
   if (results == null) {
@@ -43,6 +43,7 @@ export function parseInitialPosition(
 
   return pipe(
     E.tuple(I.parse(results[1]), I.parse(results[2])),
-    E.map(([x, y]) => new InitialPosition(x, y, orientation))
+    E.map(([x, y]) => new InitialPosition(x, y, orientation)),
+    E.catchAll(() => E.left(new ParseInitialPositionError(initialPositionConfig)))
   )
 }
