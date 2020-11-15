@@ -3,6 +3,7 @@ import type * as E from "../common/Either"
 import { pipe } from "../common/Function"
 import * as I from "../common/Int"
 import { matchTag } from "../common/Match"
+import * as NA from "../common/NonEmptyArray"
 import * as RE from "../common/ReaderEither"
 import { Orientation } from "../domain/Orientation"
 import type { PlanetContext } from "../domain/Planet"
@@ -41,7 +42,7 @@ export function nextPosition(
     RE.map(
       (position): ProgramState => ({
         rover: new Rover(position, orientation),
-        history: [...state.history, new HistoryEntry(position, orientation)]
+        history: NA.append(new HistoryEntry(position, orientation))(state.history)
       })
     ),
     RE.catchAll((e) => RE.left(new NextPositionObstacle(state, e)))
@@ -274,6 +275,13 @@ export const begin = pipe(
     })
   )
 )
+
+export function actualize(self: ProgramState): ProgramState {
+  return {
+    history: [self.history[self.history.length - 1]],
+    rover: self.rover
+  }
+}
 
 export const runEither = (config: AppConfig["config"]) => (
   self: RE.ReaderEither<
