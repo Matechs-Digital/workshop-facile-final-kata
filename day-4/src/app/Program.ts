@@ -76,7 +76,7 @@ export function nextBatch(...commands: readonly [Command, ...Command[]]) {
             <RE.ReaderEither<PlanetContext, NextPositionObstacle, ProgramState>>(
               RE.right(s)
             ),
-            (c, x) => pipe(x, RE.chain(move(c)))
+            (c, x) => nextMove(c)(x)
           )
         )
       )
