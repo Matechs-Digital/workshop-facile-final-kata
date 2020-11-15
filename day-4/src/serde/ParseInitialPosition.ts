@@ -2,8 +2,6 @@ import * as E from "../common/Either"
 import { pipe } from "../common/Function"
 import * as I from "../common/Int"
 import { Orientation } from "../domain/Orientation"
-import type { InvalidPlanetConfig, Planet } from "../domain/Planet"
-import { makePlanet } from "../domain/Planet"
 
 export class ParseInitialPositionError {
   readonly _tag = "ParsePlanetError"

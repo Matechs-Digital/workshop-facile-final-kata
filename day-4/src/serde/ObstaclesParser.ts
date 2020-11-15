@@ -2,8 +2,7 @@ import { reduce } from "../common/Array"
 import * as E from "../common/Either"
 import { pipe } from "../common/Function"
 import * as I from "../common/Int"
-import type { InvalidPlanetConfig, ObstaclePosition, Planet } from "../domain/Planet"
-import { makePlanet } from "../domain/Planet"
+import type { ObstaclePosition } from "../domain/Planet"
 
 export class ParseObstaclesError {
   readonly _tag = "ParseObstaclesError"

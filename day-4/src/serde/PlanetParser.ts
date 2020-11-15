@@ -1,7 +1,7 @@
 import * as E from "../common/Either"
 import { pipe } from "../common/Function"
 import * as I from "../common/Int"
-import type { InvalidPlanetConfig, Planet } from "../domain/Planet"
+import type { Planet } from "../domain/Planet"
 import { makePlanet } from "../domain/Planet"
 
 export class ParsePlanetError {
