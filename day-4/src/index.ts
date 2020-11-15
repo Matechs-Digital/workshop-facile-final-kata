@@ -1,4 +1,3 @@
-import * as Command from "./app/Command"
 import * as MR from "./app/Program"
 import type { ProgramState } from "./app/ProgramState"
 import * as E from "./common/Either"
