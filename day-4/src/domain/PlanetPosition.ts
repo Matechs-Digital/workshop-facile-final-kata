@@ -10,29 +10,28 @@ export const PlanetPositionHash = newtype<PlanetPositionHash>()
 
 export class PlanetPosition {
   readonly _tag = "PlanetPosition"
-  constructor(readonly x: I.Int, readonly y: I.Int) {}
+  readonly x: I.Int
+  readonly y: I.Int
+  constructor(readonly planet: Planet, x: I.Int, y: I.Int) {
+    this.x = I.mod(planet.width)(x)
+    this.y = I.mod(planet.height)(y)
+  }
 }
-
-export class InvalidPlanetPositionX {
-  readonly _tag = "InvalidPlanetPositionX"
-}
-
-export class InvalidPlanetPositionY {
-  readonly _tag = "InvalidPlanetPositionY"
-}
-
-export type InvalidPlanetPosition = InvalidPlanetPositionY | InvalidPlanetPositionX
 
 export const makePlanetPosition = (
   x: I.Int,
   y: I.Int
-): ((planet: Planet) => E.Either<InvalidPlanetPosition, PlanetPosition>) => (planet) =>
-  I.between(I.Zero, planet.width)(x)
-    ? I.between(I.Zero, planet.height)(y)
-      ? E.right(new PlanetPosition(x, y))
-      : E.left(new InvalidPlanetPositionY())
-    : E.left(new InvalidPlanetPositionX())
+): ((planet: Planet) => PlanetPosition) => (planet) => new PlanetPosition(planet, x, y)
 
 export function hashPlanetPosition(self: PlanetPosition) {
   return PlanetPositionHash.wrap(`x: ${self.x} - y: ${self.y}`)
+}
+
+export function move(x: I.Int, y: I.Int) {
+  return (self: PlanetPosition) =>
+    new PlanetPosition(
+      self.planet,
+      I.mod(self.planet.width)(x),
+      I.mod(self.planet.height)(y)
+    )
 }

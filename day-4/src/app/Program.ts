@@ -21,15 +21,13 @@ export interface ProgramConfiguration {
 export function begin(config: ProgramConfiguration) {
   return pipe(
     makePlanet(config.planet),
-    E.chain(
+    E.map(
       flow(
         makeRover(config.rover),
-        E.map(
-          (rover): ProgramState => ({
-            rover,
-            history: [new HistoryEntry(rover.position, rover.orientation)]
-          })
-        )
+        (rover): ProgramState => ({
+          rover,
+          history: [new HistoryEntry(rover.position, rover.orientation)]
+        })
       )
     )
   )
@@ -39,9 +37,11 @@ export type ConfigError = E.EitherGetE<ReturnType<typeof begin>>
 
 export function nextPosition(
   state: ProgramState,
-  position: PlanetPosition,
+  x: I.Int,
+  y: I.Int,
   orientation: Orientation
 ): ProgramState {
+  const position = new PlanetPosition(state.rover.planet, x, y)
   return {
     rover: new Rover(state.rover.planet, position, orientation),
     history: [...state.history, new HistoryEntry(position, orientation)]
@@ -80,37 +80,29 @@ export function goForward(_: GoForward) {
         North: () =>
           nextPosition(
             state,
-            new PlanetPosition(
-              state.rover.position.x,
-              I.mod(state.rover.planet.height)(I.add(I.One)(state.rover.position.y))
-            ),
+            state.rover.position.x,
+            I.increment(state.rover.position.y),
             Orientation.North
           ),
         South: () =>
           nextPosition(
             state,
-            new PlanetPosition(
-              state.rover.position.x,
-              I.mod(state.rover.planet.height)(I.sub(I.One)(state.rover.position.y))
-            ),
+            state.rover.position.x,
+            I.decrement(state.rover.position.y),
             Orientation.South
           ),
         East: () =>
           nextPosition(
             state,
-            new PlanetPosition(
-              I.mod(state.rover.planet.width)(I.add(I.One)(state.rover.position.x)),
-              state.rover.position.y
-            ),
+            I.increment(state.rover.position.x),
+            state.rover.position.y,
             Orientation.East
           ),
         West: () =>
           nextPosition(
             state,
-            new PlanetPosition(
-              I.mod(state.rover.planet.width)(I.sub(I.One)(state.rover.position.x)),
-              state.rover.position.y
-            ),
+            I.decrement(state.rover.position.x),
+            state.rover.position.y,
             Orientation.West
           )
       })
@@ -125,37 +117,29 @@ export function goBackward(_: GoBackward) {
         North: () =>
           nextPosition(
             state,
-            new PlanetPosition(
-              state.rover.position.x,
-              I.mod(state.rover.planet.height)(I.sub(I.One)(state.rover.position.y))
-            ),
+            state.rover.position.x,
+            I.decrement(state.rover.position.y),
             Orientation.South
           ),
         South: () =>
           nextPosition(
             state,
-            new PlanetPosition(
-              state.rover.position.x,
-              I.mod(state.rover.planet.height)(I.add(I.One)(state.rover.position.y))
-            ),
+            state.rover.position.x,
+            I.increment(state.rover.position.y),
             Orientation.North
           ),
         East: () =>
           nextPosition(
             state,
-            new PlanetPosition(
-              I.mod(state.rover.planet.width)(I.sub(I.One)(state.rover.position.x)),
-              state.rover.position.y
-            ),
+            I.decrement(state.rover.position.x),
+            state.rover.position.y,
             Orientation.West
           ),
         West: () =>
           nextPosition(
             state,
-            new PlanetPosition(
-              I.mod(state.rover.planet.width)(I.add(I.One)(state.rover.position.x)),
-              state.rover.position.y
-            ),
+            I.increment(state.rover.position.x),
+            state.rover.position.y,
             Orientation.East
           )
       })
@@ -170,37 +154,29 @@ export function goLeft(_: GoLeft) {
         North: () =>
           nextPosition(
             state,
-            new PlanetPosition(
-              I.mod(state.rover.planet.width)(I.sub(I.One)(state.rover.position.x)),
-              state.rover.position.y
-            ),
+            I.decrement(state.rover.position.x),
+            state.rover.position.y,
             Orientation.West
           ),
         South: () =>
           nextPosition(
             state,
-            new PlanetPosition(
-              I.mod(state.rover.planet.width)(I.add(I.One)(state.rover.position.x)),
-              state.rover.position.y
-            ),
+            I.increment(state.rover.position.x),
+            state.rover.position.y,
             Orientation.East
           ),
         East: () =>
           nextPosition(
             state,
-            new PlanetPosition(
-              state.rover.position.x,
-              I.mod(state.rover.planet.height)(I.add(I.One)(state.rover.position.y))
-            ),
+            state.rover.position.x,
+            I.increment(state.rover.position.y),
             Orientation.North
           ),
         West: () =>
           nextPosition(
             state,
-            new PlanetPosition(
-              state.rover.position.x,
-              I.mod(state.rover.planet.height)(I.sub(I.One)(state.rover.position.y))
-            ),
+            state.rover.position.x,
+            I.decrement(state.rover.position.y),
             Orientation.South
           )
       })
@@ -215,37 +191,29 @@ export function goRight(_: GoRight) {
         North: () =>
           nextPosition(
             state,
-            new PlanetPosition(
-              I.mod(state.rover.planet.width)(I.add(I.One)(state.rover.position.x)),
-              state.rover.position.y
-            ),
+            I.increment(state.rover.position.x),
+            state.rover.position.y,
             Orientation.East
           ),
         South: () =>
           nextPosition(
             state,
-            new PlanetPosition(
-              I.mod(state.rover.planet.width)(I.sub(I.One)(state.rover.position.x)),
-              state.rover.position.y
-            ),
+            I.decrement(state.rover.position.x),
+            state.rover.position.y,
             Orientation.West
           ),
         East: () =>
           nextPosition(
             state,
-            new PlanetPosition(
-              state.rover.position.x,
-              I.mod(state.rover.planet.height)(I.sub(I.One)(state.rover.position.y))
-            ),
+            state.rover.position.x,
+            I.decrement(state.rover.position.y),
             Orientation.South
           ),
         West: () =>
           nextPosition(
             state,
-            new PlanetPosition(
-              state.rover.position.x,
-              I.mod(state.rover.planet.height)(I.add(I.One)(state.rover.position.y))
-            ),
+            state.rover.position.x,
+            I.increment(state.rover.position.y),
             Orientation.North
           )
       })

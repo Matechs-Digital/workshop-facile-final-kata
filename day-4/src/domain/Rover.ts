@@ -1,10 +1,7 @@
-import * as E from "../common/Either"
-import { pipe } from "../common/Function"
 import type * as I from "../common/Int"
 import type { Orientation } from "./Orientation"
 import type { Planet } from "./Planet"
-import type { PlanetPosition } from "./PlanetPosition"
-import { makePlanetPosition } from "./PlanetPosition"
+import { PlanetPosition } from "./PlanetPosition"
 
 export class Rover {
   readonly _tag = "Rover"
@@ -25,9 +22,9 @@ export interface RoverConfiguration {
 
 export function makeRover(rover: RoverConfiguration) {
   return (planet: Planet) =>
-    pipe(
+    new Rover(
       planet,
-      makePlanetPosition(rover.position.x, rover.position.y),
-      E.map((position) => new Rover(planet, position, rover.orientation))
+      new PlanetPosition(planet, rover.position.x, rover.position.y),
+      rover.orientation
     )
 }

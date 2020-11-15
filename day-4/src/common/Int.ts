@@ -53,3 +53,7 @@ export const positive = gte(Zero)
 
 export const { unwrap, wrap } = Int
 export const { wrap: wrapIso } = IntIso
+
+export const increment = add(One)
+
+export const decrement = sub(One)

@@ -30,10 +30,14 @@ describe("Rover", () => {
 
     expect(state).toMatchObject(
       E.right({
-        rover: new Rover(planet, new PlanetPosition(I.Zero, I.Zero), Orientation.North),
+        rover: new Rover(
+          planet,
+          new PlanetPosition(planet, I.Zero, I.Zero),
+          Orientation.North
+        ),
         history: [
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Zero),
+            new PlanetPosition(planet, I.Zero, I.Zero),
             Orientation.North
           )
         ]
@@ -61,14 +65,18 @@ describe("Rover", () => {
 
     expect(program).toMatchObject(
       E.right({
-        rover: new Rover(planet, new PlanetPosition(I.Zero, I.Zero), Orientation.North),
+        rover: new Rover(
+          planet,
+          new PlanetPosition(planet, I.Zero, I.Zero),
+          Orientation.North
+        ),
         history: [
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Three),
+            new PlanetPosition(planet, I.Zero, I.Three),
             Orientation.North
           ),
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Zero),
+            new PlanetPosition(planet, I.Zero, I.Zero),
             Orientation.North
           )
         ]
@@ -98,16 +106,16 @@ describe("Rover", () => {
       E.right({
         rover: new Rover(
           planet,
-          new PlanetPosition(I.Zero, I.Three),
+          new PlanetPosition(planet, I.Zero, I.Three),
           Orientation.South
         ),
         history: [
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Zero),
+            new PlanetPosition(planet, I.Zero, I.Zero),
             Orientation.South
           ),
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Three),
+            new PlanetPosition(planet, I.Zero, I.Three),
             Orientation.South
           )
         ]
@@ -135,14 +143,18 @@ describe("Rover", () => {
 
     expect(program).toMatchObject(
       E.right({
-        rover: new Rover(planet, new PlanetPosition(I.Zero, I.Zero), Orientation.East),
+        rover: new Rover(
+          planet,
+          new PlanetPosition(planet, I.Zero, I.Zero),
+          Orientation.East
+        ),
         history: [
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Four, I.Zero),
+            new PlanetPosition(planet, I.Four, I.Zero),
             Orientation.East
           ),
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Zero),
+            new PlanetPosition(planet, I.Zero, I.Zero),
             Orientation.East
           )
         ]
@@ -170,14 +182,18 @@ describe("Rover", () => {
 
     expect(program).toMatchObject(
       E.right({
-        rover: new Rover(planet, new PlanetPosition(I.Four, I.Zero), Orientation.West),
+        rover: new Rover(
+          planet,
+          new PlanetPosition(planet, I.Four, I.Zero),
+          Orientation.West
+        ),
         history: [
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Zero),
+            new PlanetPosition(planet, I.Zero, I.Zero),
             Orientation.West
           ),
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Four, I.Zero),
+            new PlanetPosition(planet, I.Four, I.Zero),
             Orientation.West
           )
         ]
@@ -207,16 +223,16 @@ describe("Rover", () => {
       E.right({
         rover: new Rover(
           planet,
-          new PlanetPosition(I.Zero, I.Three),
+          new PlanetPosition(planet, I.Zero, I.Three),
           Orientation.South
         ),
         history: [
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Zero),
+            new PlanetPosition(planet, I.Zero, I.Zero),
             Orientation.North
           ),
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Three),
+            new PlanetPosition(planet, I.Zero, I.Three),
             Orientation.South
           )
         ]
@@ -244,14 +260,18 @@ describe("Rover", () => {
 
     expect(program).toMatchObject(
       E.right({
-        rover: new Rover(planet, new PlanetPosition(I.Zero, I.Zero), Orientation.North),
+        rover: new Rover(
+          planet,
+          new PlanetPosition(planet, I.Zero, I.Zero),
+          Orientation.North
+        ),
         history: [
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Three),
+            new PlanetPosition(planet, I.Zero, I.Three),
             Orientation.South
           ),
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Zero),
+            new PlanetPosition(planet, I.Zero, I.Zero),
             Orientation.North
           )
         ]
@@ -279,14 +299,18 @@ describe("Rover", () => {
 
     expect(program).toMatchObject(
       E.right({
-        rover: new Rover(planet, new PlanetPosition(I.Four, I.Zero), Orientation.West),
+        rover: new Rover(
+          planet,
+          new PlanetPosition(planet, I.Four, I.Zero),
+          Orientation.West
+        ),
         history: [
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Zero),
+            new PlanetPosition(planet, I.Zero, I.Zero),
             Orientation.East
           ),
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Four, I.Zero),
+            new PlanetPosition(planet, I.Four, I.Zero),
             Orientation.West
           )
         ]
@@ -314,14 +338,18 @@ describe("Rover", () => {
 
     expect(program).toMatchObject(
       E.right({
-        rover: new Rover(planet, new PlanetPosition(I.Zero, I.Zero), Orientation.East),
+        rover: new Rover(
+          planet,
+          new PlanetPosition(planet, I.Zero, I.Zero),
+          Orientation.East
+        ),
         history: [
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Four, I.Zero),
+            new PlanetPosition(planet, I.Four, I.Zero),
             Orientation.West
           ),
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Zero),
+            new PlanetPosition(planet, I.Zero, I.Zero),
             Orientation.East
           )
         ]
@@ -349,14 +377,18 @@ describe("Rover", () => {
 
     expect(program).toMatchObject(
       E.right({
-        rover: new Rover(planet, new PlanetPosition(I.Four, I.Zero), Orientation.West),
+        rover: new Rover(
+          planet,
+          new PlanetPosition(planet, I.Four, I.Zero),
+          Orientation.West
+        ),
         history: [
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Zero),
+            new PlanetPosition(planet, I.Zero, I.Zero),
             Orientation.North
           ),
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Four, I.Zero),
+            new PlanetPosition(planet, I.Four, I.Zero),
             Orientation.West
           )
         ]
@@ -384,14 +416,18 @@ describe("Rover", () => {
 
     expect(program).toMatchObject(
       E.right({
-        rover: new Rover(planet, new PlanetPosition(I.Zero, I.Zero), Orientation.East),
+        rover: new Rover(
+          planet,
+          new PlanetPosition(planet, I.Zero, I.Zero),
+          Orientation.East
+        ),
         history: [
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Four, I.Zero),
+            new PlanetPosition(planet, I.Four, I.Zero),
             Orientation.South
           ),
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Zero),
+            new PlanetPosition(planet, I.Zero, I.Zero),
             Orientation.East
           )
         ]
@@ -419,14 +455,18 @@ describe("Rover", () => {
 
     expect(program).toMatchObject(
       E.right({
-        rover: new Rover(planet, new PlanetPosition(I.Zero, I.Zero), Orientation.North),
+        rover: new Rover(
+          planet,
+          new PlanetPosition(planet, I.Zero, I.Zero),
+          Orientation.North
+        ),
         history: [
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Three),
+            new PlanetPosition(planet, I.Zero, I.Three),
             Orientation.East
           ),
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Zero),
+            new PlanetPosition(planet, I.Zero, I.Zero),
             Orientation.North
           )
         ]
@@ -456,16 +496,16 @@ describe("Rover", () => {
       E.right({
         rover: new Rover(
           planet,
-          new PlanetPosition(I.Zero, I.Three),
+          new PlanetPosition(planet, I.Zero, I.Three),
           Orientation.South
         ),
         history: [
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Zero),
+            new PlanetPosition(planet, I.Zero, I.Zero),
             Orientation.West
           ),
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Three),
+            new PlanetPosition(planet, I.Zero, I.Three),
             Orientation.South
           )
         ]
@@ -493,14 +533,18 @@ describe("Rover", () => {
 
     expect(program).toMatchObject(
       E.right({
-        rover: new Rover(planet, new PlanetPosition(I.Zero, I.Zero), Orientation.East),
+        rover: new Rover(
+          planet,
+          new PlanetPosition(planet, I.Zero, I.Zero),
+          Orientation.East
+        ),
         history: [
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Four, I.Zero),
+            new PlanetPosition(planet, I.Four, I.Zero),
             Orientation.North
           ),
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Zero),
+            new PlanetPosition(planet, I.Zero, I.Zero),
             Orientation.East
           )
         ]
@@ -528,14 +572,18 @@ describe("Rover", () => {
 
     expect(program).toMatchObject(
       E.right({
-        rover: new Rover(planet, new PlanetPosition(I.Four, I.Zero), Orientation.West),
+        rover: new Rover(
+          planet,
+          new PlanetPosition(planet, I.Four, I.Zero),
+          Orientation.West
+        ),
         history: [
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Zero),
+            new PlanetPosition(planet, I.Zero, I.Zero),
             Orientation.South
           ),
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Four, I.Zero),
+            new PlanetPosition(planet, I.Four, I.Zero),
             Orientation.West
           )
         ]
@@ -565,16 +613,16 @@ describe("Rover", () => {
       E.right({
         rover: new Rover(
           planet,
-          new PlanetPosition(I.Zero, I.Three),
+          new PlanetPosition(planet, I.Zero, I.Three),
           Orientation.South
         ),
         history: [
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Zero),
+            new PlanetPosition(planet, I.Zero, I.Zero),
             Orientation.East
           ),
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Three),
+            new PlanetPosition(planet, I.Zero, I.Three),
             Orientation.South
           )
         ]
@@ -602,14 +650,18 @@ describe("Rover", () => {
 
     expect(program).toMatchObject(
       E.right({
-        rover: new Rover(planet, new PlanetPosition(I.Zero, I.Zero), Orientation.North),
+        rover: new Rover(
+          planet,
+          new PlanetPosition(planet, I.Zero, I.Zero),
+          Orientation.North
+        ),
         history: [
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Three),
+            new PlanetPosition(planet, I.Zero, I.Three),
             Orientation.West
           ),
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Zero),
+            new PlanetPosition(planet, I.Zero, I.Zero),
             Orientation.North
           )
         ]
@@ -644,22 +696,26 @@ describe("Rover", () => {
 
     expect(program).toMatchObject(
       E.right({
-        rover: new Rover(planet, new PlanetPosition(I.One, I.Two), Orientation.South),
+        rover: new Rover(
+          planet,
+          new PlanetPosition(planet, I.One, I.Two),
+          Orientation.South
+        ),
         history: [
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.Zero, I.Zero),
+            new PlanetPosition(planet, I.Zero, I.Zero),
             Orientation.East
           ),
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.One, I.Zero),
+            new PlanetPosition(planet, I.One, I.Zero),
             Orientation.East
           ),
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.One, I.Three),
+            new PlanetPosition(planet, I.One, I.Three),
             Orientation.South
           ),
           new ProgramState.HistoryEntry(
-            new PlanetPosition(I.One, I.Two),
+            new PlanetPosition(planet, I.One, I.Two),
             Orientation.South
           )
         ]
