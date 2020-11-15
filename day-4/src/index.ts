@@ -22,6 +22,7 @@ const config: MR.ProgramConfiguration = {
 
 const onError = (e: MR.ConfigError | MR.NextPositionObstacle): void => {
   console.error(JSON.stringify(e, null, 2))
+
   process.exit(1)
 }
 
