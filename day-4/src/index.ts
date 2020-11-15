@@ -1,12 +1,8 @@
-import type { AppConfig } from "./app/AppConfig"
-import { provideAppConfig } from "./app/AppConfig"
 import type { NextPositionObstacle } from "./app/Program"
-import { begin, moveForward, moveLeft, providePlanet, runEither } from "./app/Program"
+import { begin, moveForward, moveLeft, runEither } from "./app/Program"
 import type { ProgramState } from "./app/ProgramState"
 import * as E from "./common/Either"
 import { pipe } from "./common/Function"
-import * as RE from "./common/ReaderEither"
-import type { PlanetContext } from "./domain/Planet"
 import type { ParseError } from "./serde/ParseError"
 
 const onError = (e: ParseError | NextPositionObstacle): void => {

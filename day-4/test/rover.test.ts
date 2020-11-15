@@ -5,10 +5,7 @@ import * as E from "../src/common/Either"
 import { pipe } from "../src/common/Function"
 import * as I from "../src/common/Int"
 import { Orientation } from "../src/domain/Orientation"
-import { Planet } from "../src/domain/Planet"
 import { Rover } from "../src/domain/Rover"
-
-const planet = new Planet(I.Five, I.Four, new Set())
 
 describe("Rover", () => {
   it("init", () => {
