@@ -1,6 +1,7 @@
 import { reduce } from "./Array"
 import * as E from "./Either"
 import { pipe } from "./Function"
+import type { Option } from "./Option"
 import type { Task } from "./Task"
 
 export interface TaskEither<E, A> extends Task<E.Either<E, A>> {}
@@ -157,4 +158,23 @@ export function foreach<A, E, B>(f: (a: A) => TaskEither<E, B>) {
         )
       )
     )
+}
+
+export function repeatUntilSome<E, A>(
+  self: TaskEither<E, Option<A>>
+): TaskEither<E, void> {
+  return async () => {
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      const result = await self()
+
+      if (result._tag === "Left") {
+        return result
+      }
+
+      if (result.right._tag === "None") {
+        return E.right(undefined)
+      }
+    }
+  }
 }
