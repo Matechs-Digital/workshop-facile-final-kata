@@ -11,10 +11,12 @@ export interface PlanetConfiguration {
   height: I.Int
 }
 
+export type InvalidPlanetConfig = InvalidPlanetHeight | InvalidPlanetWidth
+
 export function makePlanet({
   height,
   width
-}: PlanetConfiguration): E.Either<InvalidPlanetHeight | InvalidPlanetWidth, Planet> {
+}: PlanetConfiguration): E.Either<InvalidPlanetConfig, Planet> {
   return I.positive(width)
     ? I.positive(height)
       ? E.right(new Planet(width, height))

@@ -3,12 +3,16 @@ import { pipe } from "../common/Function"
 import type * as I from "../common/Int"
 import type { Orientation } from "./Orientation"
 import type { Planet } from "./Planet"
-import type { Position } from "./Position"
-import { makePosition } from "./Position"
+import type { PlanetPosition } from "./PlanetPosition"
+import { makePlanetPosition } from "./PlanetPosition"
 
 export class Rover {
   readonly _tag = "Rover"
-  constructor(readonly position: Position, readonly orientation: Orientation) {}
+  constructor(
+    readonly planet: Planet,
+    readonly position: PlanetPosition,
+    readonly orientation: Orientation
+  ) {}
 }
 
 export interface RoverConfiguration {
@@ -19,10 +23,11 @@ export interface RoverConfiguration {
   orientation: Orientation
 }
 
-export function makeRover(planet: Planet) {
-  return (rover: RoverConfiguration) =>
+export function makeRover(rover: RoverConfiguration) {
+  return (planet: Planet) =>
     pipe(
-      makePosition(planet)(rover.position.x, rover.position.y),
-      E.map((position) => new Rover(position, rover.orientation))
+      planet,
+      makePlanetPosition(rover.position.x, rover.position.y),
+      E.map((position) => new Rover(planet, position, rover.orientation))
     )
 }
