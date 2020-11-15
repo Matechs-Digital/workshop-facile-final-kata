@@ -3,9 +3,12 @@ import { begin, moveForward, moveLeft, runEither } from "./app/Program"
 import type { ProgramState } from "./app/ProgramState"
 import * as E from "./common/Either"
 import { pipe } from "./common/Function"
+import type { InvalidInitialPosition } from "./domain/Rover"
 import type { ParseError } from "./serde/ParseError"
 
-const onError = (e: ParseError | NextPositionObstacle): void => {
+const onError = (
+  e: ParseError | NextPositionObstacle | InvalidInitialPosition
+): void => {
   console.error(JSON.stringify(e, null, 2))
 
   process.exit(1)
