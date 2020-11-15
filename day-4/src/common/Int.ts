@@ -1,9 +1,9 @@
 /* istanbul ignore file */
 
-import { left, right } from "../utils/either"
-import { flow } from "../utils/flow"
-import type { Newtype } from "../utils/newtype"
-import { newtypeIso, newtypePrism } from "../utils/newtype"
+import { left, right } from "./Either"
+import { flow } from "./Function"
+import type { Newtype } from "./Newtype"
+import { newtype, newtypeSmart } from "./Newtype"
 
 export interface Int extends Newtype<"Int", number> {}
 
@@ -11,18 +11,18 @@ export class InvalidInteger {
   readonly _tag = "InvalidInteger"
 }
 
-export const Int = newtypePrism<Int>()((n) =>
+export const Int = newtypeSmart<Int>()((n) =>
   Number.isInteger(n) ? right(n) : left(new InvalidInteger())
 )
 
-export const IntIso = newtypeIso<Int>()
+export const IntIso = newtype<Int>()
 
-export const Zero = newtypeIso<Int>().wrap(0)
-export const One = newtypeIso<Int>().wrap(1)
-export const Two = newtypeIso<Int>().wrap(2)
-export const Three = newtypeIso<Int>().wrap(3)
-export const Four = newtypeIso<Int>().wrap(4)
-export const Five = newtypeIso<Int>().wrap(5)
+export const Zero = newtype<Int>().wrap(0)
+export const One = newtype<Int>().wrap(1)
+export const Two = newtype<Int>().wrap(2)
+export const Three = newtype<Int>().wrap(3)
+export const Four = newtype<Int>().wrap(4)
+export const Five = newtype<Int>().wrap(5)
 
 export function between(min: Int, max: Int) {
   return flow(Int.unwrap, (n) => n >= Int.unwrap(min) && n <= Int.unwrap(max))
@@ -37,17 +37,19 @@ export function mod(m: Int) {
     Int.unwrap,
     (n) => n % Int.unwrap(m),
     (n) => (n < 0 ? n + Int.unwrap(m) : n),
-    newtypeIso<Int>().wrap
+    newtype<Int>().wrap
   )
 }
 
 export function add(m: Int) {
-  return flow(Int.unwrap, (n) => n + Int.unwrap(m), newtypeIso<Int>().wrap)
+  return flow(Int.unwrap, (n) => n + Int.unwrap(m), newtype<Int>().wrap)
 }
 
 export function sub(m: Int) {
-  return flow(Int.unwrap, (n) => n - Int.unwrap(m), newtypeIso<Int>().wrap)
+  return flow(Int.unwrap, (n) => n - Int.unwrap(m), newtype<Int>().wrap)
 }
+
+export const positive = gte(Zero)
 
 export const { unwrap, wrap } = Int
 export const { wrap: wrapIso } = IntIso

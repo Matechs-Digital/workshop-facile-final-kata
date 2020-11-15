@@ -58,3 +58,8 @@ export function tuple<Es extends readonly Either<any, any>[]>(
 
   return right(as) as any
 }
+
+export function fold<E, A, B, C>(onLeft: (e: E) => C, onRight: (a: A) => B) {
+  return (self: Either<E, A>) =>
+    self._tag === "Left" ? onLeft(self.left) : onRight(self.right)
+}

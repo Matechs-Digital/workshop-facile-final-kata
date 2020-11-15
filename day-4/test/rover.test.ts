@@ -1,13 +1,19 @@
-import * as MR from "../src"
+import * as Command from "../src/app/Command"
+import * as MR from "../src/app/Program"
+import * as ProgramState from "../src/app/ProgramState"
+import * as E from "../src/common/Either"
+import { pipe } from "../src/common/Function"
 import * as I from "../src/common/Int"
-import * as E from "../src/utils/either"
-import { pipe } from "../src/utils/pipe"
+import { Orientation } from "../src/domain/Orientation"
+import { Planet } from "../src/domain/Planet"
+import { Position } from "../src/domain/Position"
+import { Rover } from "../src/domain/Rover"
 
-const planet = new MR.Planet(I.Five, I.Four)
+const planet = new Planet(I.Five, I.Four)
 
 describe("Rover", () => {
   it("init", () => {
-    const state = MR.initialState({
+    const state = MR.begin({
       planet: {
         width: I.Five,
         height: I.Four
@@ -17,21 +23,23 @@ describe("Rover", () => {
           x: I.Zero,
           y: I.Zero
         },
-        orientation: "N"
+        orientation: Orientation.North
       }
     })
 
     expect(state).toEqual(
       E.right({
         planet,
-        rover: new MR.Rover(new MR.Position(I.Zero, I.Zero), "N"),
-        history: [new MR.Point(new MR.Position(I.Zero, I.Zero), "N")]
+        rover: new Rover(new Position(I.Zero, I.Zero), Orientation.North),
+        history: [
+          new ProgramState.HistoryEntry(new Position(I.Zero, I.Zero), Orientation.North)
+        ]
       })
     )
   })
 
   it("move forward looking north (at edge)", () => {
-    const state = MR.initialState({
+    const state = MR.begin({
       planet: {
         width: I.Five,
         height: I.Four
@@ -41,26 +49,29 @@ describe("Rover", () => {
           x: I.Zero,
           y: I.Three
         },
-        orientation: "N"
+        orientation: Orientation.North
       }
     })
 
-    const program = pipe(state, MR.nextMove("f"))
+    const program = pipe(state, MR.nextMove(Command.Commands.Forward))
 
     expect(program).toEqual(
       E.right({
         planet,
-        rover: new MR.Rover(new MR.Position(I.Zero, I.Zero), "N"),
+        rover: new Rover(new Position(I.Zero, I.Zero), Orientation.North),
         history: [
-          new MR.Point(new MR.Position(I.Zero, I.Three), "N"),
-          new MR.Point(new MR.Position(I.Zero, I.Zero), "N")
+          new ProgramState.HistoryEntry(
+            new Position(I.Zero, I.Three),
+            Orientation.North
+          ),
+          new ProgramState.HistoryEntry(new Position(I.Zero, I.Zero), Orientation.North)
         ]
       })
     )
   })
 
   it("move forward looking south (at the edge)", () => {
-    const state = MR.initialState({
+    const state = MR.begin({
       planet: {
         width: I.Five,
         height: I.Four
@@ -70,26 +81,32 @@ describe("Rover", () => {
           x: I.Zero,
           y: I.Zero
         },
-        orientation: "S"
+        orientation: Orientation.South
       }
     })
 
-    const program = pipe(state, MR.nextMove("f"))
+    const program = pipe(state, MR.nextMove(Command.Commands.Forward))
 
     expect(program).toEqual(
       E.right({
         planet,
-        rover: new MR.Rover(new MR.Position(I.Zero, I.Three), "S"),
+        rover: new Rover(new Position(I.Zero, I.Three), Orientation.South),
         history: [
-          new MR.Point(new MR.Position(I.Zero, I.Zero), "S"),
-          new MR.Point(new MR.Position(I.Zero, I.Three), "S")
+          new ProgramState.HistoryEntry(
+            new Position(I.Zero, I.Zero),
+            Orientation.South
+          ),
+          new ProgramState.HistoryEntry(
+            new Position(I.Zero, I.Three),
+            Orientation.South
+          )
         ]
       })
     )
   })
 
   it("move forward looking east (at the edge)", () => {
-    const state = MR.initialState({
+    const state = MR.begin({
       planet: {
         width: I.Five,
         height: I.Four
@@ -99,26 +116,26 @@ describe("Rover", () => {
           x: I.Four,
           y: I.Zero
         },
-        orientation: "E"
+        orientation: Orientation.East
       }
     })
 
-    const program = pipe(state, MR.nextMove("f"))
+    const program = pipe(state, MR.nextMove(Command.Commands.Forward))
 
     expect(program).toEqual(
       E.right({
         planet,
-        rover: new MR.Rover(new MR.Position(I.Zero, I.Zero), "E"),
+        rover: new Rover(new Position(I.Zero, I.Zero), Orientation.East),
         history: [
-          new MR.Point(new MR.Position(I.Four, I.Zero), "E"),
-          new MR.Point(new MR.Position(I.Zero, I.Zero), "E")
+          new ProgramState.HistoryEntry(new Position(I.Four, I.Zero), Orientation.East),
+          new ProgramState.HistoryEntry(new Position(I.Zero, I.Zero), Orientation.East)
         ]
       })
     )
   })
 
   it("move forward looking west (at the edge)", () => {
-    const state = MR.initialState({
+    const state = MR.begin({
       planet: {
         width: I.Five,
         height: I.Four
@@ -128,26 +145,26 @@ describe("Rover", () => {
           x: I.Zero,
           y: I.Zero
         },
-        orientation: "W"
+        orientation: Orientation.West
       }
     })
 
-    const program = pipe(state, MR.nextMove("f"))
+    const program = pipe(state, MR.nextMove(Command.Commands.Forward))
 
     expect(program).toEqual(
       E.right({
         planet,
-        rover: new MR.Rover(new MR.Position(I.Four, I.Zero), "W"),
+        rover: new Rover(new Position(I.Four, I.Zero), Orientation.West),
         history: [
-          new MR.Point(new MR.Position(I.Zero, I.Zero), "W"),
-          new MR.Point(new MR.Position(I.Four, I.Zero), "W")
+          new ProgramState.HistoryEntry(new Position(I.Zero, I.Zero), Orientation.West),
+          new ProgramState.HistoryEntry(new Position(I.Four, I.Zero), Orientation.West)
         ]
       })
     )
   })
 
   it("move backward looking north (at the edge)", () => {
-    const state = MR.initialState({
+    const state = MR.begin({
       planet: {
         width: I.Five,
         height: I.Four
@@ -157,26 +174,32 @@ describe("Rover", () => {
           x: I.Zero,
           y: I.Zero
         },
-        orientation: "N"
+        orientation: Orientation.North
       }
     })
 
-    const program = pipe(state, MR.nextMove("b"))
+    const program = pipe(state, MR.nextMove(Command.Commands.Backward))
 
     expect(program).toEqual(
       E.right({
         planet,
-        rover: new MR.Rover(new MR.Position(I.Zero, I.Three), "S"),
+        rover: new Rover(new Position(I.Zero, I.Three), Orientation.South),
         history: [
-          new MR.Point(new MR.Position(I.Zero, I.Zero), "N"),
-          new MR.Point(new MR.Position(I.Zero, I.Three), "S")
+          new ProgramState.HistoryEntry(
+            new Position(I.Zero, I.Zero),
+            Orientation.North
+          ),
+          new ProgramState.HistoryEntry(
+            new Position(I.Zero, I.Three),
+            Orientation.South
+          )
         ]
       })
     )
   })
 
   it("move backward looking south (at the edge)", () => {
-    const state = MR.initialState({
+    const state = MR.begin({
       planet: {
         width: I.Five,
         height: I.Four
@@ -186,26 +209,29 @@ describe("Rover", () => {
           x: I.Zero,
           y: I.Three
         },
-        orientation: "S"
+        orientation: Orientation.South
       }
     })
 
-    const program = pipe(state, MR.nextMove("b"))
+    const program = pipe(state, MR.nextMove(Command.Commands.Backward))
 
     expect(program).toEqual(
       E.right({
         planet,
-        rover: new MR.Rover(new MR.Position(I.Zero, I.Zero), "N"),
+        rover: new Rover(new Position(I.Zero, I.Zero), Orientation.North),
         history: [
-          new MR.Point(new MR.Position(I.Zero, I.Three), "S"),
-          new MR.Point(new MR.Position(I.Zero, I.Zero), "N")
+          new ProgramState.HistoryEntry(
+            new Position(I.Zero, I.Three),
+            Orientation.South
+          ),
+          new ProgramState.HistoryEntry(new Position(I.Zero, I.Zero), Orientation.North)
         ]
       })
     )
   })
 
   it("move backward looking east (at the edge)", () => {
-    const state = MR.initialState({
+    const state = MR.begin({
       planet: {
         width: I.Five,
         height: I.Four
@@ -215,26 +241,26 @@ describe("Rover", () => {
           x: I.Zero,
           y: I.Zero
         },
-        orientation: "E"
+        orientation: Orientation.East
       }
     })
 
-    const program = pipe(state, MR.nextMove("b"))
+    const program = pipe(state, MR.nextMove(Command.Commands.Backward))
 
     expect(program).toEqual(
       E.right({
         planet,
-        rover: new MR.Rover(new MR.Position(I.Four, I.Zero), "W"),
+        rover: new Rover(new Position(I.Four, I.Zero), Orientation.West),
         history: [
-          new MR.Point(new MR.Position(I.Zero, I.Zero), "E"),
-          new MR.Point(new MR.Position(I.Four, I.Zero), "W")
+          new ProgramState.HistoryEntry(new Position(I.Zero, I.Zero), Orientation.East),
+          new ProgramState.HistoryEntry(new Position(I.Four, I.Zero), Orientation.West)
         ]
       })
     )
   })
 
   it("move backward looking west (at the edge)", () => {
-    const state = MR.initialState({
+    const state = MR.begin({
       planet: {
         width: I.Five,
         height: I.Four
@@ -244,26 +270,26 @@ describe("Rover", () => {
           x: I.Four,
           y: I.Zero
         },
-        orientation: "W"
+        orientation: Orientation.West
       }
     })
 
-    const program = pipe(state, MR.nextMove("b"))
+    const program = pipe(state, MR.nextMove(Command.Commands.Backward))
 
     expect(program).toEqual(
       E.right({
         planet,
-        rover: new MR.Rover(new MR.Position(I.Zero, I.Zero), "E"),
+        rover: new Rover(new Position(I.Zero, I.Zero), Orientation.East),
         history: [
-          new MR.Point(new MR.Position(I.Four, I.Zero), "W"),
-          new MR.Point(new MR.Position(I.Zero, I.Zero), "E")
+          new ProgramState.HistoryEntry(new Position(I.Four, I.Zero), Orientation.West),
+          new ProgramState.HistoryEntry(new Position(I.Zero, I.Zero), Orientation.East)
         ]
       })
     )
   })
 
   it("move left looking north (at the edge)", () => {
-    const state = MR.initialState({
+    const state = MR.begin({
       planet: {
         width: I.Five,
         height: I.Four
@@ -273,26 +299,29 @@ describe("Rover", () => {
           x: I.Zero,
           y: I.Zero
         },
-        orientation: "N"
+        orientation: Orientation.North
       }
     })
 
-    const program = pipe(state, MR.nextMove("l"))
+    const program = pipe(state, MR.nextMove(Command.Commands.Left))
 
     expect(program).toEqual(
       E.right({
         planet,
-        rover: new MR.Rover(new MR.Position(I.Four, I.Zero), "W"),
+        rover: new Rover(new Position(I.Four, I.Zero), Orientation.West),
         history: [
-          new MR.Point(new MR.Position(I.Zero, I.Zero), "N"),
-          new MR.Point(new MR.Position(I.Four, I.Zero), "W")
+          new ProgramState.HistoryEntry(
+            new Position(I.Zero, I.Zero),
+            Orientation.North
+          ),
+          new ProgramState.HistoryEntry(new Position(I.Four, I.Zero), Orientation.West)
         ]
       })
     )
   })
 
   it("move left looking south (at the edge)", () => {
-    const state = MR.initialState({
+    const state = MR.begin({
       planet: {
         width: I.Five,
         height: I.Four
@@ -302,26 +331,29 @@ describe("Rover", () => {
           x: I.Four,
           y: I.Zero
         },
-        orientation: "S"
+        orientation: Orientation.South
       }
     })
 
-    const program = pipe(state, MR.nextMove("l"))
+    const program = pipe(state, MR.nextMove(Command.Commands.Left))
 
     expect(program).toEqual(
       E.right({
         planet,
-        rover: new MR.Rover(new MR.Position(I.Zero, I.Zero), "E"),
+        rover: new Rover(new Position(I.Zero, I.Zero), Orientation.East),
         history: [
-          new MR.Point(new MR.Position(I.Four, I.Zero), "S"),
-          new MR.Point(new MR.Position(I.Zero, I.Zero), "E")
+          new ProgramState.HistoryEntry(
+            new Position(I.Four, I.Zero),
+            Orientation.South
+          ),
+          new ProgramState.HistoryEntry(new Position(I.Zero, I.Zero), Orientation.East)
         ]
       })
     )
   })
 
   it("move left looking east (at the edge)", () => {
-    const state = MR.initialState({
+    const state = MR.begin({
       planet: {
         width: I.Five,
         height: I.Four
@@ -331,26 +363,29 @@ describe("Rover", () => {
           x: I.Zero,
           y: I.Three
         },
-        orientation: "E"
+        orientation: Orientation.East
       }
     })
 
-    const program = pipe(state, MR.nextMove("l"))
+    const program = pipe(state, MR.nextMove(Command.Commands.Left))
 
     expect(program).toEqual(
       E.right({
         planet,
-        rover: new MR.Rover(new MR.Position(I.Zero, I.Zero), "N"),
+        rover: new Rover(new Position(I.Zero, I.Zero), Orientation.North),
         history: [
-          new MR.Point(new MR.Position(I.Zero, I.Three), "E"),
-          new MR.Point(new MR.Position(I.Zero, I.Zero), "N")
+          new ProgramState.HistoryEntry(
+            new Position(I.Zero, I.Three),
+            Orientation.East
+          ),
+          new ProgramState.HistoryEntry(new Position(I.Zero, I.Zero), Orientation.North)
         ]
       })
     )
   })
 
   it("move left looking west (at the edge)", () => {
-    const state = MR.initialState({
+    const state = MR.begin({
       planet: {
         width: I.Five,
         height: I.Four
@@ -360,26 +395,29 @@ describe("Rover", () => {
           x: I.Zero,
           y: I.Zero
         },
-        orientation: "W"
+        orientation: Orientation.West
       }
     })
 
-    const program = pipe(state, MR.nextMove("l"))
+    const program = pipe(state, MR.nextMove(Command.Commands.Left))
 
     expect(program).toEqual(
       E.right({
         planet,
-        rover: new MR.Rover(new MR.Position(I.Zero, I.Three), "S"),
+        rover: new Rover(new Position(I.Zero, I.Three), Orientation.South),
         history: [
-          new MR.Point(new MR.Position(I.Zero, I.Zero), "W"),
-          new MR.Point(new MR.Position(I.Zero, I.Three), "S")
+          new ProgramState.HistoryEntry(new Position(I.Zero, I.Zero), Orientation.West),
+          new ProgramState.HistoryEntry(
+            new Position(I.Zero, I.Three),
+            Orientation.South
+          )
         ]
       })
     )
   })
 
   it("move right looking north (at the edge)", () => {
-    const state = MR.initialState({
+    const state = MR.begin({
       planet: {
         width: I.Five,
         height: I.Four
@@ -389,26 +427,29 @@ describe("Rover", () => {
           x: I.Four,
           y: I.Zero
         },
-        orientation: "N"
+        orientation: Orientation.North
       }
     })
 
-    const program = pipe(state, MR.nextMove("r"))
+    const program = pipe(state, MR.nextMove(Command.Commands.Right))
 
     expect(program).toEqual(
       E.right({
         planet,
-        rover: new MR.Rover(new MR.Position(I.Zero, I.Zero), "E"),
+        rover: new Rover(new Position(I.Zero, I.Zero), Orientation.East),
         history: [
-          new MR.Point(new MR.Position(I.Four, I.Zero), "N"),
-          new MR.Point(new MR.Position(I.Zero, I.Zero), "E")
+          new ProgramState.HistoryEntry(
+            new Position(I.Four, I.Zero),
+            Orientation.North
+          ),
+          new ProgramState.HistoryEntry(new Position(I.Zero, I.Zero), Orientation.East)
         ]
       })
     )
   })
 
   it("move right looking south (at the edge)", () => {
-    const state = MR.initialState({
+    const state = MR.begin({
       planet: {
         width: I.Five,
         height: I.Four
@@ -418,26 +459,29 @@ describe("Rover", () => {
           x: I.Zero,
           y: I.Zero
         },
-        orientation: "S"
+        orientation: Orientation.South
       }
     })
 
-    const program = pipe(state, MR.nextMove("r"))
+    const program = pipe(state, MR.nextMove(Command.Commands.Right))
 
     expect(program).toEqual(
       E.right({
         planet,
-        rover: new MR.Rover(new MR.Position(I.Four, I.Zero), "W"),
+        rover: new Rover(new Position(I.Four, I.Zero), Orientation.West),
         history: [
-          new MR.Point(new MR.Position(I.Zero, I.Zero), "S"),
-          new MR.Point(new MR.Position(I.Four, I.Zero), "W")
+          new ProgramState.HistoryEntry(
+            new Position(I.Zero, I.Zero),
+            Orientation.South
+          ),
+          new ProgramState.HistoryEntry(new Position(I.Four, I.Zero), Orientation.West)
         ]
       })
     )
   })
 
   it("move right looking east (at the edge)", () => {
-    const state = MR.initialState({
+    const state = MR.begin({
       planet: {
         width: I.Five,
         height: I.Four
@@ -447,26 +491,29 @@ describe("Rover", () => {
           x: I.Zero,
           y: I.Zero
         },
-        orientation: "E"
+        orientation: Orientation.East
       }
     })
 
-    const program = pipe(state, MR.nextMove("r"))
+    const program = pipe(state, MR.nextMove(Command.Commands.Right))
 
     expect(program).toEqual(
       E.right({
         planet,
-        rover: new MR.Rover(new MR.Position(I.Zero, I.Three), "S"),
+        rover: new Rover(new Position(I.Zero, I.Three), Orientation.South),
         history: [
-          new MR.Point(new MR.Position(I.Zero, I.Zero), "E"),
-          new MR.Point(new MR.Position(I.Zero, I.Three), "S")
+          new ProgramState.HistoryEntry(new Position(I.Zero, I.Zero), Orientation.East),
+          new ProgramState.HistoryEntry(
+            new Position(I.Zero, I.Three),
+            Orientation.South
+          )
         ]
       })
     )
   })
 
   it("move right looking west (at the edge)", () => {
-    const state = MR.initialState({
+    const state = MR.begin({
       planet: {
         width: I.Five,
         height: I.Four
@@ -476,26 +523,29 @@ describe("Rover", () => {
           x: I.Zero,
           y: I.Three
         },
-        orientation: "W"
+        orientation: Orientation.West
       }
     })
 
-    const program = pipe(state, MR.nextMove("r"))
+    const program = pipe(state, MR.nextMove(Command.Commands.Right))
 
     expect(program).toEqual(
       E.right({
         planet,
-        rover: new MR.Rover(new MR.Position(I.Zero, I.Zero), "N"),
+        rover: new Rover(new Position(I.Zero, I.Zero), Orientation.North),
         history: [
-          new MR.Point(new MR.Position(I.Zero, I.Three), "W"),
-          new MR.Point(new MR.Position(I.Zero, I.Zero), "N")
+          new ProgramState.HistoryEntry(
+            new Position(I.Zero, I.Three),
+            Orientation.West
+          ),
+          new ProgramState.HistoryEntry(new Position(I.Zero, I.Zero), Orientation.North)
         ]
       })
     )
   })
 
   it("run batches of commands", () => {
-    const state = MR.initialState({
+    const state = MR.begin({
       planet: {
         width: I.Five,
         height: I.Four
@@ -505,21 +555,31 @@ describe("Rover", () => {
           x: I.Zero,
           y: I.Zero
         },
-        orientation: "E"
+        orientation: Orientation.East
       }
     })
 
-    const program = pipe(state, MR.nextBatch("f", "r", "f"))
+    const program = pipe(
+      state,
+      MR.nextBatch(
+        Command.Commands.Forward,
+        Command.Commands.Right,
+        Command.Commands.Forward
+      )
+    )
 
     expect(program).toEqual(
       E.right({
         planet,
-        rover: new MR.Rover(new MR.Position(I.One, I.Two), "S"),
+        rover: new Rover(new Position(I.One, I.Two), Orientation.South),
         history: [
-          new MR.Point(new MR.Position(I.Zero, I.Zero), "E"),
-          new MR.Point(new MR.Position(I.One, I.Zero), "E"),
-          new MR.Point(new MR.Position(I.One, I.Three), "S"),
-          new MR.Point(new MR.Position(I.One, I.Two), "S")
+          new ProgramState.HistoryEntry(new Position(I.Zero, I.Zero), Orientation.East),
+          new ProgramState.HistoryEntry(new Position(I.One, I.Zero), Orientation.East),
+          new ProgramState.HistoryEntry(
+            new Position(I.One, I.Three),
+            Orientation.South
+          ),
+          new ProgramState.HistoryEntry(new Position(I.One, I.Two), Orientation.South)
         ]
       })
     )

@@ -1,4 +1,4 @@
-export function foldLeft<A, S>(
+export function reduce<A, S>(
   a: readonly A[],
   initial: S,
   reducer: (a: A, s: S) => S
