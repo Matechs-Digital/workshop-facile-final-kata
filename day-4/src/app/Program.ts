@@ -53,13 +53,13 @@ export function nextPosition(
 ): E.Either<NextPositionObstacle, ProgramState> {
   return pipe(
     validatePlanetPosition(new PlanetPosition(state.rover.planet, x, y)),
-    E.catchAll((e) => E.left(new NextPositionObstacle(state, e))),
     E.map(
       (position): ProgramState => ({
         rover: new Rover(state.rover.planet, position, orientation),
         history: [...state.history, new HistoryEntry(position, orientation)]
       })
-    )
+    ),
+    E.catchAll((e) => E.left(new NextPositionObstacle(state, e)))
   )
 }
 

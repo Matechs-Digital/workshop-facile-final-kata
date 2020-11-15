@@ -27,6 +27,7 @@ const onError = (e: MR.ConfigError | MR.NextPositionObstacle): void => {
 
 const onSuccess = (a: ProgramState): void => {
   console.log(JSON.stringify(a, null, 2))
+  process.exit(0)
 }
 
 const runMain = E.fold(onError, onSuccess)
