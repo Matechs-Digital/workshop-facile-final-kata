@@ -9,14 +9,14 @@ const config: MR.ProgramConfiguration = {
   planet: {
     width: I.Five,
     height: I.Four,
-    obstacles: []
+    obstacles: [{ x: I.One, y: I.One }]
   },
   rover: {
     position: {
-      x: I.Four,
+      x: I.Zero,
       y: I.Zero
     },
-    orientation: Orientation.West
+    orientation: Orientation.East
   }
 }
 
@@ -32,12 +32,4 @@ const onSuccess = (a: ProgramState): void => {
 
 const runMain = E.fold(onError, onSuccess)
 
-pipe(
-  config,
-  MR.begin,
-  MR.moveBackward,
-  MR.moveForward,
-  MR.moveLeft,
-  MR.moveRight,
-  runMain
-)
+pipe(config, MR.begin, MR.moveForward, MR.moveLeft, runMain)

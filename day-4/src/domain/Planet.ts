@@ -2,22 +2,24 @@ import * as A from "../common/Array"
 import * as E from "../common/Either"
 import { pipe } from "../common/Function"
 import * as I from "../common/Int"
-import type { PlanetPosition, PlanetPositionHash } from "./PlanetPosition"
-import { hashPlanetPosition } from "./PlanetPosition"
+import type { Position, PositionHash } from "./Position"
+import { hashPosition, scale } from "./Position"
 
 export class Planet {
   readonly _tag = "Planet"
   constructor(
     readonly width: I.Int,
     readonly height: I.Int,
-    readonly obstacles: Set<PlanetPositionHash>
+    readonly obstacles: Set<PositionHash>
   ) {}
 }
+
+export interface ObstaclePosition extends Position {}
 
 export interface PlanetConfiguration {
   width: I.Int
   height: I.Int
-  obstacles: readonly PlanetPosition[]
+  obstacles: readonly ObstaclePosition[]
 }
 
 export type InvalidPlanetConfig = InvalidPlanetHeight | InvalidPlanetWidth
@@ -35,7 +37,9 @@ export function makePlanet({
             height,
             pipe(
               obstacles,
-              A.reduce(new Set(), (p, m) => m.add(hashPlanetPosition(p)))
+              A.reduce(new Set(), (p, m) =>
+                m.add(hashPosition(scale({ width, height })(p)))
+              )
             )
           )
         )
