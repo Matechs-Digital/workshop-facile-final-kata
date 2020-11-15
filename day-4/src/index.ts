@@ -33,7 +33,7 @@ const onSuccess = (a: ProgramState): void => {
 const x = pipe(
   MR.begin(config),
   MR.nextMove(Command.Commands.Backward),
-  MR.nextMove(Command.Commands.Backward),
-  MR.nextMove(Command.Commands.Backward),
+  MR.nextMove(Command.Commands.Forward),
+  MR.nextMove(Command.Commands.Left),
   E.fold(onError, onSuccess)
 )
