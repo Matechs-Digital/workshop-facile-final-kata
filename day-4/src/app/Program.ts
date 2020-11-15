@@ -10,6 +10,7 @@ import type { PlanetContext } from "../domain/Planet"
 import { addObstacles } from "../domain/Planet"
 import type { ObstacleHit } from "../domain/Position"
 import { validatePosition } from "../domain/Position"
+import type { InvalidInitialPosition } from "../domain/Rover"
 import { makeRover, Rover } from "../domain/Rover"
 import { parseObstacles } from "../serde/ObstaclesParser"
 import type { ParseError } from "../serde/ParseError"
@@ -282,7 +283,7 @@ export function actualize(self: ProgramState): ProgramState {
 export const runEither = (config: AppConfig["config"]) => (
   self: RE.ReaderEither<
     AppConfig & PlanetContext,
-    ParseError | NextPositionObstacle,
+    ParseError | NextPositionObstacle | InvalidInitialPosition,
     ProgramState
   >
 ) => pipe(self, providePlanet, provideAppConfig(config), RE.run)
