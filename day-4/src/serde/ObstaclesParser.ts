@@ -31,26 +31,9 @@ export function parseObstacle(
   )
 }
 
-export function parseObstacles(
-  obstaclesConfig: string
-): E.Either<ParseObstaclesError, readonly ObstaclePosition[]> {
+export function parseObstacles(obstaclesConfig: string) {
   if (obstaclesConfig.length === 0) {
     return E.right([])
   }
-  return pipe(
-    obstaclesConfig.split(" "),
-    reduce(
-      E.right([]) as E.Either<ParseObstaclesError, readonly ObstaclePosition[]>,
-      (s, obsOrErr) =>
-        pipe(
-          obsOrErr,
-          E.chain((obs) =>
-            pipe(
-              parseObstacle(s),
-              E.map((o) => [...obs, o])
-            )
-          )
-        )
-    )
-  )
+  return pipe(obstaclesConfig.split(" "), E.foreach(parseObstacle))
 }

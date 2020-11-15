@@ -1,5 +1,6 @@
 /* istanbul ignore file */
 
+import { reduce } from "./Array"
 import { pipe } from "./Function"
 
 export interface Left<E> {
@@ -140,3 +141,21 @@ function let_<A, K, N extends string>(tag: Exclude<N, keyof K>, f: (_: K) => A) 
 const do_ = right({})
 
 export { let_ as let, bind, do_ as do }
+
+export function foreach<A, E, B>(f: (a: A) => Either<E, B>) {
+  return (self: ReadonlyArray<A>): Either<E, readonly B[]> =>
+    pipe(
+      self,
+      reduce(right([]) as Either<E, readonly B[]>, (a, ebs) =>
+        pipe(
+          ebs,
+          chain((bs) =>
+            pipe(
+              f(a),
+              map((b) => [...bs, b])
+            )
+          )
+        )
+      )
+    )
+}
