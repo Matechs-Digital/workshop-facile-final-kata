@@ -24,7 +24,7 @@ export function parsePlanet(planetConfig: string): E.Either<ParsePlanetError, Pl
 
   return pipe(
     E.tuple(I.parse(results[1]), I.parse(results[2])),
-    E.chain(([width, height]) => makePlanet({ width, height, obstacles: [] })),
+    E.chain(([width, height]) => makePlanet({ width, height })),
     E.catchAll(() => E.left(new ParsePlanetError(planetConfig)))
   )
 }

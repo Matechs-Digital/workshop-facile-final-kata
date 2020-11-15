@@ -20,6 +20,17 @@ export interface RoverConfiguration {
   orientation: Orientation
 }
 
+export function roverConfiguration(
+  x: I.Int,
+  y: I.Int,
+  orientation: Orientation
+): RoverConfiguration {
+  return {
+    orientation,
+    position: { x, y }
+  }
+}
+
 export function makeRover(rover: RoverConfiguration) {
   return (planet: Planet) =>
     new Rover(

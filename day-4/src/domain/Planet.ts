@@ -19,30 +19,17 @@ export interface ObstaclePosition extends Position {}
 export interface PlanetConfiguration {
   width: I.Int
   height: I.Int
-  obstacles: readonly ObstaclePosition[]
 }
 
 export type InvalidPlanetConfig = InvalidPlanetHeight | InvalidPlanetWidth
 
 export function makePlanet({
   height,
-  obstacles,
   width
 }: PlanetConfiguration): E.Either<InvalidPlanetConfig, Planet> {
   return I.positive(width)
     ? I.positive(height)
-      ? E.right(
-          new Planet(
-            width,
-            height,
-            pipe(
-              obstacles,
-              A.reduce(new Set(), (p, m) =>
-                m.add(hashPosition(scale({ width, height })(p)))
-              )
-            )
-          )
-        )
+      ? E.right(new Planet(width, height, new Set()))
       : E.left(new InvalidPlanetHeight())
     : E.left(new InvalidPlanetWidth())
 }

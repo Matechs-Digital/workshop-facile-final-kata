@@ -2,23 +2,6 @@ import * as MR from "./app/Program"
 import type { ProgramState } from "./app/ProgramState"
 import * as E from "./common/Either"
 import { pipe } from "./common/Function"
-import * as I from "./common/Int"
-import { Orientation } from "./domain/Orientation"
-
-const config: MR.ProgramConfiguration = {
-  planet: {
-    width: I.Five,
-    height: I.Four,
-    obstacles: [{ x: I.One, y: I.One }]
-  },
-  rover: {
-    position: {
-      x: I.Zero,
-      y: I.Zero
-    },
-    orientation: Orientation.East
-  }
-}
 
 const onError = (e: MR.ConfigError | MR.NextPositionObstacle): void => {
   console.error(JSON.stringify(e, null, 2))
@@ -33,4 +16,13 @@ const onSuccess = (a: ProgramState): void => {
 
 const runMain = E.fold(onError, onSuccess)
 
-pipe(config, MR.begin, MR.moveForward, MR.moveLeft, runMain)
+pipe(
+  MR.begin({
+    planet: "5x4",
+    initial: "1,3:N",
+    obstacles: "1,2 0,0 3,4"
+  }),
+  MR.moveForward,
+  MR.moveLeft,
+  runMain
+)

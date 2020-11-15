@@ -1,39 +1,20 @@
 import { reduce } from "../common/Array"
 import * as E from "../common/Either"
-import { flow, pipe } from "../common/Function"
+import { pipe } from "../common/Function"
 import * as I from "../common/Int"
 import { matchTag } from "../common/Match"
 import { Orientation } from "../domain/Orientation"
-import type { PlanetConfiguration } from "../domain/Planet"
-import { makePlanet } from "../domain/Planet"
+import { addObstacles } from "../domain/Planet"
 import type { ObstacleHit } from "../domain/PlanetPosition"
 import { PlanetPosition, validatePlanetPosition } from "../domain/PlanetPosition"
-import type { RoverConfiguration } from "../domain/Rover"
 import { makeRover, Rover } from "../domain/Rover"
+import { parseObstacles } from "../serde/ObstaclesParser"
+import { parseInitialPosition } from "../serde/ParseInitialPosition"
+import { parsePlanet } from "../serde/PlanetParser"
 import type { Command, GoBackward, GoForward, GoLeft, GoRight } from "./Command"
 import { Commands } from "./Command"
 import type { ProgramState } from "./ProgramState"
 import { HistoryEntry } from "./ProgramState"
-
-export interface ProgramConfiguration {
-  planet: PlanetConfiguration
-  rover: RoverConfiguration
-}
-
-export function begin(config: ProgramConfiguration) {
-  return pipe(
-    makePlanet(config.planet),
-    E.map(
-      flow(
-        makeRover(config.rover),
-        (rover): ProgramState => ({
-          rover,
-          history: [new HistoryEntry(rover.position, rover.orientation)]
-        })
-      )
-    )
-  )
-}
 
 export type ConfigError = E.EitherGetE<ReturnType<typeof begin>>
 
@@ -246,3 +227,24 @@ export const moveLeft = nextMove(Commands.Left)
 export const moveForward = nextMove(Commands.Forward)
 
 export const moveBackward = nextMove(Commands.Backward)
+
+export function begin(config: { planet: string; initial: string; obstacles: string }) {
+  return pipe(
+    E.do,
+    E.bind("planet", () => parsePlanet(config.planet)),
+    E.bind("initialPosition", () => parseInitialPosition(config.initial)),
+    E.bind("obstacles", () => parseObstacles(config.obstacles)),
+    E.let("planetWithObstacles", ({ obstacles, planet }) =>
+      addObstacles(...obstacles)(planet)
+    ),
+    E.let("rover", ({ initialPosition, planetWithObstacles }) =>
+      makeRover(initialPosition)(planetWithObstacles)
+    ),
+    E.map(
+      ({ rover }): ProgramState => ({
+        rover,
+        history: [new HistoryEntry(rover.position, rover.orientation)]
+      })
+    )
+  )
+}

@@ -14,18 +14,9 @@ const planet = new Planet(I.Five, I.Four, new Set())
 describe("Rover", () => {
   it("init", () => {
     const state = MR.begin({
-      planet: {
-        width: I.Five,
-        height: I.Four,
-        obstacles: []
-      },
-      rover: {
-        position: {
-          x: I.Zero,
-          y: I.Zero
-        },
-        orientation: Orientation.North
-      }
+      planet: "5x4",
+      initial: "0,0:N",
+      obstacles: ""
     })
 
     expect(state).toEqual(
@@ -47,18 +38,9 @@ describe("Rover", () => {
 
   it("move forward looking north (at edge)", () => {
     const state = MR.begin({
-      planet: {
-        width: I.Five,
-        height: I.Four,
-        obstacles: []
-      },
-      rover: {
-        position: {
-          x: I.Zero,
-          y: I.Three
-        },
-        orientation: Orientation.North
-      }
+      planet: "5x4",
+      initial: "0,3:N",
+      obstacles: ""
     })
 
     const program = pipe(state, MR.nextMove(Command.Commands.Forward))
@@ -86,18 +68,9 @@ describe("Rover", () => {
 
   it("move forward looking south (at the edge)", () => {
     const state = MR.begin({
-      planet: {
-        width: I.Five,
-        height: I.Four,
-        obstacles: []
-      },
-      rover: {
-        position: {
-          x: I.Zero,
-          y: I.Zero
-        },
-        orientation: Orientation.South
-      }
+      planet: "5x4",
+      initial: "0,0:S",
+      obstacles: ""
     })
 
     const program = pipe(state, MR.nextMove(Command.Commands.Forward))
@@ -125,18 +98,9 @@ describe("Rover", () => {
 
   it("move forward looking east (at the edge)", () => {
     const state = MR.begin({
-      planet: {
-        width: I.Five,
-        height: I.Four,
-        obstacles: []
-      },
-      rover: {
-        position: {
-          x: I.Four,
-          y: I.Zero
-        },
-        orientation: Orientation.East
-      }
+      planet: "5x4",
+      initial: "4,0:E",
+      obstacles: ""
     })
 
     const program = pipe(state, MR.nextMove(Command.Commands.Forward))
@@ -164,18 +128,9 @@ describe("Rover", () => {
 
   it("move forward looking west (at the edge)", () => {
     const state = MR.begin({
-      planet: {
-        width: I.Five,
-        height: I.Four,
-        obstacles: []
-      },
-      rover: {
-        position: {
-          x: I.Zero,
-          y: I.Zero
-        },
-        orientation: Orientation.West
-      }
+      planet: "5x4",
+      initial: "0,0:W",
+      obstacles: ""
     })
 
     const program = pipe(state, MR.nextMove(Command.Commands.Forward))
@@ -203,18 +158,9 @@ describe("Rover", () => {
 
   it("move backward looking north (at the edge)", () => {
     const state = MR.begin({
-      planet: {
-        width: I.Five,
-        height: I.Four,
-        obstacles: []
-      },
-      rover: {
-        position: {
-          x: I.Zero,
-          y: I.Zero
-        },
-        orientation: Orientation.North
-      }
+      planet: "5x4",
+      initial: "0,0:N",
+      obstacles: ""
     })
 
     const program = pipe(state, MR.nextMove(Command.Commands.Backward))
@@ -242,18 +188,9 @@ describe("Rover", () => {
 
   it("move backward looking south (at the edge)", () => {
     const state = MR.begin({
-      planet: {
-        width: I.Five,
-        height: I.Four,
-        obstacles: []
-      },
-      rover: {
-        position: {
-          x: I.Zero,
-          y: I.Three
-        },
-        orientation: Orientation.South
-      }
+      planet: "5x4",
+      initial: "0,3:S",
+      obstacles: ""
     })
 
     const program = pipe(state, MR.nextMove(Command.Commands.Backward))
@@ -281,18 +218,9 @@ describe("Rover", () => {
 
   it("move backward looking east (at the edge)", () => {
     const state = MR.begin({
-      planet: {
-        width: I.Five,
-        height: I.Four,
-        obstacles: []
-      },
-      rover: {
-        position: {
-          x: I.Zero,
-          y: I.Zero
-        },
-        orientation: Orientation.East
-      }
+      planet: "5x4",
+      initial: "0,0:E",
+      obstacles: ""
     })
 
     const program = pipe(state, MR.nextMove(Command.Commands.Backward))
@@ -320,18 +248,9 @@ describe("Rover", () => {
 
   it("move backward looking west (at the edge)", () => {
     const state = MR.begin({
-      planet: {
-        width: I.Five,
-        height: I.Four,
-        obstacles: []
-      },
-      rover: {
-        position: {
-          x: I.Four,
-          y: I.Zero
-        },
-        orientation: Orientation.West
-      }
+      planet: "5x4",
+      initial: "4,0:W",
+      obstacles: ""
     })
 
     const program = pipe(state, MR.nextMove(Command.Commands.Backward))
@@ -359,18 +278,9 @@ describe("Rover", () => {
 
   it("move left looking north (at the edge)", () => {
     const state = MR.begin({
-      planet: {
-        width: I.Five,
-        height: I.Four,
-        obstacles: []
-      },
-      rover: {
-        position: {
-          x: I.Zero,
-          y: I.Zero
-        },
-        orientation: Orientation.North
-      }
+      planet: "5x4",
+      initial: "0,0:N",
+      obstacles: ""
     })
 
     const program = pipe(state, MR.nextMove(Command.Commands.Left))
@@ -398,18 +308,9 @@ describe("Rover", () => {
 
   it("move left looking south (at the edge)", () => {
     const state = MR.begin({
-      planet: {
-        width: I.Five,
-        height: I.Four,
-        obstacles: []
-      },
-      rover: {
-        position: {
-          x: I.Four,
-          y: I.Zero
-        },
-        orientation: Orientation.South
-      }
+      planet: "5x4",
+      initial: "4,0:S",
+      obstacles: ""
     })
 
     const program = pipe(state, MR.nextMove(Command.Commands.Left))
@@ -437,18 +338,9 @@ describe("Rover", () => {
 
   it("move left looking east (at the edge)", () => {
     const state = MR.begin({
-      planet: {
-        width: I.Five,
-        height: I.Four,
-        obstacles: []
-      },
-      rover: {
-        position: {
-          x: I.Zero,
-          y: I.Three
-        },
-        orientation: Orientation.East
-      }
+      planet: "5x4",
+      initial: "0,3:E",
+      obstacles: ""
     })
 
     const program = pipe(state, MR.nextMove(Command.Commands.Left))
@@ -476,18 +368,9 @@ describe("Rover", () => {
 
   it("move left looking west (at the edge)", () => {
     const state = MR.begin({
-      planet: {
-        width: I.Five,
-        height: I.Four,
-        obstacles: []
-      },
-      rover: {
-        position: {
-          x: I.Zero,
-          y: I.Zero
-        },
-        orientation: Orientation.West
-      }
+      planet: "5x4",
+      initial: "0,0:W",
+      obstacles: ""
     })
 
     const program = pipe(state, MR.nextMove(Command.Commands.Left))
@@ -515,18 +398,9 @@ describe("Rover", () => {
 
   it("move right looking north (at the edge)", () => {
     const state = MR.begin({
-      planet: {
-        width: I.Five,
-        height: I.Four,
-        obstacles: []
-      },
-      rover: {
-        position: {
-          x: I.Four,
-          y: I.Zero
-        },
-        orientation: Orientation.North
-      }
+      planet: "5x4",
+      initial: "4,0:N",
+      obstacles: ""
     })
 
     const program = pipe(state, MR.nextMove(Command.Commands.Right))
@@ -554,18 +428,9 @@ describe("Rover", () => {
 
   it("move right looking south (at the edge)", () => {
     const state = MR.begin({
-      planet: {
-        width: I.Five,
-        height: I.Four,
-        obstacles: []
-      },
-      rover: {
-        position: {
-          x: I.Zero,
-          y: I.Zero
-        },
-        orientation: Orientation.South
-      }
+      planet: "5x4",
+      initial: "0,0:S",
+      obstacles: ""
     })
 
     const program = pipe(state, MR.nextMove(Command.Commands.Right))
@@ -593,18 +458,9 @@ describe("Rover", () => {
 
   it("move right looking east (at the edge)", () => {
     const state = MR.begin({
-      planet: {
-        width: I.Five,
-        height: I.Four,
-        obstacles: []
-      },
-      rover: {
-        position: {
-          x: I.Zero,
-          y: I.Zero
-        },
-        orientation: Orientation.East
-      }
+      planet: "5x4",
+      initial: "0,0:E",
+      obstacles: ""
     })
 
     const program = pipe(state, MR.nextMove(Command.Commands.Right))
@@ -632,18 +488,9 @@ describe("Rover", () => {
 
   it("move right looking west (at the edge)", () => {
     const state = MR.begin({
-      planet: {
-        width: I.Five,
-        height: I.Four,
-        obstacles: []
-      },
-      rover: {
-        position: {
-          x: I.Zero,
-          y: I.Three
-        },
-        orientation: Orientation.West
-      }
+      planet: "5x4",
+      initial: "0,3:W",
+      obstacles: ""
     })
 
     const program = pipe(state, MR.nextMove(Command.Commands.Right))
@@ -671,18 +518,9 @@ describe("Rover", () => {
 
   it("run batches of commands", () => {
     const state = MR.begin({
-      planet: {
-        width: I.Five,
-        height: I.Four,
-        obstacles: []
-      },
-      rover: {
-        position: {
-          x: I.Zero,
-          y: I.Zero
-        },
-        orientation: Orientation.East
-      }
+      planet: "5x4",
+      initial: "0,0:E",
+      obstacles: ""
     })
 
     const program = pipe(

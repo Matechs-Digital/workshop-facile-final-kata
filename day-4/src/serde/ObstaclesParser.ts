@@ -34,6 +34,9 @@ export function parseObstacle(
 export function parseObstacles(
   obstaclesConfig: string
 ): E.Either<ParseObstaclesError, readonly ObstaclePosition[]> {
+  if (obstaclesConfig.length === 0) {
+    return E.right([])
+  }
   return pipe(
     obstaclesConfig.split(" "),
     reduce(

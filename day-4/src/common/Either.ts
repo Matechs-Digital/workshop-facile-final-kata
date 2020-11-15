@@ -1,5 +1,7 @@
 /* istanbul ignore file */
 
+import { pipe } from "./Function"
+
 export interface Left<E> {
   readonly _tag: "Left"
   readonly left: E
@@ -80,3 +82,61 @@ export type EitherGetA<X extends Either<any, any>> = [X] extends [
 ]
   ? A
   : never
+
+function bind<E, A, K, N extends string>(
+  tag: Exclude<N, keyof K>,
+  f: (_: K) => Either<E, A>
+) {
+  return <E2>(
+    mk: Either<E2, K>
+  ): Either<
+    E | E2,
+    K &
+      {
+        [k in N]: A
+      }
+  > =>
+    pipe(
+      mk,
+      chain((k) =>
+        pipe(
+          f(k),
+          map(
+            (
+              a
+            ): K &
+              {
+                [k in N]: A
+              } => ({ ...k, [tag]: a } as any)
+          )
+        )
+      )
+    )
+}
+
+function let_<A, K, N extends string>(tag: Exclude<N, keyof K>, f: (_: K) => A) {
+  return <E2>(
+    mk: Either<E2, K>
+  ): Either<
+    E2,
+    K &
+      {
+        [k in N]: A
+      }
+  > =>
+    pipe(
+      mk,
+      map(
+        (
+          k
+        ): K &
+          {
+            [k in N]: A
+          } => ({ ...k, [tag]: f(k) } as any)
+      )
+    )
+}
+
+const do_ = right({})
+
+export { let_ as let, bind, do_ as do }
