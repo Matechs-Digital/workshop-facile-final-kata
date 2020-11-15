@@ -46,7 +46,7 @@ export function tuple<Es extends readonly TaskEither<any, any>[]>(
     for (const t of tasks) {
       const x = await t()
       if (x._tag === "Left") {
-        return t
+        return x
       }
       as.push(x.right)
     }
