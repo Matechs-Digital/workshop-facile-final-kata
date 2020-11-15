@@ -21,7 +21,7 @@ const config: MR.ProgramConfiguration = {
   }
 }
 
-const onError = (e: MR.ConfigError): void => {
+const onError = (e: MR.ConfigError | MR.NextPositionObstacle): void => {
   console.error(JSON.stringify(e, null, 2))
   process.exit(1)
 }
@@ -30,8 +30,10 @@ const onSuccess = (a: ProgramState): void => {
   console.log(JSON.stringify(a, null, 2))
 }
 
-pipe(
+const x = pipe(
   MR.begin(config),
+  MR.nextMove(Command.Commands.Backward),
+  MR.nextMove(Command.Commands.Backward),
   MR.nextMove(Command.Commands.Backward),
   E.fold(onError, onSuccess)
 )

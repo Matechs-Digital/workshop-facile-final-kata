@@ -6,7 +6,8 @@ import { matchTag } from "../common/Match"
 import { Orientation } from "../domain/Orientation"
 import type { PlanetConfiguration } from "../domain/Planet"
 import { makePlanet } from "../domain/Planet"
-import { PlanetPosition } from "../domain/PlanetPosition"
+import type { ObstacleHit } from "../domain/PlanetPosition"
+import { PlanetPosition, validatePlanetPosition } from "../domain/PlanetPosition"
 import type { RoverConfiguration } from "../domain/Rover"
 import { makeRover, Rover } from "../domain/Rover"
 import type { Command, GoBackward, GoForward, GoLeft, GoRight } from "./Command"
@@ -35,20 +36,35 @@ export function begin(config: ProgramConfiguration) {
 
 export type ConfigError = E.EitherGetE<ReturnType<typeof begin>>
 
+export class NextPositionObstacle {
+  readonly _tag = "NextPositionObstacle"
+  constructor(
+    readonly previousState: ProgramState,
+    readonly obstacleHit: ObstacleHit
+  ) {}
+}
+
 export function nextPosition(
   state: ProgramState,
   x: I.Int,
   y: I.Int,
   orientation: Orientation
-): ProgramState {
-  const position = new PlanetPosition(state.rover.planet, x, y)
-  return {
-    rover: new Rover(state.rover.planet, position, orientation),
-    history: [...state.history, new HistoryEntry(position, orientation)]
-  }
+): E.Either<NextPositionObstacle, ProgramState> {
+  return pipe(
+    validatePlanetPosition(new PlanetPosition(state.rover.planet, x, y)),
+    E.catchAll((e) => E.left(new NextPositionObstacle(state, e))),
+    E.map(
+      (position): ProgramState => ({
+        rover: new Rover(state.rover.planet, position, orientation),
+        history: [...state.history, new HistoryEntry(position, orientation)]
+      })
+    )
+  )
 }
 
-export const move: (_: Command) => (_: ProgramState) => ProgramState = matchTag({
+export const move: (
+  _: Command
+) => (_: ProgramState) => E.Either<NextPositionObstacle, ProgramState> = matchTag({
   GoForward: goForward,
   GoBackward: goBackward,
   GoLeft: goLeft,
@@ -56,24 +72,26 @@ export const move: (_: Command) => (_: ProgramState) => ProgramState = matchTag(
 })
 
 export function nextMove(command: Command) {
-  return <E>(e: E.Either<E, ProgramState>) => pipe(e, E.map(move(command)))
+  return <E>(e: E.Either<E, ProgramState>) => pipe(e, E.chain(move(command)))
 }
 
 export function nextBatch(...commands: readonly [Command, ...Command[]]) {
-  return <E>(e: E.Either<E, ProgramState>): E.Either<E, ProgramState> =>
+  return <E>(e: E.Either<E, ProgramState>) =>
     pipe(
       e,
-      E.map((s) =>
+      E.chain((s) =>
         pipe(
           commands,
-          reduce(s, (c, x) => move(c)(x))
+          reduce(<E.Either<NextPositionObstacle, ProgramState>>E.right(s), (c, x) =>
+            pipe(x, E.chain(move(c)))
+          )
         )
       )
     )
 }
 
 export function goForward(_: GoForward) {
-  return (state: ProgramState): ProgramState =>
+  return (state: ProgramState): E.Either<NextPositionObstacle, ProgramState> =>
     pipe(
       state.rover.orientation,
       matchTag({
@@ -110,7 +128,7 @@ export function goForward(_: GoForward) {
 }
 
 export function goBackward(_: GoBackward) {
-  return (state: ProgramState): ProgramState =>
+  return (state: ProgramState): E.Either<NextPositionObstacle, ProgramState> =>
     pipe(
       state.rover.orientation,
       matchTag({
@@ -147,7 +165,7 @@ export function goBackward(_: GoBackward) {
 }
 
 export function goLeft(_: GoLeft) {
-  return (state: ProgramState): ProgramState =>
+  return (state: ProgramState): E.Either<NextPositionObstacle, ProgramState> =>
     pipe(
       state.rover.orientation,
       matchTag({
@@ -184,7 +202,7 @@ export function goLeft(_: GoLeft) {
 }
 
 export function goRight(_: GoRight) {
-  return (state: ProgramState): ProgramState =>
+  return (state: ProgramState): E.Either<NextPositionObstacle, ProgramState> =>
     pipe(
       state.rover.orientation,
       matchTag({

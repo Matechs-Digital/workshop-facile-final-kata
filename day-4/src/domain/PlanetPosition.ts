@@ -35,3 +35,17 @@ export function move(x: I.Int, y: I.Int) {
       I.mod(self.planet.height)(y)
     )
 }
+
+export class ObstacleHit {
+  readonly _tag = "ObstacleHit"
+  constructor(readonly position: PlanetPosition) {}
+}
+
+export function validatePlanetPosition(
+  self: PlanetPosition
+): E.Either<ObstacleHit, PlanetPosition> {
+  if (self.planet.obstacles.has(hashPlanetPosition(self))) {
+    return E.left(new ObstacleHit(self))
+  }
+  return E.right(self)
+}
