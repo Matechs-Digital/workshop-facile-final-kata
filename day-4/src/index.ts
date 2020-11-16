@@ -5,7 +5,8 @@ import { provideInitialRoverState } from "./app/ProgramState"
 import { provideLiveReadFile } from "./app/ReadFile"
 import { provideLiveReadLine } from "./app/Readline"
 import * as E from "./common/Either"
-import { pipe } from "./common/Function"
+import { flow, pipe } from "./common/Function"
+import { matchTag } from "./common/Match"
 import * as RTE from "./common/ReaderTaskEither"
 
 pipe(
@@ -19,10 +20,30 @@ pipe(
   RTE.run
 )().then(
   E.fold(
-    (e) => {
-      console.error(JSON.stringify(e, null, 2))
-      process.exit(1)
-    },
+    flow(
+      matchTag({
+        InvalidInitialPosition: ({ hit }) => {
+          console.error(
+            `Invalid initial position: ${hit.position.x}, ${hit.position.y}`
+          )
+        },
+        ParseCommandError: ({ actual }) => {
+          console.error(`Invalid command string: ${actual}`)
+        },
+        ParseObstaclesError: ({ actual }) => {
+          console.error(`Invalid obstacle config: ${actual}`)
+        },
+        ParsePlanetError: ({ actual }) => {
+          console.error(`Invalid planet config: ${actual}`)
+        },
+        ReadFileError: ({ error }) => {
+          console.error(`Unknown error reading file: ${error.message}`)
+        }
+      }),
+      () => {
+        process.exit(1)
+      }
+    ),
     () => {
       process.exit(0)
     }
