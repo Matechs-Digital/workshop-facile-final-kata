@@ -86,13 +86,13 @@ export function chain<R2, A, E2, B>(f: (a: A) => ReaderTaskEither<R2, E2, B>) {
 export function tuple<Es extends readonly ReaderTaskEither<any, any, any>[]>(
   ...tasks: Es
 ): ReaderTaskEither<
-  {
-    [k in keyof Es]: [Es[k]] extends [ReaderTaskEither<infer R, any, any>] ? R : never
-  }[number],
-  {
-    [k in keyof Es]: [Es[k]] extends [ReaderTaskEither<any, infer E, any>] ? E : never
-  }[number],
-  { [k in keyof Es]: [Es[k]] extends [ReaderTaskEither<any, any, infer A>] ? A : never }
+  [Es[number]] extends [ReaderTaskEither<infer R, infer E, infer A>] ? R : never,
+  [Es[number]] extends [ReaderTaskEither<infer R, infer E, infer A>] ? E : never,
+  Readonly<
+    {
+      [k in keyof Es]: [Es[k]] extends [ReaderTaskEither<any, any, infer A>] ? A : never
+    }
+  >
 > {
   return (r) => async () => {
     const as = <any[]>[]
