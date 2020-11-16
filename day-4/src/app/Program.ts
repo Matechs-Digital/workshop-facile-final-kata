@@ -272,14 +272,12 @@ export const main: RTE.ReaderTaskEither<
             RTE.catchAll((e) =>
               e._tag === "NextPositionObstacle"
                 ? pipe(
-                    pipe(
-                      getCurrentState,
-                      RTE.chain(({ history }) =>
-                        pipe(
-                          history,
-                          RTE.foreach(({ orientation, position }) =>
-                            log(prettyPosition(position, orientation))
-                          )
+                    getCurrentState,
+                    RTE.chain(({ history }) =>
+                      pipe(
+                        history,
+                        RTE.foreach(({ orientation, position }) =>
+                          log(prettyPosition(position, orientation))
                         )
                       )
                     ),
