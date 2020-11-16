@@ -19,10 +19,6 @@ export function parseCommand(
     return E.left(new ParseCommandError(commandString))
   }
 
-  if (results.length !== 2) {
-    return E.left(new ParseCommandError(commandString))
-  }
-
   const command = results[1]
 
   switch (command) {

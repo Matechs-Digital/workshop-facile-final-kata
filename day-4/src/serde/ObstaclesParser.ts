@@ -19,10 +19,6 @@ export function parseObstacle(
     return E.left(new ParseObstaclesError(obstacleConfig))
   }
 
-  if (results.length !== 3) {
-    return E.left(new ParseObstaclesError(obstacleConfig))
-  }
-
   return pipe(
     E.tuple(I.parse(results[1]), I.parse(results[2])),
     E.map(([x, y]): ObstaclePosition => ({ x, y })),

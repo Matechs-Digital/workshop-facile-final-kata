@@ -20,10 +20,6 @@ export function parseInitialPosition(
     return E.left(new ParseInitialPositionError(initialPositionConfig))
   }
 
-  if (results.length !== 4) {
-    return E.left(new ParseInitialPositionError(initialPositionConfig))
-  }
-
   const o = results[3]
 
   const orientation =
