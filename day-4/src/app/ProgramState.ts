@@ -39,7 +39,7 @@ export const actualize = updateCurrentState((self) => ({
   rover: self.rover
 }))
 
-export const provideInitialRoverState = pipe(
+export const provideLiveRoverContext = pipe(
   makeRover,
   RTE.chain((rover) =>
     makeRef<RoverState>({
