@@ -13,7 +13,7 @@ import type { Orientation } from "./domain/Orientation"
 import type { Position } from "./domain/Position"
 import { parseCommands } from "./serde/CommandParser"
 
-export const runMainLoop = pipe(
+export const main = pipe(
   begin,
   RTE.chain(
     RTE.repeatWithState((state) =>
@@ -79,7 +79,7 @@ function prettyOrientation(orientation: Orientation) {
 }
 
 pipe(
-  runMainLoop,
+  main,
   provideLiveAppConfig,
   provideLiveReadFile,
   provideLiveReadLine,
