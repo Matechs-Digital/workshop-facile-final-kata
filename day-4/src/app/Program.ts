@@ -237,7 +237,7 @@ export const moveForward = nextMove(Commands.Forward)
 
 export const moveBackward = nextMove(Commands.Backward)
 
-export function providePlanet<R, E, A>(
+export function provideLivePlanet<R, E, A>(
   self: RE.ReaderTaskEither<R & PlanetContext, E, A>
 ) {
   return RE.accessM(({ config }: AppConfig) =>
@@ -281,4 +281,4 @@ export const runTaskEither = (config: AppConfig["config"]) => (
     ParseError | NextPositionObstacle | InvalidInitialPosition,
     ProgramState
   >
-) => pipe(self, providePlanet, provideAppConfig(config), RE.run)
+) => pipe(self, provideLivePlanet, provideAppConfig(config), RE.run)

@@ -1,7 +1,7 @@
 import { provideLiveAppConfig } from "./app/AppConfig"
 import { error, log, provideLiveConsole } from "./app/Console"
 import type { NextPositionObstacle } from "./app/Program"
-import { actualize, begin, nextBatch, providePlanet } from "./app/Program"
+import { actualize, begin, nextBatch, provideLivePlanet } from "./app/Program"
 import { provideLiveReadFile } from "./app/ReadFile"
 import { getStrLn, provideLiveReadLine } from "./app/Readline"
 import * as E from "./common/Either"
@@ -52,8 +52,7 @@ export const main = pipe(
         )
       )
     )
-  ),
-  providePlanet
+  )
 )
 
 function prettyObstacle(e: NextPositionObstacle): string {
@@ -80,6 +79,7 @@ function prettyOrientation(orientation: Orientation) {
 
 pipe(
   main,
+  provideLivePlanet,
   provideLiveAppConfig,
   provideLiveReadFile,
   provideLiveReadLine,
