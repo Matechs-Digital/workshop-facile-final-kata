@@ -16,14 +16,14 @@ import { parsePlanet } from "../serde/PlanetParser"
 import type { AppConfig } from "./AppConfig"
 import * as C from "./Command"
 import { error, log } from "./Console"
-import type { RoverContext, RoverState } from "./ProgramState"
+import { getStrLn } from "./Readline"
+import type { RoverContext, RoverState } from "./RoverContext"
 import {
   actualize,
   getCurrentState,
   RoverHistoricPosition,
   updateCurrentState
-} from "./ProgramState"
-import { getStrLn } from "./Readline"
+} from "./RoverContext"
 
 export class NextPositionObstacle {
   readonly _tag = "NextPositionObstacle"
