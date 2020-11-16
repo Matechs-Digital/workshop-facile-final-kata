@@ -7,7 +7,10 @@
     "start": "node -r ts-node/register src/index.ts",
     "test": "jest",
     "type-check": "tsc --noEmit",
-    "ci": "yarn type-check && yarn test --ci"
+    "ci": "yarn type-check && yarn test --ci",
+    "autofix": "yarn prettier && yarn lint --fix && yarn prettier",
+    "prettier": "prettier --write \"./{src,test,demo}/**/*.ts\"",
+    "lint": "eslint . --ext .ts,.tsx"
   },
   "dependencies": {
     "@types/jest": "^26.0.10",
