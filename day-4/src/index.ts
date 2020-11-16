@@ -87,7 +87,7 @@ pipe(
     readFile(P.join(__dirname, "../config/obstacles.txt"))
   ),
   RTE.chain(([planet, initial, obstacles]) =>
-    pipe(runMainLoop, provideAppConfig({ initial, obstacles, planet }))
+    provideAppConfig({ initial, obstacles, planet })(runMainLoop)
   ),
   RTE.provide(LiveReadFile),
   RTE.provide(LiveReadline),
