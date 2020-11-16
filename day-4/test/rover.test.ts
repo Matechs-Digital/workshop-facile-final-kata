@@ -49,7 +49,7 @@ describe("Rover", () => {
 
   it("move forward looking north (at edge)", async () => {
     const program = await pipe(
-      MR.move(Command.Commands.Forward),
+      MR.moveForward,
       ProgramState.provideLiveRoverContext,
       runTaskEither({
         planet: "5x4",
@@ -77,7 +77,7 @@ describe("Rover", () => {
 
   it("move forward looking south (at the edge)", async () => {
     const program = await pipe(
-      MR.move(Command.Commands.Forward),
+      MR.moveForward,
       ProgramState.provideLiveRoverContext,
       runTaskEither({
         planet: "5x4",
@@ -105,7 +105,7 @@ describe("Rover", () => {
 
   it("move forward looking east (at the edge)", async () => {
     const program = await pipe(
-      MR.move(Command.Commands.Forward),
+      MR.moveForward,
       ProgramState.provideLiveRoverContext,
       runTaskEither({
         planet: "5x4",
@@ -133,7 +133,7 @@ describe("Rover", () => {
 
   it("move forward looking west (at the edge)", async () => {
     const program = await pipe(
-      MR.move(Command.Commands.Forward),
+      MR.moveForward,
       ProgramState.provideLiveRoverContext,
       runTaskEither({
         planet: "5x4",
@@ -161,7 +161,7 @@ describe("Rover", () => {
 
   it("move backward looking north (at the edge)", async () => {
     const program = await pipe(
-      MR.move(Command.Commands.Backward),
+      MR.moveBackward,
       ProgramState.provideLiveRoverContext,
       runTaskEither({
         planet: "5x4",
@@ -189,7 +189,7 @@ describe("Rover", () => {
 
   it("move backward looking south (at the edge)", async () => {
     const program = await pipe(
-      MR.move(Command.Commands.Backward),
+      MR.moveBackward,
       ProgramState.provideLiveRoverContext,
       runTaskEither({
         planet: "5x4",
@@ -217,7 +217,7 @@ describe("Rover", () => {
 
   it("move backward looking east (at the edge)", async () => {
     const program = await pipe(
-      MR.move(Command.Commands.Backward),
+      MR.moveBackward,
       ProgramState.provideLiveRoverContext,
       runTaskEither({
         planet: "5x4",
@@ -245,7 +245,7 @@ describe("Rover", () => {
 
   it("move backward looking west (at the edge)", async () => {
     const program = await pipe(
-      MR.move(Command.Commands.Backward),
+      MR.moveBackward,
       ProgramState.provideLiveRoverContext,
       runTaskEither({
         planet: "5x4",
@@ -273,7 +273,7 @@ describe("Rover", () => {
 
   it("move left looking north (at the edge)", async () => {
     const program = await pipe(
-      MR.move(Command.Commands.Left),
+      MR.moveLeft,
       ProgramState.provideLiveRoverContext,
       runTaskEither({
         planet: "5x4",
@@ -301,7 +301,7 @@ describe("Rover", () => {
 
   it("move left looking south (at the edge)", async () => {
     const program = await pipe(
-      MR.move(Command.Commands.Left),
+      MR.moveLeft,
       ProgramState.provideLiveRoverContext,
       runTaskEither({
         planet: "5x4",
@@ -329,7 +329,7 @@ describe("Rover", () => {
 
   it("move left looking east (at the edge)", async () => {
     const program = await pipe(
-      MR.move(Command.Commands.Left),
+      MR.moveLeft,
       ProgramState.provideLiveRoverContext,
       runTaskEither({
         planet: "5x4",
@@ -357,7 +357,7 @@ describe("Rover", () => {
 
   it("move left looking west (at the edge)", async () => {
     const program = await pipe(
-      MR.move(Command.Commands.Left),
+      MR.moveLeft,
       ProgramState.provideLiveRoverContext,
       runTaskEither({
         planet: "5x4",
@@ -385,7 +385,7 @@ describe("Rover", () => {
 
   it("move right looking north (at the edge)", async () => {
     const program = await pipe(
-      MR.move(Command.Commands.Right),
+      MR.moveRight,
       ProgramState.provideLiveRoverContext,
       runTaskEither({
         planet: "5x4",
@@ -413,7 +413,7 @@ describe("Rover", () => {
 
   it("move right looking south (at the edge)", async () => {
     const program = await pipe(
-      MR.move(Command.Commands.Right),
+      MR.moveRight,
       ProgramState.provideLiveRoverContext,
       runTaskEither({
         planet: "5x4",
@@ -441,7 +441,7 @@ describe("Rover", () => {
 
   it("move right looking east (at the edge)", async () => {
     const program = await pipe(
-      MR.move(Command.Commands.Right),
+      MR.moveRight,
       ProgramState.provideLiveRoverContext,
       runTaskEither({
         planet: "5x4",
@@ -469,7 +469,7 @@ describe("Rover", () => {
 
   it("move right looking west (at the edge)", async () => {
     const program = await pipe(
-      MR.move(Command.Commands.Right),
+      MR.moveRight,
       ProgramState.provideLiveRoverContext,
       runTaskEither({
         planet: "5x4",
