@@ -211,7 +211,7 @@ export function foreach<R, A, E, B>(f: (a: A) => ReaderTaskEither<R, E, B>) {
   return (self: ReadonlyArray<A>): ReaderTaskEither<R, E, readonly B[]> =>
     pipe(
       self,
-      A.reduce(right([]) as ReaderTaskEither<R, E, readonly B[]>, (a, ebs) =>
+      A.reduce(<ReaderTaskEither<R, E, readonly B[]>>right([]), (a, ebs) =>
         pipe(
           ebs,
           chain((bs) =>
@@ -275,7 +275,7 @@ export function reduce<S>(initial: S) {
   ) =>
     pipe(
       as,
-      A.reduce(right(initial) as ReaderTaskEither<R, E, S>, (a, ms) =>
+      A.reduce(<ReaderTaskEither<R, E, S>>right(initial), (a, ms) =>
         pipe(
           ms,
           chain((s) => f(a, s))
