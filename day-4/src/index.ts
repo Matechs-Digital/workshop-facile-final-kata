@@ -24,7 +24,7 @@ pipe(
       matchTag({
         InvalidInitialPosition: ({ hit }) => {
           console.error(
-            `Invalid initial position: ${hit.position.x}, ${hit.position.y}`
+            `Invalid initial position hitting obstacle at: ${hit.position.x}, ${hit.position.y}`
           )
         },
         ParseCommandError: ({ actual }) => {
