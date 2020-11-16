@@ -2,6 +2,7 @@ import * as A from "./Array"
 import * as E from "./Either"
 import { pipe } from "./Function"
 import type { Option } from "./Option"
+import { some } from "./Option"
 import type { Task } from "./Task"
 import * as TE from "./TaskEither"
 
@@ -64,7 +65,7 @@ export function fromTaskEither<E, A>(
 }
 
 export function sync<A>(f: () => A): ReaderTaskEither<unknown, never, A> {
-  return () => () => Promise.resolve(E.right(f()))
+  return () => () => Promise.resolve({}).then(() => Promise.resolve(E.right(f())))
 }
 
 export function map<A, B>(f: (a: A) => B) {
@@ -80,6 +81,16 @@ export function chain<R2, A, E2, B>(f: (a: A) => ReaderTaskEither<R2, E2, B>) {
     fa(r)().then(
       (a): Promise<E.Either<E | E2, B>> =>
         a._tag === "Right" ? f(a.right)(r)() : Promise.resolve(E.left(a.left))
+    )
+}
+
+export function andThen<R2, A, E2, B>(fb: ReaderTaskEither<R2, E2, B>) {
+  return <R, E>(fa: ReaderTaskEither<R, E, A>): ReaderTaskEither<R & R2, E | E2, B> => (
+    r
+  ) => () =>
+    fa(r)().then(
+      (a): Promise<E.Either<E | E2, B>> =>
+        a._tag === "Right" ? fb(r)() : Promise.resolve(E.left(a.left))
     )
 }
 
@@ -231,6 +242,28 @@ export function repeatWithState<S, R, E>(
         return E.right(undefined)
       } else {
         current = result.right.value
+      }
+    }
+  }
+}
+
+export const Stop = some<Stop>("stop")
+export type Stop = "stop"
+
+export function repeatUntilStop<R, E>(
+  self: ReaderTaskEither<R, E, Option<"stop">>
+): ReaderTaskEither<R, E, void> {
+  return (r) => async () => {
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      const result = await self(r)()
+
+      if (result._tag === "Left") {
+        return result
+      }
+
+      if (result.right._tag === "Some") {
+        return E.right(undefined)
       }
     }
   }
