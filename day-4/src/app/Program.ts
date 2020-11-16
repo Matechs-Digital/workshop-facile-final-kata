@@ -16,6 +16,7 @@ import { error, log } from "./Console"
 import type { PlanetContext } from "./PlanetContext"
 import type { Readline } from "./Readline"
 import { getStrLn } from "./Readline"
+import { prettyObstacle, prettyPosition } from "./Render"
 import type { RoverContext, RoverState } from "./RoverContext"
 import {
   actualize,
@@ -218,26 +219,6 @@ export const moveLeft = move(C.Commands.Left)
 export const moveForward = move(C.Commands.Forward)
 
 export const moveBackward = move(C.Commands.Backward)
-
-export function prettyObstacle(e: NextPositionObstacle): string {
-  return `O:${e.position.x}:${e.position.y}:${prettyOrientation(e.orientation)}`
-}
-
-export function prettyPosition(position: Position, orientation: Orientation): string {
-  return `${position.x}:${position.y}:${prettyOrientation(orientation)}`
-}
-
-export function prettyOrientation(orientation: Orientation): string {
-  return pipe(
-    orientation,
-    matchTag({
-      North: () => "N",
-      South: () => "S",
-      East: () => "E",
-      West: () => "W"
-    })
-  )
-}
 
 export const main: RTE.ReaderTaskEither<
   Readline & PlanetContext & RoverContext & Console,
