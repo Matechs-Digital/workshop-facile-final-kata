@@ -10,12 +10,15 @@ import { addObstacles } from "../domain/Planet"
 import type { Position } from "../domain/Position"
 import { validatePosition } from "../domain/Position"
 import { Rover } from "../domain/Rover"
+import type { ParseCommandError } from "../serde/CommandParser"
 import { parseCommands } from "../serde/CommandParser"
 import { parseObstacles } from "../serde/ObstaclesParser"
 import { parsePlanet } from "../serde/PlanetParser"
 import type { AppConfig } from "./AppConfig"
 import * as C from "./Command"
+import type { Console } from "./Console"
 import { error, log } from "./Console"
+import type { Readline } from "./Readline"
 import { getStrLn } from "./Readline"
 import type { RoverContext, RoverState } from "./RoverContext"
 import {
@@ -241,7 +244,7 @@ export function provideLivePlanet<R, E, A>(
   )
 }
 
-export function prettyObstacle(e: NextPositionObstacle) {
+export function prettyObstacle(e: NextPositionObstacle): string {
   return `O:${e.position.x}:${e.position.y}:${prettyOrientation(e.orientation)}`
 }
 
@@ -249,7 +252,7 @@ export function prettyPosition(position: Position, orientation: Orientation): st
   return `${position.x}:${position.y}:${prettyOrientation(orientation)}`
 }
 
-export function prettyOrientation(orientation: Orientation) {
+export function prettyOrientation(orientation: Orientation): string {
   return pipe(
     orientation,
     matchTag({
@@ -261,7 +264,11 @@ export function prettyOrientation(orientation: Orientation) {
   )
 }
 
-export const main = RTE.repeatUntilStop(
+export const main: RTE.ReaderTaskEither<
+  Readline & PlanetContext & RoverContext & Console,
+  ParseCommandError,
+  void
+> = RTE.repeatUntilStop(
   pipe(
     getStrLn,
     RTE.chain((commandsInput) =>
