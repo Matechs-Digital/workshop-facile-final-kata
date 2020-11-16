@@ -14,7 +14,7 @@ import { parseCommands } from "../serde/CommandParser"
 import { parseObstacles } from "../serde/ObstaclesParser"
 import { parsePlanet } from "../serde/PlanetParser"
 import type { AppConfig } from "./AppConfig"
-import type { Command, GoBackward, GoForward, GoLeft, GoRight } from "./Command"
+import type * as C from "./Command"
 import { Commands } from "./Command"
 import { error, log } from "./Console"
 import type { RoverContext, RoverState } from "./ProgramState"
@@ -53,23 +53,19 @@ export function nextPosition(
 }
 
 export const move: (
-  c: Command
+  c: C.Command
 ) => RTE.ReaderTaskEither<
   PlanetContext & RoverContext,
   NextPositionObstacle,
   RoverState
-> = (c) =>
-  pipe(
-    c,
-    matchTag({
-      GoForward: goForward,
-      GoBackward: goBackward,
-      GoLeft: goLeft,
-      GoRight: goRight
-    })
-  )
+> = matchTag({
+  GoForward,
+  GoBackward,
+  GoLeft,
+  GoRight
+})
 
-export function goForward(_: GoForward) {
+export function GoForward(_: C.GoForward) {
   return pipe(
     getCurrentState,
     RTE.chain((state) =>
@@ -106,7 +102,7 @@ export function goForward(_: GoForward) {
   )
 }
 
-export function goBackward(_: GoBackward) {
+export function GoBackward(_: C.GoBackward) {
   return pipe(
     getCurrentState,
     RTE.chain((state) =>
@@ -143,7 +139,7 @@ export function goBackward(_: GoBackward) {
   )
 }
 
-export function goLeft(_: GoLeft) {
+export function GoLeft(_: C.GoLeft) {
   return pipe(
     getCurrentState,
     RTE.chain((state) =>
@@ -180,7 +176,7 @@ export function goLeft(_: GoLeft) {
   )
 }
 
-export function goRight(_: GoRight) {
+export function GoRight(_: C.GoRight) {
   return pipe(
     getCurrentState,
     RTE.chain((state) =>
