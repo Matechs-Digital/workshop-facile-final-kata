@@ -69,12 +69,8 @@ export function nextMove(command: Command) {
     )
 }
 
-export function nextBatch(...commands: readonly [Command, ...Command[]]) {
-  return <R, E>(e: RE.ReaderTaskEither<R, E, ProgramState>) =>
-    pipe(
-      e,
-      RE.chain((s) => pipe(commands, RE.reduce(s)(move)))
-    )
+export function nextBatch(commands: readonly Command[]) {
+  return (s: ProgramState) => pipe(commands, RE.reduce(s)(move))
 }
 
 export function goForward(_: GoForward) {

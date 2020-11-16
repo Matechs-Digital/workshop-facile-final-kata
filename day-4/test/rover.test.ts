@@ -4,6 +4,7 @@ import * as ProgramState from "../src/app/ProgramState"
 import * as E from "../src/common/Either"
 import { pipe } from "../src/common/Function"
 import * as I from "../src/common/Int"
+import * as RTE from "../src/common/ReaderTaskEither"
 import { Orientation } from "../src/domain/Orientation"
 import { Rover } from "../src/domain/Rover"
 
@@ -383,10 +384,12 @@ describe("Rover", () => {
   it("run batches of commands", async () => {
     const program = await pipe(
       MR.begin,
-      MR.nextBatch(
-        Command.Commands.Forward,
-        Command.Commands.Right,
-        Command.Commands.Forward
+      RTE.chain(
+        MR.nextBatch([
+          Command.Commands.Forward,
+          Command.Commands.Right,
+          Command.Commands.Forward
+        ])
       ),
       MR.runTaskEither({
         planet: "5x4",
