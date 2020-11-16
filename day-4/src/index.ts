@@ -22,25 +22,15 @@ pipe(
   E.fold(
     flow(
       matchTag({
-        InvalidInitialPosition: ({ hit }) => {
-          console.error(
-            `Invalid initial position hitting obstacle at: ${hit.position.x}, ${hit.position.y}`
-          )
-        },
-        ParseCommandError: ({ actual }) => {
-          console.error(`Invalid command string: ${actual}`)
-        },
-        ParseObstaclesError: ({ actual }) => {
-          console.error(`Invalid obstacle config: ${actual}`)
-        },
-        ParsePlanetError: ({ actual }) => {
-          console.error(`Invalid planet config: ${actual}`)
-        },
-        ReadFileError: ({ error }) => {
-          console.error(`Unknown error reading file: ${error.message}`)
-        }
+        InvalidInitialPosition: ({ hit }) =>
+          `Invalid initial position hitting obstacle at: ${hit.position.x}, ${hit.position.y}`,
+        ParseCommandError: ({ actual }) => `Invalid command string: ${actual}`,
+        ParseObstaclesError: ({ actual }) => `Invalid obstacle config: ${actual}`,
+        ParsePlanetError: ({ actual }) => `Invalid planet config: ${actual}`,
+        ReadFileError: ({ error }) => `Unknown error reading file: ${error.message}`
       }),
-      () => {
+      (error) => {
+        console.error(error)
         process.exit(1)
       }
     ),
