@@ -15,17 +15,6 @@ import type { Orientation } from "./domain/Orientation"
 import type { Position } from "./domain/Position"
 import { parseCommands } from "./serde/CommandParser"
 
-export class AtomicRef<A> {
-  private ref: A
-  constructor(initial: A) {
-    this.ref = initial
-  }
-  readonly get = () => this.ref
-  readonly set = (a: A) => {
-    this.ref = a
-  }
-}
-
 export const runMainLoop = pipe(
   begin,
   RTE.chain(
