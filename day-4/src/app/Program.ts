@@ -284,7 +284,7 @@ export const main = RTE.repeatUntilStop(
                   )
                 ),
                 RTE.andThen(actualize),
-                RTE.andThen(RTE.sync(() => none))
+                RTE.andThen(RTE.right(none))
               )
             ),
             RTE.catchAll((e) =>
