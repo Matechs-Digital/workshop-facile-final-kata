@@ -120,19 +120,19 @@ export function catchAll<R1, E, E1, B>(f: (e: E) => ReaderTaskEither<R1, E1, B>)
 
 export type ReaderTaskEitherGetR<X extends ReaderTaskEither<any, any, any>> = [
   X
-] extends [ReaderTaskEither<infer R, infer E, infer A>]
+] extends [ReaderTaskEither<infer R, infer _E, infer _A>]
   ? R
   : never
 
 export type ReaderTaskEitherGetE<X extends ReaderTaskEither<any, any, any>> = [
   X
-] extends [ReaderTaskEither<infer R, infer E, infer A>]
+] extends [ReaderTaskEither<infer _R, infer E, infer _A>]
   ? E
   : never
 
 export type ReaderTaskEitherGetA<X extends ReaderTaskEither<any, any, any>> = [
   X
-] extends [ReaderTaskEither<infer R, infer E, infer A>]
+] extends [ReaderTaskEither<infer _R, infer _E, infer A>]
   ? A
   : never
 

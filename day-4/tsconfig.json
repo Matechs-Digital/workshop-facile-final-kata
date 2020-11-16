@@ -10,7 +10,9 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "declaration": true
+    "declaration": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true
   },
   "include": [
     "src/**/*.ts",

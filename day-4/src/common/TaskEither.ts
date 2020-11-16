@@ -73,13 +73,13 @@ export function catchAll<E, E1, B>(f: (e: E) => TaskEither<E1, B>) {
 }
 
 export type TaskEitherGetE<X extends TaskEither<any, any>> = [X] extends [
-  TaskEither<infer E, infer A>
+  TaskEither<infer E, infer _A>
 ]
   ? E
   : never
 
 export type TaskEitherGetA<X extends TaskEither<any, any>> = [X] extends [
-  TaskEither<infer E, infer A>
+  TaskEither<infer _E, infer A>
 ]
   ? A
   : never

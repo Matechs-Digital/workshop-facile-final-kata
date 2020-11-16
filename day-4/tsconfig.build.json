@@ -1,16 +1,9 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "downlevelIteration": true,
-    "lib": ["ES2019"],
     "target": "ES2017",
-    "strict": true,
     "outDir": "lib",
-    "noErrorTruncation": true,
     "noEmit": false,
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "baseUrl": ".",
-    "declaration": true,
     "module": "commonjs"
   },
   "include": ["src/**/*.ts"]

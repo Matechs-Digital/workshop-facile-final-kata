@@ -73,13 +73,13 @@ export function catchAll<E, E1, B>(f: (e: E) => Either<E1, B>) {
 }
 
 export type EitherGetE<X extends Either<any, any>> = [X] extends [
-  Either<infer E, infer A>
+  Either<infer E, infer _A>
 ]
   ? E
   : never
 
 export type EitherGetA<X extends Either<any, any>> = [X] extends [
-  Either<infer E, infer A>
+  Either<infer _E, infer A>
 ]
   ? A
   : never

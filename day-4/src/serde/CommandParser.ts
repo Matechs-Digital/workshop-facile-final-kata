@@ -1,10 +1,7 @@
 import type { Command } from "../app/Command"
 import { Commands } from "../app/Command"
-import { reduce } from "../common/Array"
 import * as E from "../common/Either"
 import { flow, pipe } from "../common/Function"
-import * as I from "../common/Int"
-import type { ObstaclePosition } from "../domain/Planet"
 
 export class ParseCommandError {
   readonly _tag = "ParseCommandError"
