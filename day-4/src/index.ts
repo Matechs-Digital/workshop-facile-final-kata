@@ -6,11 +6,11 @@ import type { NextPositionObstacle } from "./app/Program"
 import { actualize, begin, nextBatch, providePlanet } from "./app/Program"
 import { LiveReadFile, readFile } from "./app/ReadFile"
 import { getStrLn, LiveReadline } from "./app/Readline"
+import * as E from "./common/Either"
 import { pipe } from "./common/Function"
 import { matchTag } from "./common/Match"
 import { none, some } from "./common/Option"
 import * as RTE from "./common/ReaderTaskEither"
-import * as TE from "./common/TaskEither"
 import type { Orientation } from "./domain/Orientation"
 import type { Position } from "./domain/Position"
 import { parseCommands } from "./serde/CommandParser"
@@ -92,14 +92,15 @@ pipe(
   RTE.provide(LiveReadFile),
   RTE.provide(LiveReadline),
   RTE.provide(LiveConsole),
-  RTE.run,
-  TE.fold(
-    (e) => async () => {
+  RTE.run
+)().then(
+  E.fold(
+    (e) => {
       console.error(JSON.stringify(e, null, 2))
       process.exit(1)
     },
-    () => async () => {
+    () => {
       process.exit(0)
     }
   )
-)()
+)
