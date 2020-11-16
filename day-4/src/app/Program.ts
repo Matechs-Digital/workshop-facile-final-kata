@@ -43,11 +43,9 @@ export function nextPosition(
   return pipe(
     validatePosition({ x, y }),
     RTE.chain((position) =>
-      updateCurrentState((state) => ({
+      updateCurrentState(({ history }) => ({
         rover: new Rover(position, orientation),
-        history: NA.append(new RoverHistoricPosition(position, orientation))(
-          state.history
-        )
+        history: NA.append(new RoverHistoricPosition(position, orientation))(history)
       }))
     ),
     RTE.catchAll((e) => RTE.left(new NextPositionObstacle(e.position, orientation)))
