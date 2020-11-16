@@ -33,39 +33,37 @@ export const runMainLoop = pipe(
     RTE.repeatWithState((state) =>
       pipe(
         getStrLn,
-        RTE.chain((s) => {
-          if (s.length === 0) {
-            return RTE.right(none)
-          }
-
-          return pipe(
-            s,
-            parseCommands,
-            RTE.fromEither,
-            RTE.chain((commands) => nextBatch(commands)(state)),
-            RTE.chain((nextState) =>
-              pipe(
-                nextState.history,
-                RTE.foreach(({ orientation, position }) =>
-                  log(prettyPosition(position, orientation))
-                ),
-                RTE.chain(() => RTE.sync(() => some(actualize(nextState))))
-              )
-            ),
-            RTE.catchAll((e) =>
-              e._tag === "NextPositionObstacle"
-                ? pipe(
-                    e.previousState.history,
+        RTE.chain((s) =>
+          s.length === 0
+            ? RTE.right(none)
+            : pipe(
+                s,
+                parseCommands,
+                RTE.fromEither,
+                RTE.chain((commands) => nextBatch(commands)(state)),
+                RTE.chain((nextState) =>
+                  pipe(
+                    nextState.history,
                     RTE.foreach(({ orientation, position }) =>
                       log(prettyPosition(position, orientation))
                     ),
-                    RTE.chain(() => error(prettyObstacle(e))),
-                    RTE.chain(() => RTE.right(some(actualize(e.previousState))))
+                    RTE.chain(() => RTE.sync(() => some(actualize(nextState))))
                   )
-                : RTE.left(e)
-            )
-          )
-        })
+                ),
+                RTE.catchAll((e) =>
+                  e._tag === "NextPositionObstacle"
+                    ? pipe(
+                        e.previousState.history,
+                        RTE.foreach(({ orientation, position }) =>
+                          log(prettyPosition(position, orientation))
+                        ),
+                        RTE.chain(() => error(prettyObstacle(e))),
+                        RTE.chain(() => RTE.right(some(actualize(e.previousState))))
+                      )
+                    : RTE.left(e)
+                )
+              )
+        )
       )
     )
   ),
