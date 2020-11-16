@@ -1,10 +1,10 @@
 import type { AppConfig } from "../app/AppConfig"
+import type { PlanetContext } from "../app/PlanetContext"
 import { pipe } from "../common/Function"
 import type * as I from "../common/Int"
 import * as RTE from "../common/ReaderTaskEither"
 import { parseInitialPosition } from "../serde/ParseInitialPosition"
 import type { Orientation } from "./Orientation"
-import type { PlanetContext } from "./Planet"
 import type { ObstacleHit, Position } from "./Position"
 import { scale, validatePosition } from "./Position"
 

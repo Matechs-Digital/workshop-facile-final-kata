@@ -53,9 +53,3 @@ export function addObstacles(...obstacles: readonly ObstaclePosition[]) {
       )
     )
 }
-
-export interface PlanetContext {
-  planetContext: {
-    planet: Planet
-  }
-}

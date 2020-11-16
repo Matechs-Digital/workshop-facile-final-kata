@@ -1,9 +1,9 @@
+import type { PlanetContext } from "../app/PlanetContext"
 import { pipe } from "../common/Function"
 import * as I from "../common/Int"
 import type { Newtype } from "../common/Newtype"
 import { newtype } from "../common/Newtype"
 import * as RTE from "../common/ReaderTaskEither"
-import type { PlanetContext } from "./Planet"
 
 export interface Position {
   readonly x: I.Int

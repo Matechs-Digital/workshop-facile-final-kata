@@ -1,6 +1,8 @@
 import type { AppConfig } from "../src/app/AppConfig"
 import { provideAppConfig } from "../src/app/AppConfig"
 import * as Command from "../src/app/Command"
+import type { PlanetContext } from "../src/app/PlanetContext"
+import { provideLivePlanetContext } from "../src/app/PlanetContext"
 import * as MR from "../src/app/Program"
 import * as ProgramState from "../src/app/RoverContext"
 import * as E from "../src/common/Either"
@@ -8,7 +10,6 @@ import { pipe } from "../src/common/Function"
 import * as I from "../src/common/Int"
 import * as RTE from "../src/common/ReaderTaskEither"
 import { Orientation } from "../src/domain/Orientation"
-import type { PlanetContext } from "../src/domain/Planet"
 import type { InvalidInitialPosition } from "../src/domain/Rover"
 import { Rover } from "../src/domain/Rover"
 import type { ParseError } from "../src/serde/ParseError"
@@ -19,7 +20,7 @@ const runTaskEither = (config: AppConfig["config"]) => (
     ParseError | MR.NextPositionObstacle | InvalidInitialPosition,
     ProgramState.RoverState
   >
-) => pipe(self, MR.provideLivePlanet, provideAppConfig(config), RTE.run)
+) => pipe(self, provideLivePlanetContext, provideAppConfig(config), RTE.run)
 
 describe("Rover", () => {
   it("init", async () => {

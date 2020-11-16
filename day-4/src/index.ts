@@ -1,6 +1,7 @@
 import { provideLiveAppConfig } from "./app/AppConfig"
 import { provideLiveConsole } from "./app/Console"
-import { main, provideLivePlanet } from "./app/Program"
+import { provideLivePlanetContext } from "./app/PlanetContext"
+import { main } from "./app/Program"
 import { provideLiveReadFile } from "./app/ReadFile"
 import { provideLiveReadLine } from "./app/Readline"
 import { provideLiveRoverContext } from "./app/RoverContext"
@@ -12,7 +13,7 @@ import * as RTE from "./common/ReaderTaskEither"
 pipe(
   main,
   provideLiveRoverContext,
-  provideLivePlanet,
+  provideLivePlanetContext,
   provideLiveAppConfig,
   provideLiveReadFile,
   provideLiveReadLine,

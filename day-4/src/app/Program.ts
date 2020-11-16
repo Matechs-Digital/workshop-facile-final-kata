@@ -5,19 +5,15 @@ import * as NA from "../common/NonEmptyArray"
 import { none } from "../common/Option"
 import * as RTE from "../common/ReaderTaskEither"
 import { Orientation } from "../domain/Orientation"
-import type { PlanetContext } from "../domain/Planet"
-import { addObstacles } from "../domain/Planet"
 import type { Position } from "../domain/Position"
 import { validatePosition } from "../domain/Position"
 import { Rover } from "../domain/Rover"
 import type { ParseCommandError } from "../serde/CommandParser"
 import { parseCommands } from "../serde/CommandParser"
-import { parseObstacles } from "../serde/ObstaclesParser"
-import { parsePlanet } from "../serde/PlanetParser"
-import type { AppConfig } from "./AppConfig"
 import * as C from "./Command"
 import type { Console } from "./Console"
 import { error, log } from "./Console"
+import type { PlanetContext } from "./PlanetContext"
 import type { Readline } from "./Readline"
 import { getStrLn } from "./Readline"
 import type { RoverContext, RoverState } from "./RoverContext"
@@ -222,27 +218,6 @@ export const moveLeft = move(C.Commands.Left)
 export const moveForward = move(C.Commands.Forward)
 
 export const moveBackward = move(C.Commands.Backward)
-
-export function provideLivePlanet<R, E, A>(
-  self: RTE.ReaderTaskEither<R & PlanetContext, E, A>
-) {
-  return RTE.accessM(({ config }: AppConfig) =>
-    pipe(
-      RTE.do,
-      RTE.bind("planet", () => RTE.fromEither(parsePlanet(config.planet))),
-      RTE.bind("obstacles", () => RTE.fromEither(parseObstacles(config.obstacles))),
-      RTE.let("planetWithObstacles", ({ obstacles, planet }) =>
-        addObstacles(...obstacles)(planet)
-      ),
-      RTE.chain(({ planet }) =>
-        pipe(
-          self,
-          RTE.provide<PlanetContext>({ planetContext: { planet } })
-        )
-      )
-    )
-  )
-}
 
 export function prettyObstacle(e: NextPositionObstacle): string {
   return `O:${e.position.x}:${e.position.y}:${prettyOrientation(e.orientation)}`
