@@ -14,8 +14,7 @@ import { parseCommands } from "../serde/CommandParser"
 import { parseObstacles } from "../serde/ObstaclesParser"
 import { parsePlanet } from "../serde/PlanetParser"
 import type { AppConfig } from "./AppConfig"
-import type * as C from "./Command"
-import { Commands } from "./Command"
+import * as C from "./Command"
 import { error, log } from "./Console"
 import type { RoverContext, RoverState } from "./ProgramState"
 import {
@@ -53,7 +52,7 @@ export function nextPosition(
 }
 
 export const move: (
-  c: C.Command
+  command: C.Command
 ) => RTE.ReaderTaskEither<
   PlanetContext & RoverContext,
   NextPositionObstacle,
@@ -213,13 +212,13 @@ export function GoRight(_: C.GoRight) {
   )
 }
 
-export const moveRight = move(Commands.Right)
+export const moveRight = move(C.Commands.Right)
 
-export const moveLeft = move(Commands.Left)
+export const moveLeft = move(C.Commands.Left)
 
-export const moveForward = move(Commands.Forward)
+export const moveForward = move(C.Commands.Forward)
 
-export const moveBackward = move(Commands.Backward)
+export const moveBackward = move(C.Commands.Backward)
 
 export function provideLivePlanet<R, E, A>(
   self: RTE.ReaderTaskEither<R & PlanetContext, E, A>
