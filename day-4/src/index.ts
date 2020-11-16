@@ -1,7 +1,6 @@
 import * as P from "path"
 
 import { provideAppConfig } from "./app/AppConfig"
-import type { Console } from "./app/Console"
 import { error, LiveConsole, log } from "./app/Console"
 import type { NextPositionObstacle } from "./app/Program"
 import { actualize, begin, nextBatch, providePlanet } from "./app/Program"
