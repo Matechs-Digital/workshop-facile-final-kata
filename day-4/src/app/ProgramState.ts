@@ -41,13 +41,16 @@ export const actualize = updateCurrentState((self) => ({
 
 export const provideInitialRoverState = pipe(
   makeRover,
+  RTE.chain((rover) =>
+    makeRef<RoverState>({
+      rover,
+      history: [new RoverHistoricPosition(rover.position, rover.orientation)]
+    })
+  ),
   RTE.map(
-    (rover): RoverContext => ({
+    (ref): RoverContext => ({
       roverState: {
-        ref: makeRef<RoverState>({
-          rover,
-          history: [new RoverHistoricPosition(rover.position, rover.orientation)]
-        })
+        ref
       }
     })
   ),

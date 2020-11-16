@@ -6,19 +6,21 @@ export interface Ref<A> {
   update: (f: (a: A) => A) => RTE.ReaderTaskEither<unknown, never, A>
 }
 
-export function makeRef<A>(a: A): Ref<A> {
-  let current = a
-  return {
-    get: RTE.sync(() => current),
-    set: (a) =>
-      RTE.sync(() => {
-        current = a
-        return a
-      }),
-    update: (f) =>
-      RTE.sync(() => {
-        current = f(current)
-        return current
-      })
-  }
+export function makeRef<A>(a: A): RTE.ReaderTaskEither<unknown, never, Ref<A>> {
+  return RTE.sync(() => {
+    let current = a
+    return {
+      get: RTE.sync(() => current),
+      set: (a) =>
+        RTE.sync(() => {
+          current = a
+          return a
+        }),
+      update: (f) =>
+        RTE.sync(() => {
+          current = f(current)
+          return current
+        })
+    }
+  })
 }
