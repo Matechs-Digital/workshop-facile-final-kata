@@ -86,8 +86,8 @@ export function chain<R2, A, E2, B>(f: (a: A) => ReaderTaskEither<R2, E2, B>) {
 export function tuple<Es extends readonly ReaderTaskEither<any, any, any>[]>(
   ...tasks: Es
 ): ReaderTaskEither<
-  [Es[number]] extends [ReaderTaskEither<infer R, infer E, infer A>] ? R : never,
-  [Es[number]] extends [ReaderTaskEither<infer R, infer E, infer A>] ? E : never,
+  ReaderTaskEitherGetR<Es[number]>,
+  ReaderTaskEitherGetE<Es[number]>,
   Readonly<
     {
       [k in keyof Es]: [Es[k]] extends [ReaderTaskEither<any, any, infer A>] ? A : never
