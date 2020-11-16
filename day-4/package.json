@@ -4,6 +4,7 @@
   "license": "UNLICENSED",
   "author": "Michael Arnaldi",
   "scripts": {
+    "build": "tsc -p tsconfig.build.json",
     "start": "node -r ts-node/register src/index.ts",
     "test": "jest",
     "type-check": "tsc --noEmit",

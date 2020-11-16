@@ -1,3 +1,5 @@
+import type { AppConfig } from "../src/app/AppConfig"
+import { provideAppConfig } from "../src/app/AppConfig"
 import * as Command from "../src/app/Command"
 import * as MR from "../src/app/Program"
 import * as ProgramState from "../src/app/ProgramState"
@@ -6,13 +8,24 @@ import { pipe } from "../src/common/Function"
 import * as I from "../src/common/Int"
 import * as RTE from "../src/common/ReaderTaskEither"
 import { Orientation } from "../src/domain/Orientation"
+import type { PlanetContext } from "../src/domain/Planet"
+import type { InvalidInitialPosition } from "../src/domain/Rover"
 import { Rover } from "../src/domain/Rover"
+import type { ParseError } from "../src/serde/ParseError"
+
+const runTaskEither = (config: AppConfig["config"]) => (
+  self: RTE.ReaderTaskEither<
+    AppConfig & PlanetContext,
+    ParseError | MR.NextPositionObstacle | InvalidInitialPosition,
+    ProgramState.ProgramState
+  >
+) => pipe(self, MR.provideLivePlanet, provideAppConfig(config), RTE.run)
 
 describe("Rover", () => {
   it("init", async () => {
     const state = await pipe(
       MR.begin,
-      MR.runTaskEither({
+      runTaskEither({
         planet: "5x4",
         initial: "0,0:N",
         obstacles: ""
@@ -33,7 +46,7 @@ describe("Rover", () => {
     const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Forward),
-      MR.runTaskEither({
+      runTaskEither({
         planet: "5x4",
         initial: "0,3:N",
         obstacles: ""
@@ -55,7 +68,7 @@ describe("Rover", () => {
     const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Forward),
-      MR.runTaskEither({
+      runTaskEither({
         planet: "5x4",
         initial: "0,0:S",
         obstacles: ""
@@ -77,7 +90,7 @@ describe("Rover", () => {
     const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Forward),
-      MR.runTaskEither({
+      runTaskEither({
         planet: "5x4",
         initial: "4,0:E",
         obstacles: ""
@@ -99,7 +112,7 @@ describe("Rover", () => {
     const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Forward),
-      MR.runTaskEither({
+      runTaskEither({
         planet: "5x4",
         initial: "0,0:W",
         obstacles: ""
@@ -121,7 +134,7 @@ describe("Rover", () => {
     const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Backward),
-      MR.runTaskEither({
+      runTaskEither({
         planet: "5x4",
         initial: "0,0:N",
         obstacles: ""
@@ -143,7 +156,7 @@ describe("Rover", () => {
     const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Backward),
-      MR.runTaskEither({
+      runTaskEither({
         planet: "5x4",
         initial: "0,3:S",
         obstacles: ""
@@ -165,7 +178,7 @@ describe("Rover", () => {
     const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Backward),
-      MR.runTaskEither({
+      runTaskEither({
         planet: "5x4",
         initial: "0,0:E",
         obstacles: ""
@@ -187,7 +200,7 @@ describe("Rover", () => {
     const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Backward),
-      MR.runTaskEither({
+      runTaskEither({
         planet: "5x4",
         initial: "4,0:W",
         obstacles: ""
@@ -209,7 +222,7 @@ describe("Rover", () => {
     const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Left),
-      MR.runTaskEither({
+      runTaskEither({
         planet: "5x4",
         initial: "0,0:N",
         obstacles: ""
@@ -231,7 +244,7 @@ describe("Rover", () => {
     const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Left),
-      MR.runTaskEither({
+      runTaskEither({
         planet: "5x4",
         initial: "4,0:S",
         obstacles: ""
@@ -253,7 +266,7 @@ describe("Rover", () => {
     const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Left),
-      MR.runTaskEither({
+      runTaskEither({
         planet: "5x4",
         initial: "0,3:E",
         obstacles: ""
@@ -275,7 +288,7 @@ describe("Rover", () => {
     const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Left),
-      MR.runTaskEither({
+      runTaskEither({
         planet: "5x4",
         initial: "0,0:W",
         obstacles: ""
@@ -297,7 +310,7 @@ describe("Rover", () => {
     const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Right),
-      MR.runTaskEither({
+      runTaskEither({
         planet: "5x4",
         initial: "4,0:N",
         obstacles: ""
@@ -319,7 +332,7 @@ describe("Rover", () => {
     const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Right),
-      MR.runTaskEither({
+      runTaskEither({
         planet: "5x4",
         initial: "0,0:S",
         obstacles: ""
@@ -341,7 +354,7 @@ describe("Rover", () => {
     const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Right),
-      MR.runTaskEither({
+      runTaskEither({
         planet: "5x4",
         initial: "0,0:E",
         obstacles: ""
@@ -363,7 +376,7 @@ describe("Rover", () => {
     const program = await pipe(
       MR.begin,
       MR.nextMove(Command.Commands.Right),
-      MR.runTaskEither({
+      runTaskEither({
         planet: "5x4",
         initial: "0,3:W",
         obstacles: ""
@@ -391,7 +404,7 @@ describe("Rover", () => {
           Command.Commands.Forward
         ])
       ),
-      MR.runTaskEither({
+      runTaskEither({
         planet: "5x4",
         initial: "0,0:E",
         obstacles: ""

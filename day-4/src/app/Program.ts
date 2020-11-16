@@ -282,14 +282,6 @@ export function actualize(self: ProgramState): ProgramState {
   }
 }
 
-export const runTaskEither = (config: AppConfig["config"]) => (
-  self: RTE.ReaderTaskEither<
-    AppConfig & PlanetContext,
-    ParseError | NextPositionObstacle | InvalidInitialPosition,
-    ProgramState
-  >
-) => pipe(self, provideLivePlanet, provideAppConfig(config), RTE.run)
-
 export function prettyObstacle(e: NextPositionObstacle): string {
   return `O:${e.previousState.rover.position.x}:${
     e.previousState.rover.position.y
