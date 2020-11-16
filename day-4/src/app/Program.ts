@@ -2,7 +2,6 @@ import { pipe } from "../common/Function"
 import * as I from "../common/Int"
 import { matchTag } from "../common/Match"
 import * as NA from "../common/NonEmptyArray"
-import { none } from "../common/Option"
 import * as RTE from "../common/ReaderTaskEither"
 import { Orientation } from "../domain/Orientation"
 import type { Position } from "../domain/Position"
@@ -229,7 +228,7 @@ export const main: RTE.ReaderTaskEither<
     getStrLn,
     RTE.chain((commandsInput) =>
       commandsInput.length === 0
-        ? RTE.right(RTE.Stop)
+        ? RTE.Stop
         : pipe(
             commandsInput,
             parseCommands,
@@ -247,7 +246,7 @@ export const main: RTE.ReaderTaskEither<
                   )
                 ),
                 RTE.andThen(actualize),
-                RTE.andThen(RTE.right(none))
+                RTE.andThen(RTE.Continue)
               )
             ),
             RTE.catchAll((e) =>
@@ -264,7 +263,7 @@ export const main: RTE.ReaderTaskEither<
                     ),
                     RTE.andThen(error(prettyObstacle(e))),
                     RTE.andThen(actualize),
-                    RTE.andThen(RTE.right(none))
+                    RTE.andThen(RTE.Continue)
                   )
                 : RTE.left(e)
             )

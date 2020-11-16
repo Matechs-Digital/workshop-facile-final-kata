@@ -1,8 +1,7 @@
 import * as A from "./Array"
 import * as E from "./Either"
 import { pipe } from "./Function"
-import type { Option } from "./Option"
-import { some } from "./Option"
+import * as O from "./Option"
 import type { Task } from "./Task"
 import * as TE from "./TaskEither"
 
@@ -226,7 +225,7 @@ export function foreach<R, A, E, B>(f: (a: A) => ReaderTaskEither<R, E, B>) {
 }
 
 export function repeatWithState<S, R, E>(
-  self: (s: S) => ReaderTaskEither<R, E, Option<S>>
+  self: (s: S) => ReaderTaskEither<R, E, O.Option<S>>
 ): (s: S) => ReaderTaskEither<R, E, void> {
   return (s) => (r) => async () => {
     let current = s
@@ -247,11 +246,12 @@ export function repeatWithState<S, R, E>(
   }
 }
 
-export const Stop = some<Stop>("stop")
-export type Stop = "stop"
+export const Stop = right(O.some("stop" as const))
+export type ShouldContinue = O.Option<"stop">
+export const Continue = right<ShouldContinue>(O.none)
 
 export function repeatUntilStop<R, E>(
-  self: ReaderTaskEither<R, E, Option<"stop">>
+  self: ReaderTaskEither<R, E, ShouldContinue>
 ): ReaderTaskEither<R, E, void> {
   return (r) => async () => {
     // eslint-disable-next-line no-constant-condition
