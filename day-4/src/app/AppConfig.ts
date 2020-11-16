@@ -13,13 +13,25 @@ export function provideAppConfig(config: AppConfig["config"]) {
     RTE.provide<AppConfig>({ config })(self)
 }
 
+export class InvalidPlanetFile {
+  readonly _tag = "InvalidPlanetFile"
+  constructor(readonly actual: string) {}
+}
+
 export const provideLiveAppConfig = RTE.provideM(
   pipe(
     RTE.tuple(
       readFile(P.join(__dirname, "../../config/planet.txt")),
-      readFile(P.join(__dirname, "../../config/initial.txt")),
-      readFile(P.join(__dirname, "../../config/obstacles.txt"))
+      readFile(P.join(__dirname, "../../config/initial.txt"))
     ),
+    RTE.chain(([planet, initial]) => {
+      const lines = planet.split("\n")
+      if (lines.length !== 2) {
+        return RTE.left(new InvalidPlanetFile(planet))
+      } else {
+        return RTE.right([lines[0], initial, lines[1]])
+      }
+    }),
     RTE.map(
       ([planet, initial, obstacles]): AppConfig => ({
         config: { initial, obstacles, planet }

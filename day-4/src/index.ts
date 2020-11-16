@@ -23,6 +23,7 @@ pipe(
   E.fold(
     flow(
       matchTag({
+        InvalidPlanetFile: ({ actual }) => `Invalid planet file:\n${actual}`,
         InvalidInitialPosition: ({ hit }) =>
           `Invalid initial position hitting obstacle at: ${hit.position.x}, ${hit.position.y}`,
         ParseCommandError: ({ actual }) => `Invalid command string: ${actual}`,
