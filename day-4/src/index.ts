@@ -19,11 +19,11 @@ export const main = pipe(
     RTE.repeatWithState((state) =>
       pipe(
         getStrLn,
-        RTE.chain((s) =>
-          s.length === 0
+        RTE.chain((commandsInput) =>
+          commandsInput.length === 0
             ? RTE.right(none)
             : pipe(
-                s,
+                commandsInput,
                 parseCommands,
                 RTE.fromEither,
                 RTE.chain((commands) => nextBatch(commands)(state)),
