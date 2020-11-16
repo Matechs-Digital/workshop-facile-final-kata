@@ -27,3 +27,5 @@ export const LiveConsole: Console = {
       })
   }
 }
+
+export const provideLiveConsole = RTE.provide(LiveConsole)

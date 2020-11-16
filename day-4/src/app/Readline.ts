@@ -1,17 +1,16 @@
 import { createInterface } from "readline"
 
-import type { ReaderTaskEither } from "../common/ReaderTaskEither"
-import { accessM, rightTask } from "../common/ReaderTaskEither"
+import * as RTE from "../common/ReaderTaskEither"
 
 export interface Readline {
   readline: {
-    getStrLn: ReaderTaskEither<unknown, never, string>
+    getStrLn: RTE.ReaderTaskEither<unknown, never, string>
   }
 }
 
 export const LiveReadline: Readline = {
   readline: {
-    getStrLn: rightTask(
+    getStrLn: RTE.rightTask(
       () =>
         new Promise((resolve) => {
           const rl = createInterface({
@@ -27,4 +26,6 @@ export const LiveReadline: Readline = {
   }
 }
 
-export const getStrLn = accessM((r: Readline) => r.readline.getStrLn)
+export const provideLiveReadLine = RTE.provide(LiveReadline)
+
+export const getStrLn = RTE.accessM((r: Readline) => r.readline.getStrLn)

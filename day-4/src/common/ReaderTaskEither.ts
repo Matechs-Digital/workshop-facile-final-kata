@@ -37,6 +37,16 @@ export function provide<R>(r: R) {
   ): ReaderTaskEither<R2, E, A> => (r2) => self({ ...r2, ...r })
 }
 
+export function provideM<R3, E2, R>(mr: ReaderTaskEither<R3, E2, R>) {
+  return <R2, E, A>(
+    self: ReaderTaskEither<R & R2, E, A>
+  ): ReaderTaskEither<R2 & R3, E | E2, A> =>
+    pipe(
+      mr,
+      chain((r) => provide(r)(self))
+    )
+}
+
 export function run<E, A>(self: ReaderTaskEither<unknown, E, A>) {
   return self({})
 }

@@ -32,6 +32,8 @@ export const LiveReadFile: ReadFile = {
   }
 }
 
+export const provideLiveReadFile = RTE.provide(LiveReadFile)
+
 export function readFile(file: string) {
   return RTE.accessM(({ readFile: { read } }: ReadFile) => read(file))
 }

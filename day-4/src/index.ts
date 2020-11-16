@@ -1,11 +1,9 @@
-import * as P from "path"
-
-import { provideAppConfig } from "./app/AppConfig"
-import { error, LiveConsole, log } from "./app/Console"
+import { provideLiveAppConfig } from "./app/AppConfig"
+import { error, log, provideLiveConsole } from "./app/Console"
 import type { NextPositionObstacle } from "./app/Program"
 import { actualize, begin, nextBatch, providePlanet } from "./app/Program"
-import { LiveReadFile, readFile } from "./app/ReadFile"
-import { getStrLn, LiveReadline } from "./app/Readline"
+import { provideLiveReadFile } from "./app/ReadFile"
+import { getStrLn, provideLiveReadLine } from "./app/Readline"
 import * as E from "./common/Either"
 import { pipe } from "./common/Function"
 import { matchTag } from "./common/Match"
@@ -81,17 +79,11 @@ function prettyOrientation(orientation: Orientation) {
 }
 
 pipe(
-  RTE.tuple(
-    readFile(P.join(__dirname, "../config/planet.txt")),
-    readFile(P.join(__dirname, "../config/initial.txt")),
-    readFile(P.join(__dirname, "../config/obstacles.txt"))
-  ),
-  RTE.chain(([planet, initial, obstacles]) =>
-    provideAppConfig({ initial, obstacles, planet })(runMainLoop)
-  ),
-  RTE.provide(LiveReadFile),
-  RTE.provide(LiveReadline),
-  RTE.provide(LiveConsole),
+  runMainLoop,
+  provideLiveAppConfig,
+  provideLiveReadFile,
+  provideLiveReadLine,
+  provideLiveConsole,
   RTE.run
 )().then(
   E.fold(
