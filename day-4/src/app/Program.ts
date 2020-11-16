@@ -1,25 +1,32 @@
-import type * as E from "../common/Either"
 import { pipe } from "../common/Function"
 import * as I from "../common/Int"
 import { matchTag } from "../common/Match"
 import * as NA from "../common/NonEmptyArray"
-import * as RE from "../common/ReaderTaskEither"
+import { none, some } from "../common/Option"
+import * as RTE from "../common/ReaderTaskEither"
 import { Orientation } from "../domain/Orientation"
 import type { PlanetContext } from "../domain/Planet"
 import { addObstacles } from "../domain/Planet"
-import type { ObstacleHit } from "../domain/Position"
+import type { ObstacleHit, Position } from "../domain/Position"
 import { validatePosition } from "../domain/Position"
 import type { InvalidInitialPosition } from "../domain/Rover"
 import { makeRover, Rover } from "../domain/Rover"
+import type { ParseCommandError } from "../serde/CommandParser"
+import { parseCommands } from "../serde/CommandParser"
 import { parseObstacles } from "../serde/ObstaclesParser"
 import type { ParseError } from "../serde/ParseError"
+import type { ParseInitialPositionError } from "../serde/ParseInitialPosition"
 import { parsePlanet } from "../serde/PlanetParser"
 import type { AppConfig } from "./AppConfig"
 import { provideAppConfig } from "./AppConfig"
 import type { Command, GoBackward, GoForward, GoLeft, GoRight } from "./Command"
 import { Commands } from "./Command"
+import type { Console } from "./Console"
+import { error, log } from "./Console"
 import type { ProgramState } from "./ProgramState"
 import { HistoryEntry } from "./ProgramState"
+import type { Readline } from "./Readline"
+import { getStrLn } from "./Readline"
 
 export class NextPositionObstacle {
   readonly _tag = "NextPositionObstacle"
@@ -34,23 +41,23 @@ export function nextPosition(
   x: I.Int,
   y: I.Int,
   orientation: Orientation
-): RE.ReaderTaskEither<PlanetContext, NextPositionObstacle, ProgramState> {
+): RTE.ReaderTaskEither<PlanetContext, NextPositionObstacle, ProgramState> {
   return pipe(
     validatePosition({ x, y }),
-    RE.map(
+    RTE.map(
       (position): ProgramState => ({
         rover: new Rover(position, orientation),
         history: NA.append(new HistoryEntry(position, orientation))(state.history)
       })
     ),
-    RE.catchAll((e) => RE.left(new NextPositionObstacle(state, e)))
+    RTE.catchAll((e) => RTE.left(new NextPositionObstacle(state, e)))
   )
 }
 
 export const move: (
   c: Command,
   s: ProgramState
-) => RE.ReaderTaskEither<PlanetContext, NextPositionObstacle, ProgramState> = (c, s) =>
+) => RTE.ReaderTaskEither<PlanetContext, NextPositionObstacle, ProgramState> = (c, s) =>
   pipe(
     c,
     matchTag({
@@ -62,21 +69,21 @@ export const move: (
   )(s)
 
 export function nextMove(command: Command) {
-  return <R, E>(e: RE.ReaderTaskEither<R, E, ProgramState>) =>
+  return <R, E>(e: RTE.ReaderTaskEither<R, E, ProgramState>) =>
     pipe(
       e,
-      RE.chain((s) => move(command, s))
+      RTE.chain((s) => move(command, s))
     )
 }
 
 export function nextBatch(commands: readonly Command[]) {
-  return (s: ProgramState) => pipe(commands, RE.reduce(s)(move))
+  return (s: ProgramState) => pipe(commands, RTE.reduce(s)(move))
 }
 
 export function goForward(_: GoForward) {
   return (
     state: ProgramState
-  ): RE.ReaderTaskEither<PlanetContext, NextPositionObstacle, ProgramState> =>
+  ): RTE.ReaderTaskEither<PlanetContext, NextPositionObstacle, ProgramState> =>
     pipe(
       state.rover.orientation,
       matchTag({
@@ -115,7 +122,7 @@ export function goForward(_: GoForward) {
 export function goBackward(_: GoBackward) {
   return (
     state: ProgramState
-  ): RE.ReaderTaskEither<PlanetContext, NextPositionObstacle, ProgramState> =>
+  ): RTE.ReaderTaskEither<PlanetContext, NextPositionObstacle, ProgramState> =>
     pipe(
       state.rover.orientation,
       matchTag({
@@ -154,7 +161,7 @@ export function goBackward(_: GoBackward) {
 export function goLeft(_: GoLeft) {
   return (
     state: ProgramState
-  ): RE.ReaderTaskEither<PlanetContext, NextPositionObstacle, ProgramState> =>
+  ): RTE.ReaderTaskEither<PlanetContext, NextPositionObstacle, ProgramState> =>
     pipe(
       state.rover.orientation,
       matchTag({
@@ -193,7 +200,7 @@ export function goLeft(_: GoLeft) {
 export function goRight(_: GoRight) {
   return (
     state: ProgramState
-  ): RE.ReaderTaskEither<PlanetContext, NextPositionObstacle, ProgramState> =>
+  ): RTE.ReaderTaskEither<PlanetContext, NextPositionObstacle, ProgramState> =>
     pipe(
       state.rover.orientation,
       matchTag({
@@ -238,20 +245,20 @@ export const moveForward = nextMove(Commands.Forward)
 export const moveBackward = nextMove(Commands.Backward)
 
 export function provideLivePlanet<R, E, A>(
-  self: RE.ReaderTaskEither<R & PlanetContext, E, A>
+  self: RTE.ReaderTaskEither<R & PlanetContext, E, A>
 ) {
-  return RE.accessM(({ config }: AppConfig) =>
+  return RTE.accessM(({ config }: AppConfig) =>
     pipe(
-      RE.do,
-      RE.bind("planet", () => RE.fromEither(parsePlanet(config.planet))),
-      RE.bind("obstacles", () => RE.fromEither(parseObstacles(config.obstacles))),
-      RE.let("planetWithObstacles", ({ obstacles, planet }) =>
+      RTE.do,
+      RTE.bind("planet", () => RTE.fromEither(parsePlanet(config.planet))),
+      RTE.bind("obstacles", () => RTE.fromEither(parseObstacles(config.obstacles))),
+      RTE.let("planetWithObstacles", ({ obstacles, planet }) =>
         addObstacles(...obstacles)(planet)
       ),
-      RE.chain(({ planet }) =>
+      RTE.chain(({ planet }) =>
         pipe(
           self,
-          RE.provide<PlanetContext>({ planetContext: { planet } })
+          RTE.provide<PlanetContext>({ planetContext: { planet } })
         )
       )
     )
@@ -260,7 +267,7 @@ export function provideLivePlanet<R, E, A>(
 
 export const begin = pipe(
   makeRover,
-  RE.map(
+  RTE.map(
     (rover): ProgramState => ({
       rover,
       history: [new HistoryEntry(rover.position, rover.orientation)]
@@ -276,9 +283,77 @@ export function actualize(self: ProgramState): ProgramState {
 }
 
 export const runTaskEither = (config: AppConfig["config"]) => (
-  self: RE.ReaderTaskEither<
+  self: RTE.ReaderTaskEither<
     AppConfig & PlanetContext,
     ParseError | NextPositionObstacle | InvalidInitialPosition,
     ProgramState
   >
-) => pipe(self, provideLivePlanet, provideAppConfig(config), RE.run)
+) => pipe(self, provideLivePlanet, provideAppConfig(config), RTE.run)
+
+export function prettyObstacle(e: NextPositionObstacle): string {
+  return `O:${e.previousState.rover.position.x}:${
+    e.previousState.rover.position.y
+  }:${prettyOrientation(e.previousState.rover.orientation)}`
+}
+
+export function prettyPosition(position: Position, orientation: Orientation): string {
+  return `${position.x}:${position.y}:${prettyOrientation(orientation)}`
+}
+
+export function prettyOrientation(orientation: Orientation) {
+  return pipe(
+    orientation,
+    matchTag({
+      North: () => "N",
+      South: () => "S",
+      East: () => "E",
+      West: () => "W"
+    })
+  )
+}
+
+export const main: RTE.ReaderTaskEither<
+  AppConfig & PlanetContext & Readline & Console,
+  ParseInitialPositionError | InvalidInitialPosition | ParseCommandError,
+  void
+> = pipe(
+  begin,
+  RTE.chain(
+    RTE.repeatWithState((state) =>
+      pipe(
+        getStrLn,
+        RTE.chain((commandsInput) =>
+          commandsInput.length === 0
+            ? RTE.right(none)
+            : pipe(
+                commandsInput,
+                parseCommands,
+                RTE.fromEither,
+                RTE.chain((commands) => nextBatch(commands)(state)),
+                RTE.chain((nextState) =>
+                  pipe(
+                    nextState.history,
+                    RTE.foreach(({ orientation, position }) =>
+                      log(prettyPosition(position, orientation))
+                    ),
+                    RTE.chain(() => RTE.sync(() => some(actualize(nextState))))
+                  )
+                ),
+                RTE.catchAll((e) =>
+                  e._tag === "NextPositionObstacle"
+                    ? pipe(
+                        e.previousState.history,
+                        RTE.foreach(({ orientation, position }) =>
+                          log(prettyPosition(position, orientation))
+                        ),
+                        RTE.chain(() => error(prettyObstacle(e))),
+                        RTE.chain(() => RTE.right(some(actualize(e.previousState))))
+                      )
+                    : RTE.left(e)
+                )
+              )
+        )
+      )
+    )
+  )
+)
